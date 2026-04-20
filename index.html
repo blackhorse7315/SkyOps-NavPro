@@ -1166,17 +1166,39 @@
         // --- REAL MAP LOGIC (LEAFLET)           ---
         // ==========================================
         function initLeafletMap() {
-            map = L.map('realMap', { zoomControl: false }).setView([-0.789, 118.921], 5); L.control.zoom({ position: 'bottomleft' }).addTo(map);
-            const esriImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19, attribution: '&copy; Esri' });
-            const esriLabels = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
+            // Optimasi Performa Mesin Leaflet
+            map = L.map('realMap', { 
+                zoomControl: false,
+                preferCanvas: true,        // Mempercepat rendering garis/rute dengan HTML5 Canvas
+                wheelPxPerZoomLevel: 120,  // Scroll zoom lebih halus
+                fadeAnimation: true,       // Transisi zoom yang halus
+                markerZoomAnimation: true
+            }).setView([-0.789, 118.921], 5); 
+            
+            L.control.zoom({ position: 'bottomleft' }).addTo(map);
+
+            // Optimasi Penarikan Data Tile (Gambar Peta)
+            const tileOpt = {
+                maxZoom: 19,
+                keepBuffer: 8,             // Simpan area peta yang luas di memori agar geser peta tidak blank/delay
+                updateWhenZooming: false,  // Jangan mendownload peta saat sedang animasi Zoom
+                updateInterval: 50,        // Tarik data seketika saat peta bergeser (default 200ms)
+                crossOrigin: true
+            };
+
+            const esriImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { ...tileOpt, attribution: '&copy; Esri' });
+            const esriLabels = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { ...tileOpt });
             const satelliteHybrid = L.layerGroup([esriImagery, esriLabels]);
-            const streetMap = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' });
-            const terrainMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { maxZoom: 17, attribution: '&copy; OpenTopoMap' });
+
+            // PERBAIKAN: Ganti OpenStreetMap ke Esri World Street Map untuk menghindari "Access Blocked"
+            const streetMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', { ...tileOpt, attribution: '&copy; Esri' });
+            
+            // GANTI: Terrain Map ke Google Terrain untuk visual 3D shaded relief yang sangat realistis dan cepat
+            const terrainMap = L.tileLayer('https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google' });
 
             satelliteHybrid.addTo(map);
             L.control.layers({ "Satellite (Default)": satelliteHybrid, "Street View": streetMap, "Terrain View": terrainMap }, null, { position: 'topright' }).addTo(map);
             
-            // Pindahkan kontrol layer ke luar dari div yang akan berotasi / membesar 150%
             const controlContainer = map.getContainer().querySelector('.leaflet-control-container');
             document.getElementById('tab-map').appendChild(controlContainer);
 
