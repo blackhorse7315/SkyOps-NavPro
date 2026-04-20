@@ -1506,7 +1506,32 @@
         // ==========================================
         async function loadRoutes() {
             const data = await fetchFromSheet('routes');
-            if (data !== null) { routesData = data; }
+            if (data !== null) { 
+                // Sanitasi data: Memperbaiki format otomatis Google Sheets (Time menjadi Date 1899)
+                routesData = data.map(rt => {
+                    // 1. Perbaiki format ETD jika diubah oleh Google Sheets menjadi ISO Date String
+                    if (typeof rt.etd === 'string' && rt.etd.includes('T')) {
+                        try {
+                            const d = new Date(rt.etd);
+                            rt.etd = `${d.getUTCHours().toString().padStart(2, '0')}:${d.getUTCMinutes().toString().padStart(2, '0')}`;
+                        } catch(e) {}
+                    }
+                    
+                    // 2. Kalkulasi ulang Total Jarak & Waktu (EET) secara dinamis agar kebal dari error format
+                    let totalDist = 0; let totalDecHours = 0;
+                    if (rt.waypoints && Array.isArray(rt.waypoints)) {
+                        for(let i=1; i<rt.waypoints.length; i++) {
+                            const dist = calcDistanceNM(rt.waypoints[i-1].lat, rt.waypoints[i-1].lon, rt.waypoints[i].lat, rt.waypoints[i].lon);
+                            totalDist += dist;
+                            if (rt.speed > 0) totalDecHours += (dist / rt.speed);
+                        }
+                    }
+                    rt.totalDist = Math.round(totalDist);
+                    rt.totalEET = formatTimeHM(totalDecHours);
+                    
+                    return rt;
+                });
+            }
             renderRouteList();
             
             if (activeMapRouteId) {
