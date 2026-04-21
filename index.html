@@ -386,7 +386,7 @@
                     </div>
                 </div>
 
-                <!-- Flight HUD Overlay -->
+                <!-- Flight HUD Overlay (DIPINDAHKAN KE BAWAH & RESPONSIVE) -->
                 <div id="flightHUDOverlay" class="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-[1100] hidden w-full px-2 sm:w-max sm:px-0">
                     <div class="glass-panel p-2 sm:p-3 rounded-2xl grid grid-cols-4 gap-2 sm:gap-6 shadow-2xl border border-blue-400/30 w-full">
                         <div class="hud-data-box px-1 py-1.5 sm:px-3 sm:py-2">
@@ -544,7 +544,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 bg-slate-800/40 p-3 sm:p-4 rounded-xl border border-slate-700/50">
                             <div>
                                 <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Route Name</label>
-                                <input type="text" id="rtName" required placeholder="e.g. WIMM-WIII" oninput="this.value = this.value.toUpperCase()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-500 font-bold text-white">
+                                <input type="text" id="rtName" required placeholder="e.g. WIMM-WIII" oninput="this.dataset.manualEdit='true'; this.value = this.value.toUpperCase()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-500 font-bold text-white">
                             </div>
                             <div>
                                 <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Aircraft Profile</label>
@@ -1920,15 +1920,16 @@
 
         function openRouteForm(id = null) {
             populateRouteAircrafts(); currentRouteWps = [];
+            const nameInput = document.getElementById('rtName');
             if (id) {
                 const rt = routesData.find(r => r.id === id);
                 if (rt) {
-                    document.getElementById('rtId').value = rt.id; document.getElementById('rtName').value = rt.name; document.getElementById('rtAircraft').value = rt.aircraftId; document.getElementById('rtEtd').value = rt.etd || ''; document.getElementById('rtSpeed').value = rt.speed; document.getElementById('rtFuelCons').value = rt.fuelCons; document.getElementById('rtFuelOnboard').value = rt.fuelOnboard || 0;
+                    document.getElementById('rtId').value = rt.id; nameInput.value = rt.name; nameInput.dataset.manualEdit = 'true'; document.getElementById('rtAircraft').value = rt.aircraftId; document.getElementById('rtEtd').value = rt.etd || ''; document.getElementById('rtSpeed').value = rt.speed; document.getElementById('rtFuelCons').value = rt.fuelCons; document.getElementById('rtFuelOnboard').value = rt.fuelOnboard || 0;
                     currentRouteWps = rt.waypoints.map(savedWp => { const dbWp = waypointsData.find(db => db.id === savedWp.id); return dbWp ? {...dbWp} : savedWp; });
                     document.getElementById('routeModalTitle').innerHTML = '<i class="fas fa-edit text-blue-400 mr-2"></i>Edit Operational Flight Plan'; const ac = aircraftsData.find(a => a.id === rt.aircraftId); if(ac) { document.getElementById('rtFuelUnitLabel1').textContent = ac.fuelUnit; document.getElementById('rtFuelUnitLabel2').textContent = ac.fuelUnit; }
                 }
             } else {
-                document.getElementById('rtId').value = ''; document.getElementById('rtName').value = ''; document.getElementById('rtAircraft').value = ''; document.getElementById('rtEtd').value = ''; document.getElementById('rtSpeed').value = ''; document.getElementById('rtFuelCons').value = ''; document.getElementById('rtFuelOnboard').value = ''; document.getElementById('rtFuelUnitLabel1').textContent = '-'; document.getElementById('rtFuelUnitLabel2').textContent = '-'; document.getElementById('routeModalTitle').innerHTML = '<i class="fas fa-clipboard-list text-blue-400 mr-2"></i>Create Operational Flight Plan';
+                document.getElementById('rtId').value = ''; nameInput.value = ''; nameInput.dataset.manualEdit = 'false'; document.getElementById('rtAircraft').value = ''; document.getElementById('rtEtd').value = ''; document.getElementById('rtSpeed').value = ''; document.getElementById('rtFuelCons').value = ''; document.getElementById('rtFuelOnboard').value = ''; document.getElementById('rtFuelUnitLabel1').textContent = '-'; document.getElementById('rtFuelUnitLabel2').textContent = '-'; document.getElementById('routeModalTitle').innerHTML = '<i class="fas fa-clipboard-list text-blue-400 mr-2"></i>Create Operational Flight Plan';
             }
             renderOFPTable(); document.getElementById('routeFormModal').classList.remove('hidden');
         }
@@ -2002,6 +2003,19 @@
                 tbody.appendChild(tr);
             });
             if (currentRouteWps.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-slate-500 italic">No waypoints added yet. Click [+] to build your route.</td></tr>'; }
+            
+            // Auto-fill Route Name (Berdasarkan titik awal & akhir jika tidak diketik manual)
+            const nameInput = document.getElementById('rtName');
+            if (nameInput && nameInput.dataset.manualEdit !== 'true') {
+                if (currentRouteWps.length > 0) {
+                    const firstWp = currentRouteWps[0].name;
+                    const lastWp = currentRouteWps[currentRouteWps.length - 1].name;
+                    nameInput.value = firstWp + (currentRouteWps.length > 1 ? '-' + lastWp : '');
+                } else {
+                    nameInput.value = '';
+                }
+            }
+
             document.getElementById('sumDist').textContent = Math.round(totalDist); document.getElementById('sumEET').textContent = formatTimeHM(totalDecHours); document.getElementById('sumFuel').textContent = Math.round(totalFuel);
             const remFuel = fuelOnboard - totalFuel; const remSpan = document.getElementById('sumRemFuel'); remSpan.textContent = Math.round(remFuel); const statusBg = document.getElementById('fuelStatusBg');
             if (remFuel < 0) { remSpan.className = 'text-red-500'; statusBg.className = 'absolute inset-0 bg-red-500/20 opacity-50 animate-pulse'; } else if (remFuel < (totalFuel * 0.1)) { remSpan.className = 'text-orange-400'; statusBg.className = 'absolute inset-0 bg-orange-500/20 opacity-50'; } else { remSpan.className = 'text-emerald-400'; statusBg.className = 'absolute inset-0 bg-emerald-500/10 opacity-50'; }
