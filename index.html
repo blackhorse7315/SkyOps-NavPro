@@ -102,6 +102,17 @@
             transition: transform 0.5s linear;
         }
 
+        /* Memisahkan kontrol Leaflet dari kontainer yang berotasi */
+        .leaflet-control-container {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .leaflet-control-container .leaflet-control {
+            pointer-events: auto;
+        }
+
         /* Flight HUD Data Box */
         .hud-data-box {
             background: rgba(15, 23, 42, 0.85);
@@ -123,7 +134,7 @@
         }
     </style>
 </head>
-<body class="antialiased selection:bg-blue-500 selection:text-white relative h-screen w-screen overflow-hidden">
+<body class="antialiased selection:bg-blue-500 selection:text-white relative h-[100dvh] w-screen overflow-hidden">
 
     <!-- ========================================== -->
     <!--         BAGIAN 1: SPLASH SCREEN            -->
@@ -181,19 +192,19 @@
     <!--         BAGIAN 3: ADMIN DASHBOARD          -->
     <!-- ========================================== -->
     <div id="adminScreen" class="print:hidden hidden h-full w-full flex flex-col overflow-hidden">
-        <header class="glass-panel sticky top-0 z-40 border-b border-slate-700/50 px-4 md:px-6 py-3 md:py-4 flex justify-between items-center">
-            <div class="flex items-center gap-3 md:gap-4">
-                <img src="https://lh3.googleusercontent.com/d/1HzKe-3FS_hP-MjbOHc-mkyierhu5kVp-" alt="Logo" class="w-8 h-8 md:w-10 md:h-10 object-contain" />
-                <div>
-                    <h1 class="font-bold text-base md:text-xl tracking-wide">SkyOps <span class="text-blue-400">Admin</span></h1>
-                    <p class="text-[10px] md:text-xs text-slate-400 hidden sm:block">System Management Console</p>
+        <header class="glass-panel sticky top-0 z-40 border-b border-slate-700/50 px-3 sm:px-4 md:px-6 py-3 sm:py-4 flex justify-between items-center shrink-0 w-full" style="padding-top: max(env(safe-area-inset-top, 12px), 12px);">
+            <div class="flex items-center gap-2 sm:gap-3 md:gap-4">
+                <img src="https://lh3.googleusercontent.com/d/1HzKe-3FS_hP-MjbOHc-mkyierhu5kVp-" alt="Logo" class="w-8 h-8 md:w-10 md:h-10 object-contain shrink-0" />
+                <div class="flex flex-col justify-center">
+                    <h1 class="font-bold text-sm md:text-xl tracking-wide leading-tight">SkyOps <span class="text-blue-400">Admin</span></h1>
+                    <p class="text-[9px] md:text-xs text-slate-400 hidden sm:block mt-0.5">System Management Console</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2 md:gap-4">
-                <button onclick="syncWithGoogleSheet()" class="text-xs md:text-sm bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 px-3 md:px-4 py-2 rounded-lg hover:bg-emerald-600/40 transition">
+            <div class="flex items-center gap-2 md:gap-4 shrink-0">
+                <button onclick="syncWithGoogleSheet()" class="text-[10px] md:text-sm bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 px-2 sm:px-3 md:px-4 py-1.5 md:py-2 rounded-lg hover:bg-emerald-600/40 transition">
                     <i class="fas fa-sync-alt sm:mr-2"></i><span class="hidden sm:inline">Sync Sheet</span>
                 </button>
-                <button onclick="logout()" class="text-xs md:text-sm bg-red-500/20 text-red-400 border border-red-500/30 px-3 md:px-4 py-2 rounded-lg hover:bg-red-500/40 transition">
+                <button onclick="logout()" class="text-[10px] md:text-sm bg-red-500/20 text-red-400 border border-red-500/30 px-2 sm:px-3 md:px-4 py-1.5 md:py-2 rounded-lg hover:bg-red-500/40 transition">
                     <i class="fas fa-sign-out-alt sm:mr-2"></i><span class="hidden sm:inline">Logout</span>
                 </button>
             </div>
@@ -340,7 +351,8 @@
             <!-- ========================================== -->
             <div id="tab-map" class="tab-content absolute inset-0 fade-in h-full w-full">
                 <div id="mapTransformWrapper" class="absolute inset-0 z-0 bg-[#0f172a] overflow-hidden">
-                    <div id="realMap" class="w-full h-full cursor-crosshair" style="transition: transform 0.1s linear;"></div>
+                    <!-- Penambahan will-change dan translate3d untuk memaksa rendering menggunakan GPU -->
+                    <div id="realMap" class="w-full h-full cursor-crosshair" style="transition: transform 0.1s linear; will-change: transform; transform: translate3d(0,0,0); backface-visibility: hidden;"></div>
                 </div>
 
                 <!-- Floating Status Bar (Top Left) -->
@@ -374,7 +386,7 @@
                     </div>
                 </div>
 
-                <!-- Flight HUD Overlay (DIPINDAHKAN KE BAWAH & RESPONSIVE) -->
+                <!-- Flight HUD Overlay -->
                 <div id="flightHUDOverlay" class="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-[1100] hidden w-full px-2 sm:w-max sm:px-0">
                     <div class="glass-panel p-2 sm:p-3 rounded-2xl grid grid-cols-4 gap-2 sm:gap-6 shadow-2xl border border-blue-400/30 w-full">
                         <div class="hud-data-box px-1 py-1.5 sm:px-3 sm:py-2">
@@ -405,6 +417,52 @@
                             </div>
                         </div>
                         <button onclick="stopFlightMode()" class="bg-red-600/80 hover:bg-red-500 text-white text-[10px] sm:text-xs px-3 py-1.5 rounded transition font-bold shrink-0"><i class="fas fa-stop mr-1"></i> END</button>
+                    </div>
+                </div>
+
+                <!-- Map Route Builder HUD -->
+                <div id="mapRouteBuilderHUD" class="absolute bottom-24 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-[1050] hidden w-[95%] sm:w-max px-2 sm:px-0 transition-all duration-300">
+                    <div class="glass-panel p-3 sm:p-4 rounded-2xl flex flex-col gap-3 shadow-2xl border border-emerald-400/50 w-full bg-[#0f172a]/95 backdrop-blur-lg">
+                        <div class="flex justify-between items-center border-b border-slate-700/50 pb-2">
+                            <span class="text-[10px] sm:text-xs font-bold text-emerald-400 uppercase tracking-widest"><i class="fas fa-drafting-compass mr-1"></i> Quick Route Builder</span>
+                            <button onclick="cancelMapBuilder()" class="text-slate-400 hover:text-red-400 p-1 cursor-pointer z-50"><i class="fas fa-times"></i></button>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+                            <div class="flex gap-2 w-full sm:w-auto">
+                                <div class="flex-1 sm:w-40">
+                                    <label class="text-[9px] sm:text-[10px] text-slate-400 mb-1 block">Aircraft Profile</label>
+                                    <select id="builderAircraft" onchange="updateMapBuilderHUD()" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-2 py-1.5 text-[10px] sm:text-xs outline-none focus:border-emerald-500 text-white">
+                                        <option value="">-- Choose Aircraft --</option>
+                                    </select>
+                                </div>
+                                <div class="w-24 sm:w-28">
+                                    <label class="text-[9px] sm:text-[10px] text-slate-400 mb-1 block">Fuel Onboard</label>
+                                    <input type="number" id="builderFuelOnboard" oninput="updateMapBuilderHUD()" placeholder="0" class="w-full bg-slate-800 border border-slate-600 rounded-lg px-2 py-1.5 text-[10px] sm:text-xs outline-none focus:border-emerald-500 text-white">
+                                </div>
+                            </div>
+                            <div class="flex gap-1.5 sm:gap-2 w-full justify-between sm:justify-start">
+                                <div class="bg-slate-800/80 rounded border border-slate-700 px-2 py-1.5 text-center flex-1 sm:min-w-[65px]">
+                                    <p class="text-[8px] text-slate-400">DIST</p>
+                                    <p class="text-[10px] sm:text-xs font-bold text-white"><span id="bldDist">0</span> <span class="text-[8px] font-normal text-slate-500">NM</span></p>
+                                </div>
+                                <div class="bg-slate-800/80 rounded border border-slate-700 px-2 py-1.5 text-center flex-1 sm:min-w-[65px]">
+                                    <p class="text-[8px] text-slate-400">EET</p>
+                                    <p class="text-[10px] sm:text-xs font-bold text-orange-300" id="bldEet">00:00</p>
+                                </div>
+                                <div class="bg-slate-800/80 rounded border border-slate-700 px-2 py-1.5 text-center flex-1 sm:min-w-[65px]">
+                                    <p class="text-[8px] text-slate-400">FUEL REQ</p>
+                                    <p class="text-[10px] sm:text-xs font-bold text-emerald-400" id="bldReq">0</p>
+                                </div>
+                                <div class="bg-slate-800/80 rounded border border-slate-700 px-2 py-1.5 text-center flex-1 sm:min-w-[65px]">
+                                    <p class="text-[8px] text-slate-400">FUEL REM</p>
+                                    <p class="text-[10px] sm:text-xs font-bold text-emerald-400" id="bldRem">0</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button onclick="finishMapBuilder()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] sm:text-xs py-2 rounded-lg shadow transition font-bold mt-1 border border-emerald-500/50">
+                            <i class="fas fa-check-circle mr-1"></i> Create OFP with <span id="bldWpCount">0</span> Waypoints
+                        </button>
                     </div>
                 </div>
 
@@ -587,13 +645,11 @@
             </div>
 
             <!-- BAGIAN 6.3: ROUTE DETAIL MODAL -->
-            <!-- PERBAIKAN: z-index, position button close, max-w-lg untuk responsif layar kecil -->
             <div id="routeDetailModal" class="print:hidden fixed inset-0 z-[10000] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4">
                 <div class="glass-panel w-[95%] sm:w-full max-w-lg p-0 rounded-2xl relative shadow-2xl overflow-hidden flex flex-col max-h-[95vh]">
                     <div class="absolute top-0 left-0 w-full h-24 sm:h-32 bg-gradient-to-br from-blue-900/80 to-slate-900 z-0"></div>
                     <i class="fas fa-route text-6xl sm:text-8xl text-blue-400/10 absolute -right-2 sm:-right-4 -top-2 sm:-top-4 z-0 transform -rotate-12"></i>
                     
-                    <!-- PERBAIKAN TOMBOL CLOSE: Lebih jelas & dipastikan terklik -->
                     <button onclick="closeRouteDetailModal()" class="absolute top-3 right-3 sm:top-4 sm:right-4 text-slate-300 hover:text-white z-[100] bg-black/40 hover:bg-black/60 rounded-full w-8 h-8 flex items-center justify-center backdrop-blur-md cursor-pointer transition"><i class="fas fa-times"></i></button>
                     
                     <div class="relative z-10 p-5 sm:p-6 pt-6 sm:pt-10 flex flex-col shrink-0">
@@ -942,6 +998,11 @@
         let routesData = []; 
         let currentRouteWps = []; 
         
+        // State Map Route Builder
+        let mapBuilderWps = [];
+        let mapBuilderLayerGroup = null;
+        let pendingBuilderInsert = null;
+
         // State Map Active Route Overlay & Dragging
         let activeMapRouteId = null;
         let activeRouteLayerGroup = null;
@@ -1206,6 +1267,7 @@
 
             waypointLayerGroup = L.layerGroup().addTo(map);
             activeRouteLayerGroup = L.layerGroup().addTo(map);
+            mapBuilderLayerGroup = L.layerGroup().addTo(map);
             
             updateMapWaypoints(); 
         }
@@ -1254,11 +1316,154 @@
         }
 
         function addToRoute(id) {
-            const wp = waypointsData.find(w => w.id === id); switchTab('route');
-            if (document.getElementById('routeFormModal').classList.contains('hidden')) { openRouteForm(); }
-            addWpToRoute(wp.id); map.closePopup();
+            const wp = waypointsData.find(w => w.id === id); 
+            if (!wp) return;
+            
+            // Jika Form Route sedang terbuka (misal di tab route), proses langsung ke form
+            if (!document.getElementById('routeFormModal').classList.contains('hidden')) { 
+                currentRouteWps.push({...wp}); renderOFPTable(); map.closePopup(); return; 
+            }
+
+            // Jika sedang dalam simulasi/navigasi, cegah penambahan
+            if (flightMode !== 'none') {
+                alert("Harap matikan mode Simulasi/Navigasi terlebih dahulu."); return;
+            }
+
+            // Aksi Default: Buka HUD Builder di Map
+            mapBuilderWps.push({...wp});
+            
+            const builderHUD = document.getElementById('mapRouteBuilderHUD');
+            if (builderHUD.classList.contains('hidden')) {
+                builderHUD.classList.remove('hidden');
+                populateBuilderAircrafts();
+            }
+            
+            updateMapBuilderHUD();
+            drawMapBuilderRoute();
+            map.closePopup();
         }
 
+        // --- MAP ROUTE BUILDER LOGIC ---
+        function populateBuilderAircrafts() {
+            const select = document.getElementById('builderAircraft'); const currentVal = select.value; select.innerHTML = '<option value="">-- Choose Aircraft --</option>';
+            aircraftsData.forEach(ac => { select.innerHTML += `<option value="${ac.id}">${ac.reg} (${ac.type})</option>`; }); select.value = currentVal;
+        }
+
+        function updateMapBuilderHUD() {
+            document.getElementById('bldWpCount').textContent = mapBuilderWps.length;
+            let totalDist = 0; let totalDecHours = 0; let totalFuel = 0;
+            const acId = document.getElementById('builderAircraft').value;
+            const fuelOnboard = parseFloat(document.getElementById('builderFuelOnboard').value) || 0;
+            const ac = aircraftsData.find(a => a.id === acId);
+            
+            const speed = ac ? ac.speed : 0; const fuelCons = ac ? ac.fuel : 0;
+            
+            for(let i=1; i<mapBuilderWps.length; i++) {
+                const dist = calcDistanceNM(mapBuilderWps[i-1].lat, mapBuilderWps[i-1].lon, mapBuilderWps[i].lat, mapBuilderWps[i].lon);
+                totalDist += dist; if(speed > 0) totalDecHours += (dist / speed);
+            }
+            if (speed > 0) totalFuel = totalDecHours * fuelCons;
+            
+            document.getElementById('bldDist').textContent = Math.round(totalDist);
+            document.getElementById('bldEet').textContent = formatTimeHM(totalDecHours);
+            document.getElementById('bldReq').textContent = Math.round(totalFuel) + (ac ? ' '+ac.fuelUnit : '');
+            
+            const rem = fuelOnboard - totalFuel;
+            const remEl = document.getElementById('bldRem');
+            remEl.textContent = Math.round(rem) + (ac ? ' '+ac.fuelUnit : '');
+            if (rem < 0) remEl.className = "text-[10px] sm:text-xs font-bold text-red-500";
+            else remEl.className = "text-[10px] sm:text-xs font-bold text-emerald-400";
+        }
+
+        function drawMapBuilderRoute() {
+            if (!mapBuilderLayerGroup) return; mapBuilderLayerGroup.clearLayers();
+            if (mapBuilderWps.length < 2) return;
+            const latlngs = mapBuilderWps.map(wp => [wp.lat, wp.lon]);
+            const polyline = L.polyline(latlngs, { color: '#d946ef', weight: 5, opacity: 0.9 }).addTo(mapBuilderLayerGroup);
+
+            for (let i = 0; i < mapBuilderWps.length - 1; i++) {
+                const wp1 = mapBuilderWps[i]; const wp2 = mapBuilderWps[i+1];
+                const midLat = (wp1.lat + wp2.lat) / 2; const midLon = (wp1.lon + wp2.lon) / 2;
+                const midIcon = L.divIcon({ className: 'custom-div-icon', html: '<div class="midpoint-marker" style="width: 14px; height: 14px;"></div>', iconSize: [14, 14], iconAnchor: [7, 7] });
+                const midMarker = L.marker([midLat, midLon], { icon: midIcon, draggable: true }).addTo(mapBuilderLayerGroup);
+
+                midMarker.on('drag', (e) => { 
+                    const tempLatLngs = [...latlngs]; 
+                    tempLatLngs.splice(i+1, 0, e.latlng); 
+                    polyline.setLatLngs(tempLatLngs); 
+                });
+                
+                midMarker.on('dragend', (e) => { 
+                    const markerLatLng = e.target.getLatLng(); 
+                    handleBuilderTrackDrop(markerLatLng.lat, markerLatLng.lng, i+1); 
+                    
+                    // Kembalikan visual garis rute ke posisi semula jika pengguna membatalkan (cancel) drop
+                    polyline.setLatLngs(latlngs); 
+                    // Kembalikan posisi marker (titik drag putih) ke tengah garis
+                    midMarker.setLatLng([midLat, midLon]);
+                });
+            }
+        }
+
+        async function handleBuilderTrackDrop(lat, lng, insertIndex) {
+            let nearbyWps = waypointsData.map(wp => { return { wp: wp, dist: calcDistanceNM(lat, lng, wp.lat, wp.lon) }; });
+            // Mengubah radius deteksi waypoint menjadi 4 NM
+            nearbyWps = nearbyWps.filter(item => item.dist <= 4).sort((a,b) => a.dist - b.dist);
+
+            if (nearbyWps.length > 0) {
+                let listHtml = '';
+                nearbyWps.forEach(item => { listHtml += `<div class="flex justify-between items-center bg-slate-800 p-2 rounded mb-2 border border-slate-700"><div><span class="font-bold text-blue-400 text-sm">${item.wp.name}</span><span class="text-[10px] text-slate-400 block">${item.dist.toFixed(2)} NM away</span></div><button onclick="addExistingWpToBuilderRoute('${item.wp.id}', ${insertIndex})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2 py-1 rounded text-[10px] transition"><i class="fas fa-plus"></i> Route</button></div>`; });
+                const popupHtml = `<div class="min-w-[200px]"><h4 class="font-bold text-xs text-slate-300 mb-2 border-b border-slate-600 pb-1">Titik Ditemukan (Radius 4 NM)</h4>${listHtml}<p class="text-[10px] text-slate-400 italic text-center mt-2">Atau klik area kosong map untuk buat WP baru.</p></div>`;
+                L.popup({ className: 'custom-popup' }).setLatLng([lat, lng]).setContent(popupHtml).openOn(map);
+            } else {
+                const popup = L.popup({ className: 'custom-popup' }).setLatLng([lat, lng]).setContent('<div class="p-2 text-slate-300 text-xs"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</div>').openOn(map);
+                try {
+                    const res = await fetch(`https://api.open-meteo.com/v1/elevation?latitude=${lat}&longitude=${lng}`); const data = await res.json(); const elevFeet = Math.round((data.elevation && data.elevation.length > 0 ? data.elevation[0] : 0) * 3.28084);
+                    const popupHtml = `
+                        <div class="min-w-[180px]">
+                            <h4 class="font-bold text-sm text-emerald-400 m-0 mb-2 border-b border-slate-600 pb-1"><i class="fas fa-magic mr-1"></i> ADD NEW WAYPOINT</h4>
+                            <div class="text-xs text-slate-300 space-y-1 mb-3">
+                                <p class="m-0"><i class="fas fa-map-pin w-4 text-center mr-1"></i> ${decToDMSStr(lat, true)}</p>
+                                <p class="m-0"><i class="fas fa-map-pin w-4 text-center opacity-0 mr-1"></i> ${decToDMSStr(lng, false)}</p>
+                                <p class="m-0 mt-1"><i class="fas fa-mountain w-4 text-center mr-1"></i> ${elevFeet} ft</p>
+                            </div>
+                            <button onclick="pendingBuilderInsert = { insertIndex: ${insertIndex} }; addClickedToWaypoint(${lat}, ${lng}, ${elevFeet})" class="bg-emerald-600 hover:bg-emerald-500 text-white w-full px-2 py-2 rounded text-xs transition font-bold"><i class="fas fa-plus mr-1"></i> Create & Insert to Route</button>
+                        </div>
+                    `;
+                    popup.setContent(popupHtml);
+                } catch(e) { popup.setContent('<div class="p-2 text-red-400 text-xs">Gagal mengambil data elevasi.</div>'); }
+            }
+        }
+
+        function addExistingWpToBuilderRoute(wpId, insertIndex) {
+            const wp = waypointsData.find(w => w.id === wpId);
+            if (wp) { mapBuilderWps.splice(insertIndex, 0, wp); updateMapBuilderHUD(); drawMapBuilderRoute(); map.closePopup(); }
+        }
+
+        function cancelMapBuilder() {
+            mapBuilderWps = []; document.getElementById('mapRouteBuilderHUD').classList.add('hidden');
+            if (mapBuilderLayerGroup) mapBuilderLayerGroup.clearLayers();
+        }
+
+        function finishMapBuilder() {
+            if(mapBuilderWps.length < 2) { alert("Tambahkan minimal 2 Waypoint untuk merangkai rute."); return; }
+            
+            const acId = document.getElementById('builderAircraft').value;
+            const fuelOb = document.getElementById('builderFuelOnboard').value;
+            
+            switchTab('route');
+            openRouteForm(); // Initialize blank form
+            
+            // Transfer built route to form
+            currentRouteWps = [...mapBuilderWps];
+            if (acId) { document.getElementById('rtAircraft').value = acId; handleRouteAircraftChange(); }
+            if (fuelOb) { document.getElementById('rtFuelOnboard').value = fuelOb; }
+            
+            renderOFPTable();
+            cancelMapBuilder(); // Clear HUD & Map lines
+        }
+
+        // --- MAP ACTIVE ROUTE (EXISTING) ---
         function viewRouteOnMap(id) { 
             activeMapRouteId = id; 
             if(document.getElementById('toggleAllWps')) document.getElementById('toggleAllWps').checked = false;
@@ -1296,19 +1501,33 @@
                 const midIcon = L.divIcon({ className: 'custom-div-icon', html: '<div class="midpoint-marker" style="width: 14px; height: 14px;"></div>', iconSize: [14, 14], iconAnchor: [7, 7] });
                 const midMarker = L.marker([midLat, midLon], { icon: midIcon, draggable: true }).addTo(activeRouteLayerGroup);
 
-                midMarker.on('drag', (e) => { const tempLatLngs = [...latlngs]; tempLatLngs.splice(i+1, 0, e.latlng); polyline.setLatLngs(tempLatLngs); });
-                midMarker.on('dragend', (e) => { const markerLatLng = e.target.getLatLng(); handleTrackDrop(markerLatLng.lat, markerLatLng.lng, i+1); polyline.setLatLngs(latlngs); });
+                midMarker.on('drag', (e) => { 
+                    const tempLatLngs = [...latlngs]; 
+                    tempLatLngs.splice(i+1, 0, e.latlng); 
+                    polyline.setLatLngs(tempLatLngs); 
+                });
+                
+                midMarker.on('dragend', (e) => { 
+                    const markerLatLng = e.target.getLatLng(); 
+                    handleTrackDrop(markerLatLng.lat, markerLatLng.lng, i+1); 
+                    
+                    // Kembalikan visual garis rute ke posisi semula jika pengguna membatalkan drop
+                    polyline.setLatLngs(latlngs); 
+                    // Kembalikan posisi marker ke tengah garis
+                    midMarker.setLatLng([midLat, midLon]);
+                });
             }
         }
 
         async function handleTrackDrop(lat, lng, insertIndex) {
             let nearbyWps = waypointsData.map(wp => { return { wp: wp, dist: calcDistanceNM(lat, lng, wp.lat, wp.lon) }; });
-            nearbyWps = nearbyWps.filter(item => item.dist <= 1.5).sort((a,b) => a.dist - b.dist);
+            // Mengubah radius deteksi waypoint menjadi 4 NM
+            nearbyWps = nearbyWps.filter(item => item.dist <= 4).sort((a,b) => a.dist - b.dist);
 
             if (nearbyWps.length > 0) {
                 let listHtml = '';
                 nearbyWps.forEach(item => { listHtml += `<div class="flex justify-between items-center bg-slate-800 p-2 rounded mb-2 border border-slate-700"><div><span class="font-bold text-blue-400 text-sm">${item.wp.name}</span><span class="text-[10px] text-slate-400 block">${item.dist.toFixed(2)} NM away</span></div><button onclick="addExistingWpToActiveRoute('${item.wp.id}', ${insertIndex})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2 py-1 rounded text-[10px] transition"><i class="fas fa-plus"></i> Route</button></div>`; });
-                const popupHtml = `<div class="min-w-[200px]"><h4 class="font-bold text-xs text-slate-300 mb-2 border-b border-slate-600 pb-1">Titik Ditemukan (Radius 1.5 NM)</h4>${listHtml}<p class="text-[10px] text-slate-400 italic text-center mt-2">Atau klik area kosong map untuk buat WP baru.</p></div>`;
+                const popupHtml = `<div class="min-w-[200px]"><h4 class="font-bold text-xs text-slate-300 mb-2 border-b border-slate-600 pb-1">Titik Ditemukan (Radius 4 NM)</h4>${listHtml}<p class="text-[10px] text-slate-400 italic text-center mt-2">Atau klik area kosong map untuk buat WP baru.</p></div>`;
                 L.popup({ className: 'custom-popup' }).setLatLng([lat, lng]).setContent(popupHtml).openOn(map);
             } else {
                 const popup = L.popup({ className: 'custom-popup' }).setLatLng([lat, lng]).setContent('<div class="p-2 text-slate-300 text-xs"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</div>').openOn(map);
@@ -1397,6 +1616,7 @@
             if (id) { const idx = waypointsData.findIndex(w => w.id === id); if (idx !== -1) waypointsData[idx] = newWp; } else { waypointsData.push(newWp); }
             saveWaypoints(); renderWaypoints(); updateMapWaypoints(); closeWaypointModal();
             if (pendingRouteInsert) { addExistingWpToActiveRoute(newWp.id, pendingRouteInsert.insertIndex); pendingRouteInsert = null; }
+            if (pendingBuilderInsert) { addExistingWpToBuilderRoute(newWp.id, pendingBuilderInsert.insertIndex); pendingBuilderInsert = null; }
         }
 
         function editWaypoint(id) {
