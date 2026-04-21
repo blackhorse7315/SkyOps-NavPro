@@ -1333,6 +1333,9 @@
                 alert("Harap matikan mode Simulasi/Navigasi terlebih dahulu."); return;
             }
 
+            // Bersihkan Active Route agar tidak tumpang tindih jika user ingin merangkai rute baru
+            if (activeMapRouteId) clearActiveMapRoute();
+
             // Aksi Default: Buka HUD Builder di Map
             mapBuilderWps.push({...wp});
             
@@ -1475,7 +1478,9 @@
         }
 
         function clearActiveMapRoute() { 
-            activeMapRouteId = null; document.getElementById('activeRouteOverlay').classList.add('hidden'); 
+            activeMapRouteId = null; 
+            document.getElementById('activeRouteOverlay').classList.add('hidden'); 
+            document.getElementById('activeRouteInfoHUD').classList.add('hidden'); // Sembunyikan HUD
             if (activeRouteLayerGroup) activeRouteLayerGroup.clearLayers(); 
             if(document.getElementById('toggleAllWps')) document.getElementById('toggleAllWps').checked = false;
             updateMapWaypoints(); 
@@ -1492,10 +1497,52 @@
             map.flyToBounds(bounds, { padding: [50, 50], duration: 1.5 });
         }
 
+        function updateActiveRouteInfoHUD() {
+            if (!activeMapRouteId) return;
+            const rt = routesData.find(r => r.id === activeMapRouteId);
+            if (!rt) return;
+
+            const ac = aircraftsData.find(a => a.id === rt.aircraftId);
+            const fuelUnit = ac ? ac.fuelUnit : '';
+
+            document.getElementById('infoHudRouteName').textContent = rt.name;
+            document.getElementById('infoHudAircraft').textContent = ac ? `${ac.reg} (${ac.type})` : rt.aircraftReg;
+            
+            document.getElementById('infoHudDist').textContent = rt.totalDist;
+            document.getElementById('infoHudEet').textContent = rt.totalEET;
+            
+            const fob = rt.fuelOnboard || 0;
+            document.getElementById('infoHudFOB').textContent = fob + (fuelUnit ? ' ' + fuelUnit : '');
+
+            // Recalculate secara real-time berdasarkan jarak WP aktif saat ini
+            let totalDecHours = 0;
+            if (rt.speed > 0 && rt.waypoints && rt.waypoints.length > 1) {
+                for(let i=1; i<rt.waypoints.length; i++) {
+                    const dist = calcDistanceNM(rt.waypoints[i-1].lat, rt.waypoints[i-1].lon, rt.waypoints[i].lat, rt.waypoints[i].lon);
+                    totalDecHours += (dist / rt.speed);
+                }
+            }
+            const fuelReq = totalDecHours * (rt.fuelCons || 0);
+            const rem = fob - fuelReq;
+
+            const remEl = document.getElementById('infoHudRem');
+            remEl.textContent = Math.round(rem) + (fuelUnit ? ' ' + fuelUnit : '');
+            if (rem < 0) remEl.className = "text-[10px] sm:text-xs font-bold text-red-500";
+            else if (rem < (fuelReq * 0.1)) remEl.className = "text-[10px] sm:text-xs font-bold text-orange-400";
+            else remEl.className = "text-[10px] sm:text-xs font-bold text-emerald-400";
+        }
+
         function drawActiveRoute() {
             if (!activeRouteLayerGroup) return; activeRouteLayerGroup.clearLayers();
             const rt = routesData.find(r => r.id === activeMapRouteId); if (!rt || !rt.waypoints || rt.waypoints.length === 0) return;
-            document.getElementById('activeRouteOverlay').classList.remove('hidden'); document.getElementById('activeRouteOverlayName').textContent = rt.name;
+            
+            document.getElementById('activeRouteOverlay').classList.remove('hidden'); 
+            document.getElementById('activeRouteOverlayName').textContent = rt.name;
+            
+            // Tampilkan & Update Info HUD
+            document.getElementById('activeRouteInfoHUD').classList.remove('hidden');
+            updateActiveRouteInfoHUD();
+
             const latlngs = rt.waypoints.map(wp => [wp.lat, wp.lon]);
             const polyline = L.polyline(latlngs, { color: '#d946ef', weight: 5, opacity: 0.9 }).addTo(activeRouteLayerGroup); map.fitBounds(polyline.getBounds(), { padding: [50, 50] });
 
