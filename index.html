@@ -134,7 +134,6 @@
         }
     </style>
 </head>
-<!-- Perbaikan Layout Body: Menggunakan fixed inset-0 untuk mengunci layar penuh di mobile tanpa glitch -->
 <body class="antialiased selection:bg-blue-500 selection:text-white fixed inset-0 w-full h-full overflow-hidden bg-[#0f172a]">
 
     <!-- ========================================== -->
@@ -155,7 +154,6 @@
     <!-- ========================================== -->
     <!--         BAGIAN 2: LOGIN SCREEN             -->
     <!-- ========================================== -->
-    <!-- Perbaikan Layout: absolute inset-0 -->
     <div id="loginScreen" class="print:hidden hidden absolute inset-0 flex items-center justify-center p-4 overflow-y-auto">
         <div class="glass-panel p-6 md:p-8 rounded-3xl w-full max-w-md relative overflow-hidden my-auto">
             <div class="absolute -top-20 -right-20 w-40 h-40 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
@@ -193,9 +191,7 @@
     <!-- ========================================== -->
     <!--         BAGIAN 3: ADMIN DASHBOARD          -->
     <!-- ========================================== -->
-    <!-- Perbaikan Layout: absolute inset-0 -->
     <div id="adminScreen" class="print:hidden hidden absolute inset-0 flex flex-col overflow-hidden">
-        <!-- Perbaikan Header: flex-none, pencegahan teks wrap, padding-top yang aman tanpa konflik -->
         <header class="glass-panel z-40 border-b border-slate-700/50 px-3 sm:px-4 md:px-6 pb-3 sm:pb-4 flex justify-between items-center flex-none w-full shadow-md" style="padding-top: calc(env(safe-area-inset-top, 0px) + 0.75rem);">
             <div class="flex items-center gap-2 sm:gap-3 md:gap-4 overflow-hidden">
                 <img src="https://lh3.googleusercontent.com/d/1HzKe-3FS_hP-MjbOHc-mkyierhu5kVp-" alt="Logo" class="w-8 h-8 md:w-10 md:h-10 object-contain flex-none" />
@@ -215,6 +211,8 @@
         </header>
 
         <div class="flex-1 overflow-y-auto p-4 md:p-6 relative">
+            <div class="max-w-7xl mx-auto w-full grid grid-cols-1 xl:grid-cols-3 gap-6">
+                <div class="glass-panel p-5 md:p-6 rounded-2xl h-fit">
                     <h3 class="text-base md:text-lg font-semibold mb-4 border-b border-slate-700 pb-2"><i class="fas fa-user-shield mr-2 text-blue-400"></i>Master Admin Credentials</h3>
                     <form id="adminCredsForm" onsubmit="updateAdminCreds(event)" class="space-y-4">
                         <div>
@@ -298,9 +296,7 @@
     <!-- ========================================== -->
     <!--         BAGIAN 4: MAIN APP CONTAINER       -->
     <!-- ========================================== -->
-    <!-- Perbaikan Layout: absolute inset-0 -->
     <div id="mainScreen" class="print:hidden hidden absolute inset-0 flex flex-col bg-[#0b1121] overflow-hidden">
-        <!-- Perbaikan Header: flex-none, pencegahan teks wrap, padding-top yang aman tanpa konflik -->
         <header class="glass-panel px-3 sm:px-4 md:px-6 pb-2 sm:pb-3 flex justify-between items-center shadow-md z-30 relative flex-none w-full" style="padding-top: calc(env(safe-area-inset-top, 0px) + 0.75rem);">
             <div class="flex items-center gap-2 sm:gap-3 md:gap-4 overflow-hidden">
                 <img src="https://lh3.googleusercontent.com/d/1HzKe-3FS_hP-MjbOHc-mkyierhu5kVp-" alt="Logo" class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 object-contain filter drop-shadow-[0_0_8px_rgba(59,130,246,0.5)] flex-none" />
@@ -467,6 +463,34 @@
                         <button onclick="finishMapBuilder()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white text-[10px] sm:text-xs py-2 rounded-lg shadow transition font-bold mt-1 border border-emerald-500/50">
                             <i class="fas fa-check-circle mr-1"></i> Create OFP with <span id="bldWpCount">0</span> Waypoints
                         </button>
+                    </div>
+                </div>
+
+                <!-- Active Route Info HUD (HUD Saat View Route on Map) -->
+                <div id="activeRouteInfoHUD" class="absolute bottom-24 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-[1050] hidden w-[95%] sm:w-max px-2 sm:px-0 transition-all duration-300 pointer-events-none">
+                    <div class="glass-panel p-3 sm:p-4 rounded-2xl flex flex-col gap-2 shadow-2xl border border-blue-400/50 w-full bg-[#0f172a]/95 backdrop-blur-lg pointer-events-auto">
+                        <div class="flex justify-between items-center border-b border-slate-700/50 pb-2 mb-1">
+                            <span class="text-[10px] sm:text-xs font-bold text-blue-400 uppercase tracking-widest"><i class="fas fa-info-circle mr-1"></i> <span id="infoHudRouteName">WIMM-WIII</span></span>
+                            <span class="text-[9px] sm:text-[10px] text-cyan-400 font-medium ml-4" id="infoHudAircraft">PK-TWA</span>
+                        </div>
+                        <div class="flex gap-1.5 sm:gap-2 w-full justify-between">
+                            <div class="bg-slate-800/80 rounded border border-slate-700 px-2 py-1.5 text-center flex-1 sm:min-w-[65px]">
+                                <p class="text-[8px] text-slate-400">DIST</p>
+                                <p class="text-[10px] sm:text-xs font-bold text-white"><span id="infoHudDist">0</span> <span class="text-[8px] font-normal text-slate-500">NM</span></p>
+                            </div>
+                            <div class="bg-slate-800/80 rounded border border-slate-700 px-2 py-1.5 text-center flex-1 sm:min-w-[65px]">
+                                <p class="text-[8px] text-slate-400">EET</p>
+                                <p class="text-[10px] sm:text-xs font-bold text-orange-300" id="infoHudEet">00:00</p>
+                            </div>
+                            <div class="bg-slate-800/80 rounded border border-slate-700 px-2 py-1.5 text-center flex-1 sm:min-w-[65px]">
+                                <p class="text-[8px] text-slate-400">F. ONBOARD</p>
+                                <p class="text-[10px] sm:text-xs font-bold text-white" id="infoHudFOB">0</p>
+                            </div>
+                            <div class="bg-slate-800/80 rounded border border-slate-700 px-2 py-1.5 text-center flex-1 sm:min-w-[65px]">
+                                <p class="text-[8px] text-slate-400">F. REMAIN</p>
+                                <p class="text-[10px] sm:text-xs font-bold text-emerald-400" id="infoHudRem">0</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1414,13 +1438,13 @@
 
         async function handleBuilderTrackDrop(lat, lng, insertIndex) {
             let nearbyWps = waypointsData.map(wp => { return { wp: wp, dist: calcDistanceNM(lat, lng, wp.lat, wp.lon) }; });
-            // Mengubah radius deteksi waypoint menjadi 4 NM
-            nearbyWps = nearbyWps.filter(item => item.dist <= 4).sort((a,b) => a.dist - b.dist);
+            // Mengubah radius deteksi waypoint menjadi 5 NM
+            nearbyWps = nearbyWps.filter(item => item.dist <= 5).sort((a,b) => a.dist - b.dist);
 
             if (nearbyWps.length > 0) {
                 let listHtml = '';
                 nearbyWps.forEach(item => { listHtml += `<div class="flex justify-between items-center bg-slate-800 p-2 rounded mb-2 border border-slate-700"><div><span class="font-bold text-blue-400 text-sm">${item.wp.name}</span><span class="text-[10px] text-slate-400 block">${item.dist.toFixed(2)} NM away</span></div><button onclick="addExistingWpToBuilderRoute('${item.wp.id}', ${insertIndex})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2 py-1 rounded text-[10px] transition"><i class="fas fa-plus"></i> Route</button></div>`; });
-                const popupHtml = `<div class="min-w-[200px]"><h4 class="font-bold text-xs text-slate-300 mb-2 border-b border-slate-600 pb-1">Titik Ditemukan (Radius 4 NM)</h4>${listHtml}<p class="text-[10px] text-slate-400 italic text-center mt-2">Atau klik area kosong map untuk buat WP baru.</p></div>`;
+                const popupHtml = `<div class="min-w-[200px]"><h4 class="font-bold text-xs text-slate-300 mb-2 border-b border-slate-600 pb-1">Titik Ditemukan (Radius 5 NM)</h4>${listHtml}<p class="text-[10px] text-slate-400 italic text-center mt-2">Atau klik area kosong map untuk buat WP baru.</p></div>`;
                 L.popup({ className: 'custom-popup' }).setLatLng([lat, lng]).setContent(popupHtml).openOn(map);
             } else {
                 const popup = L.popup({ className: 'custom-popup' }).setLatLng([lat, lng]).setContent('<div class="p-2 text-slate-300 text-xs"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</div>').openOn(map);
@@ -1480,7 +1504,8 @@
         function clearActiveMapRoute() { 
             activeMapRouteId = null; 
             document.getElementById('activeRouteOverlay').classList.add('hidden'); 
-            document.getElementById('activeRouteInfoHUD').classList.add('hidden'); // Sembunyikan HUD
+            const infoHud = document.getElementById('activeRouteInfoHUD');
+            if (infoHud) infoHud.classList.add('hidden');
             if (activeRouteLayerGroup) activeRouteLayerGroup.clearLayers(); 
             if(document.getElementById('toggleAllWps')) document.getElementById('toggleAllWps').checked = false;
             updateMapWaypoints(); 
@@ -1539,9 +1564,11 @@
             document.getElementById('activeRouteOverlay').classList.remove('hidden'); 
             document.getElementById('activeRouteOverlayName').textContent = rt.name;
             
-            // Tampilkan & Update Info HUD
-            document.getElementById('activeRouteInfoHUD').classList.remove('hidden');
-            updateActiveRouteInfoHUD();
+            const infoHud = document.getElementById('activeRouteInfoHUD');
+            if (infoHud) {
+                infoHud.classList.remove('hidden');
+                updateActiveRouteInfoHUD();
+            }
 
             const latlngs = rt.waypoints.map(wp => [wp.lat, wp.lon]);
             const polyline = L.polyline(latlngs, { color: '#d946ef', weight: 5, opacity: 0.9 }).addTo(activeRouteLayerGroup); map.fitBounds(polyline.getBounds(), { padding: [50, 50] });
@@ -1572,13 +1599,13 @@
 
         async function handleTrackDrop(lat, lng, insertIndex) {
             let nearbyWps = waypointsData.map(wp => { return { wp: wp, dist: calcDistanceNM(lat, lng, wp.lat, wp.lon) }; });
-            // Mengubah radius deteksi waypoint menjadi 4 NM
-            nearbyWps = nearbyWps.filter(item => item.dist <= 4).sort((a,b) => a.dist - b.dist);
+            // Mengubah radius deteksi waypoint menjadi 5 NM
+            nearbyWps = nearbyWps.filter(item => item.dist <= 5).sort((a,b) => a.dist - b.dist);
 
             if (nearbyWps.length > 0) {
                 let listHtml = '';
                 nearbyWps.forEach(item => { listHtml += `<div class="flex justify-between items-center bg-slate-800 p-2 rounded mb-2 border border-slate-700"><div><span class="font-bold text-blue-400 text-sm">${item.wp.name}</span><span class="text-[10px] text-slate-400 block">${item.dist.toFixed(2)} NM away</span></div><button onclick="addExistingWpToActiveRoute('${item.wp.id}', ${insertIndex})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2 py-1 rounded text-[10px] transition"><i class="fas fa-plus"></i> Route</button></div>`; });
-                const popupHtml = `<div class="min-w-[200px]"><h4 class="font-bold text-xs text-slate-300 mb-2 border-b border-slate-600 pb-1">Titik Ditemukan (Radius 4 NM)</h4>${listHtml}<p class="text-[10px] text-slate-400 italic text-center mt-2">Atau klik area kosong map untuk buat WP baru.</p></div>`;
+                const popupHtml = `<div class="min-w-[200px]"><h4 class="font-bold text-xs text-slate-300 mb-2 border-b border-slate-600 pb-1">Titik Ditemukan (Radius 5 NM)</h4>${listHtml}<p class="text-[10px] text-slate-400 italic text-center mt-2">Atau klik area kosong map untuk buat WP baru.</p></div>`;
                 L.popup({ className: 'custom-popup' }).setLatLng([lat, lng]).setContent(popupHtml).openOn(map);
             } else {
                 const popup = L.popup({ className: 'custom-popup' }).setLatLng([lat, lng]).setContent('<div class="p-2 text-slate-300 text-xs"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</div>').openOn(map);
@@ -1602,7 +1629,14 @@
 
         function addExistingWpToActiveRoute(wpId, insertIndex) {
             const rt = routesData.find(r => r.id === activeMapRouteId); const wp = waypointsData.find(w => w.id === wpId);
-            if (rt && wp) { rt.waypoints.splice(insertIndex, 0, wp); recalcRouteTotals(rt); saveRoutes(); drawActiveRoute(); map.closePopup(); }
+            if (rt && wp) { 
+                rt.waypoints.splice(insertIndex, 0, wp); 
+                recalcRouteTotals(rt); 
+                saveRoutes(); 
+                drawActiveRoute(); 
+                updateActiveRouteInfoHUD(); 
+                map.closePopup(); 
+            }
         }
 
         // ==========================================
