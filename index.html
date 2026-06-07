@@ -1355,16 +1355,17 @@
             const tileOpt = {
                 maxZoom: 22, // Mengizinkan zoom lebih dalam
                 maxNativeZoom: 19, // Mencegah blank hitam: jika tile detail tidak ada, regangkan gambar yang ada
-                keepBuffer: 4, // Menjaga ketersediaan tile di sekitar layar (keseimbangan kecepatan & memori)
-                updateWhenZooming: true, // Paksa browser memuat peta seketika saat animasi zoom berlangsung
-                updateInterval: 100,
-                crossOrigin: true
+                keepBuffer: 2, // Kurangi dari 4 ke 2 agar RAM tidak kepenuhan yang bikin lag saat digeser
+                updateWhenZooming: false, // FALSE: Biarkan peta meregang dulu saat di-zoom, baru load gambar tajam setelah animasi selesai (Super Smooth)
+                updateInterval: 250, // Beri jeda 250ms saat digeser agar CPU tidak kewalahan memproses gambar baru
+                crossOrigin: true,
+                subdomains: ['0', '1', '2', '3'] // Trik Paralel: Bypass limitasi koneksi browser dengan 4 server Google sekaligus
             };
 
             // Definisi Layer (Menggunakan Google CDN 1-Layer yang jauh lebih cepat daripada ESRI 2-Layer)
-            const satelliteHybrid = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google' });
-            const streetMap = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google' });
-            const terrainMap = L.tileLayer('https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google' });
+            const satelliteHybrid = L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google' });
+            const streetMap = L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google' });
+            const terrainMap = L.tileLayer('https://mt{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google' });
 
             satelliteHybrid.addTo(map);
 
