@@ -1257,7 +1257,14 @@
             tbody.innerHTML = '';
             usersData.forEach(user => {
                 const tr = document.createElement('tr');
-                tr.innerHTML = `<td class="px-4 py-3">${user.name}</td><td class="px-4 py-3"><span class="px-2 py-1 ${user.role === 'admin' ? 'bg-red-500/20 text-red-400' : 'bg-blue-500/20 text-blue-400'} rounded text-xs">${user.role.toUpperCase()}</span></td><td class="px-4 py-3">${user.username}</td><td class="px-4 py-3 text-slate-500">******</td><td class="px-4 py-3 ${new Date(user.expired) < new Date() ? 'text-red-400' : 'text-emerald-400'}">${user.expired}</td><td class="px-4 py-3 text-right"><button onclick="editUser('${user.id}')" class="text-blue-400 hover:text-blue-300 mr-2"><i class="fas fa-edit"></i></button><button onclick="deleteUser('${user.id}')" class="text-red-400 hover:text-red-300"><i class="fas fa-trash"></i></button></td>`;
+                
+                // Memformat tanggal agar bebas dari zona waktu "T17:00:00.000Z"
+                let displayDate = user.expired;
+                if (displayDate && displayDate.includes('T')) {
+                    displayDate = displayDate.split('T')[0];
+                }
+                
+                tr.innerHTML = `<td class="px-4 py-3">${user.name}</td><td class="px-4 py-3"><span class="px-2 py-1 ${user.role === 'admin' ? 'bg-red-500/20 text-red-400' : 'bg-blue-500/20 text-blue-400'} rounded text-xs">${user.role.toUpperCase()}</span></td><td class="px-4 py-3">${user.username}</td><td class="px-4 py-3 text-slate-500">******</td><td class="px-4 py-3 ${new Date(user.expired) < new Date() ? 'text-red-400' : 'text-emerald-400'}">${displayDate}</td><td class="px-4 py-3 text-right"><button onclick="editUser('${user.id}')" class="text-blue-400 hover:text-blue-300 mr-2"><i class="fas fa-edit"></i></button><button onclick="deleteUser('${user.id}')" class="text-red-400 hover:text-red-300"><i class="fas fa-trash"></i></button></td>`;
                 tbody.appendChild(tr);
             });
         }
@@ -1303,7 +1310,14 @@
                 document.getElementById('uRole').value = user.role;
                 document.getElementById('uUsername').value = user.username;
                 document.getElementById('uPassword').value = user.password;
-                document.getElementById('uExpired').value = user.expired;
+                
+                // Memastikan kolom input Date mendukung format YYYY-MM-DD
+                let expDateVal = user.expired;
+                if (expDateVal && expDateVal.includes('T')) {
+                    expDateVal = expDateVal.split('T')[0];
+                }
+                document.getElementById('uExpired').value = expDateVal;
+                
                 document.getElementById('modalTitle').textContent = 'Edit User';
                 document.getElementById('userModal').classList.remove('hidden');
             }
