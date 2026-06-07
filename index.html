@@ -477,6 +477,8 @@
                             <div> <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Empty Weight</label> <input type="number" id="rtEmptyWt" readonly class="w-full bg-slate-700/30 border border-slate-600 rounded-lg px-3 py-2 text-xs sm:text-sm outline-none text-slate-400 cursor-not-allowed font-mono"> </div>
                             <div> <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Crew Weight</label> <input type="number" id="rtCrewWt" required oninput="calculatePayload()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-500 font-mono"> </div>
                             <div> <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Payload (Auto)</label> <input type="number" id="rtPayload" readonly class="w-full bg-emerald-900/20 border border-emerald-500/30 rounded-lg px-3 py-2 text-xs sm:text-sm outline-none text-emerald-400 font-bold cursor-not-allowed font-mono transition-colors"> </div>
+                            <div> <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Pax Wt (kg)</label> <input type="number" id="rtPaxWeight" value="75" required oninput="calculatePayload()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-500 font-mono"> </div>
+                            <div> <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Max Pax Onboard</label> <input type="text" id="rtMaxPax" readonly class="w-full bg-blue-900/20 border border-blue-500/30 rounded-lg px-3 py-2 text-xs sm:text-sm outline-none text-blue-400 font-bold cursor-not-allowed font-mono transition-colors" placeholder="-"> </div>
                         </div> <!-- OFP Table -->
                         <div class="border border-slate-700/50 rounded-xl overflow-hidden bg-slate-900/60 overflow-x-auto">
                             <table class="w-full text-left text-[10px] sm:text-sm whitespace-nowrap min-w-[600px]">
@@ -2650,6 +2652,27 @@
                 payloadEl.classList.remove('text-red-400', 'border-red-500/30', 'bg-red-900/20');
                 payloadEl.classList.add('text-emerald-400', 'border-emerald-500/30', 'bg-emerald-900/20');
             }
+
+            // --- KALKULASI PAX (OTOMATIS CONVERT LBS KE KG JIKA PERLU) ---
+            const acId = document.getElementById('rtAircraft').value;
+            const ac = aircraftsData.find(a => a.id === acId);
+            const wUnit = ac ? (ac.weightUnit || 'kg') : 'kg';
+            
+            let payloadKg = payload;
+            if (wUnit === 'lbs') {
+                payloadKg = payload / 2.20462;
+            }
+
+            const paxWt = parseFloat(document.getElementById('rtPaxWeight').value) || 0;
+            const maxPaxEl = document.getElementById('rtMaxPax');
+
+            if (payloadKg > 0 && paxWt > 0) {
+                const maxPax = Math.floor(payloadKg / paxWt);
+                const remLoadKg = payloadKg - (maxPax * paxWt);
+                maxPaxEl.value = `${maxPax} pax (Sisa: ${Math.round(remLoadKg)} kg)`;
+            } else {
+                maxPaxEl.value = '-';
+            }
         }
 
         function openRouteForm(id = null) {
@@ -2685,6 +2708,7 @@
                         document.getElementById('rtEmptyWt').value = '';
                     }
                     document.getElementById('rtCrewWt').value = rt.crewWt !== undefined ? rt.crewWt : ((ac ? (ac.pic||0)+(ac.sic||0)+(ac.eng1||0)+(ac.eng2||0) : 0));
+                    document.getElementById('rtPaxWeight').value = rt.paxWeight !== undefined ? rt.paxWeight : '75';
                 }
             } else {
                 document.getElementById('rtId').value = '';
@@ -2701,6 +2725,8 @@
                 document.getElementById('rtEmptyWt').value = '';
                 document.getElementById('rtCrewWt').value = '';
                 document.getElementById('rtPayload').value = '';
+                document.getElementById('rtPaxWeight').value = '75';
+                document.getElementById('rtMaxPax').value = '';
                 document.getElementById('routeModalTitle').innerHTML = '<i class="fas fa-clipboard-list text-blue-400 mr-2"></i>Create Operational Flight Plan';
             }
             renderOFPTable();
@@ -2920,6 +2946,8 @@
                 fuelOnboard: parseFloat(document.getElementById('rtFuelOnboard').value) || 0,
                 crewWt: parseFloat(document.getElementById('rtCrewWt').value) || 0,
                 payload: parseFloat(document.getElementById('rtPayload').value) || 0,
+                paxWeight: parseFloat(document.getElementById('rtPaxWeight').value) || 75,
+                maxPax: document.getElementById('rtMaxPax').value,
                 waypoints: currentRouteWps,
                 totalDist: Math.round(totalDist),
                 totalEET: formatTimeHM(totalDecHours)
