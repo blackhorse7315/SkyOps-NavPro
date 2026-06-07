@@ -571,8 +571,8 @@
                     </div>
                     <div class="relative z-10 p-4 sm:p-6 pt-0 space-y-3 sm:space-y-4 overflow-y-auto flex-1">
                         <div class="bg-slate-900/80 p-3 sm:p-4 rounded-xl border border-slate-700/50 flex justify-between items-center"> <span class="text-[10px] sm:text-xs text-slate-400 uppercase">Routing</span> <span id="detRtOriginDest" class="font-bold text-white text-xs sm:text-sm truncate max-w-[60%]">WIMM <i class="fas fa-arrow-right text-blue-400 mx-1 sm:mx-2 text-[8px] sm:text-xs"></i> WIII</span> </div>
-                        <div class="bg-slate-900/80 p-3 sm:p-4 rounded-xl border border-slate-700/50 flex flex-col gap-3">
-                            <div class="grid grid-cols-3 gap-1 sm:gap-2 text-center pt-1">
+                        <div class="bg-slate-900/80 p-3 sm:p-4 rounded-xl border border-slate-700/50 flex flex-col gap-2">
+                            <div class="grid grid-cols-3 gap-1 sm:gap-2 text-center pt-1 border-b border-slate-700/50 pb-2">
                                 <div>
                                     <p class="text-[8px] sm:text-[10px] text-slate-500 uppercase">Total Dist</p>
                                     <p class="text-xs sm:text-sm font-semibold text-white"><span id="detRtDist">0</span> <span class="text-[8px] sm:text-[10px] text-slate-400">NM</span></p>
@@ -584,6 +584,20 @@
                                 <div>
                                     <p class="text-[8px] sm:text-[10px] text-slate-500 uppercase">Fuel Req</p>
                                     <p class="text-xs sm:text-sm font-semibold text-emerald-400"><span id="detRtFuel">0</span></p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 gap-1 sm:gap-2 text-center pt-1">
+                                <div>
+                                    <p class="text-[8px] sm:text-[10px] text-slate-500 uppercase">F. Onboard</p>
+                                    <p class="text-xs sm:text-sm font-semibold text-white"><span id="detRtFob">0</span></p>
+                                </div>
+                                <div class="border-l border-r border-slate-700/50">
+                                    <p class="text-[8px] sm:text-[10px] text-slate-500 uppercase">Rem. Fuel</p>
+                                    <p class="text-xs sm:text-sm font-semibold"><span id="detRtRem">0</span></p>
+                                </div>
+                                <div class="flex flex-col justify-center items-center">
+                                    <p class="text-[8px] sm:text-[10px] text-slate-500 uppercase">Max Pax</p>
+                                    <p class="text-[9px] sm:text-[11px] font-semibold text-blue-400 leading-tight" id="detRtMaxPax">-</p>
                                 </div>
                             </div>
                         </div> <!-- Action Buttons -->
@@ -2537,6 +2551,20 @@
                 totalFuel = totalDecHours * rt.fuelCons;
             }
             document.getElementById('detRtFuel').textContent = Math.round(totalFuel) + (ac ? ' ' + ac.fuelUnit : '');
+            
+            // --- UPDATE UI TAMBAHAN FOB, REM FUEL, MAX PAX ---
+            const fob = rt.fuelOnboard || 0;
+            const remFuel = fob - totalFuel;
+            document.getElementById('detRtFob').textContent = fob + (ac ? ' ' + ac.fuelUnit : '');
+            
+            const remEl = document.getElementById('detRtRem');
+            remEl.textContent = Math.round(remFuel) + (ac ? ' ' + ac.fuelUnit : '');
+            if (remFuel < 0) remEl.className = "text-red-400 font-bold";
+            else if (remFuel < (totalFuel * 0.1)) remEl.className = "text-orange-400 font-bold";
+            else remEl.className = "text-emerald-400 font-bold";
+            
+            document.getElementById('detRtMaxPax').textContent = rt.maxPax || '-';
+
             document.getElementById('btnDetEdit').onclick = () => {
                 closeRouteDetailModal();
                 editRoute(id);
