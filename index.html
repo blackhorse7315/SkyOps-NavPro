@@ -1292,7 +1292,8 @@
                 expired: document.getElementById('uExpired').value
             };
             if (id) {
-                const idx = usersData.findIndex(u => u.id === id);
+                // Gunakan String() untuk mencegah gagal cocok karena beda tipe data (Number vs String dari Sheet)
+                const idx = usersData.findIndex(u => String(u.id) === String(id));
                 if (idx !== -1) usersData[idx] = userData;
             } else {
                 usersData.push(userData);
@@ -1303,7 +1304,8 @@
         }
 
         function editUser(id) {
-            const user = usersData.find(u => u.id === id);
+            // Gunakan String() agar jika ID dari Google Sheet berupa Angka, tetap cocok dengan id dari tombol
+            const user = usersData.find(u => String(u.id) === String(id));
             if (user) {
                 document.getElementById('userId').value = user.id;
                 document.getElementById('uName').value = user.name;
@@ -1325,7 +1327,8 @@
 
         function deleteUser(id) {
             if (confirm("Are you sure?")) {
-                usersData = usersData.filter(u => u.id !== id);
+                // Filter menggunakan String() untuk memastikan ID tercocokkan dengan benar
+                usersData = usersData.filter(u => String(u.id) !== String(id));
                 saveUsers();
                 renderUserTable();
             }
