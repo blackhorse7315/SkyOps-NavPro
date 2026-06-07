@@ -1354,9 +1354,10 @@
 
             const tileOpt = {
                 maxZoom: 19,
-                keepBuffer: 8,
+                keepBuffer: 2, // Dikurangi dari 8 agar memori dan jaringan tidak terbebani tile di luar layar
                 updateWhenZooming: false,
-                updateInterval: 50
+                updateInterval: 200, // Dinaikkan dari 50 ke 200ms agar rendering saat digeser lebih ringan
+                crossOrigin: true // Membantu browser melakukan caching tile dengan lebih efisien
             };
 
             // Definisi Layer
