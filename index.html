@@ -1353,18 +1353,17 @@
             L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
             const tileOpt = {
-                maxZoom: 19,
-                keepBuffer: 2, // Dikurangi dari 8 agar memori dan jaringan tidak terbebani tile di luar layar
-                updateWhenZooming: false,
-                updateInterval: 200, // Dinaikkan dari 50 ke 200ms agar rendering saat digeser lebih ringan
-                crossOrigin: true // Membantu browser melakukan caching tile dengan lebih efisien
+                maxZoom: 22, // Mengizinkan zoom lebih dalam
+                maxNativeZoom: 19, // Mencegah blank hitam: jika tile detail tidak ada, regangkan gambar yang ada
+                keepBuffer: 4, // Menjaga ketersediaan tile di sekitar layar (keseimbangan kecepatan & memori)
+                updateWhenZooming: true, // Paksa browser memuat peta seketika saat animasi zoom berlangsung
+                updateInterval: 100,
+                crossOrigin: true
             };
 
-            // Definisi Layer
-            const esriImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { ...tileOpt, attribution: '&copy; Esri' });
-            const esriLabels = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { ...tileOpt });
-            const satelliteHybrid = L.layerGroup([esriImagery, esriLabels]);
-            const streetMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', { ...tileOpt, attribution: '&copy; Esri' });
+            // Definisi Layer (Menggunakan Google CDN 1-Layer yang jauh lebih cepat daripada ESRI 2-Layer)
+            const satelliteHybrid = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google' });
+            const streetMap = L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google' });
             const terrainMap = L.tileLayer('https://mt1.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google' });
 
             satelliteHybrid.addTo(map);
