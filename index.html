@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 
@@ -334,14 +333,14 @@
                 <div class="absolute top-2 left-2 sm:top-4 sm:left-4 z-[1000] flex gap-0 shadow-lg rounded-full backdrop-blur-sm transform scale-90 sm:scale-100 origin-top-left"> <span id="gps-status" class="px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-900/80 text-slate-400 border border-slate-700 rounded-l-full text-[10px] sm:text-xs transition-colors font-bold tracking-wider">GPS STANDBY</span> <span id="gps-coordinates" class="px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-900/80 text-slate-300 border border-slate-700 border-l-0 rounded-r-full text-[10px] sm:text-xs font-mono">LAT: -- | LON: --</span> </div> <!-- Map Overlay (For Active Route Indicator - Non Sim) -->
                 <div id="activeRouteOverlay" class="absolute top-14 left-2 sm:top-20 sm:left-4 z-[1000] hidden">
                     <div class="bg-black/80 backdrop-blur border border-magenta-500/50 rounded-xl p-2.5 sm:p-3 shadow-lg flex flex-col gap-2 min-w-[200px] sm:min-w-[250px]">
-                        <div class="flex justify-between items-start gap-3">
-                            <div>
+                        <div class="flex justify-between items-start gap-3 cursor-move" id="activeRouteDragHandle" title="Drag to move">
+                            <div class="pointer-events-none">
                                 <p class="text-[9px] sm:text-[10px] text-magenta-400 uppercase tracking-widest font-bold mb-0.5"><i class="fas fa-route mr-1"></i> ACTIVE FLIGHT PLAN</p>
                                 <h3 id="activeRouteOverlayName" class="text-xs sm:text-sm font-bold text-white uppercase">WIMM-WIII</h3>
-                            </div> <button onclick="clearActiveMapRoute()" class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-slate-800 hover:bg-red-500/20 hover:text-red-400 border border-slate-600 transition flex items-center justify-center text-slate-300 shadow cursor-pointer z-50"> <i class="fas fa-times text-xs"></i> </button>
+                            </div> <button onclick="clearActiveMapRoute()" class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-slate-800 hover:bg-red-500/20 hover:text-red-400 border border-slate-600 transition flex items-center justify-center text-slate-300 shadow cursor-pointer z-50 pointer-events-auto"> <i class="fas fa-times text-xs"></i> </button>
                         </div>
                         <div class="flex items-center justify-between border-t border-slate-700/50 pt-2 mt-0.5 gap-2"> <button onclick="fitMapToActiveRoute()" class="text-[9px] sm:text-[10px] text-slate-300 font-bold uppercase bg-slate-800 px-2 py-1.5 rounded hover:bg-slate-700 border border-slate-600 transition flex items-center gap-1 flex-1 justify-center shadow"> <i class="fas fa-compress-arrows-alt text-cyan-400"></i> Fit </button> <label class="flex items-center gap-1 sm:gap-2 cursor-pointer bg-slate-800 px-2 py-1.5 rounded hover:bg-slate-700 border border-slate-600 transition flex-1 justify-center shadow"> <span class="text-[9px] sm:text-[10px] text-slate-300 font-bold uppercase">All WPs</span> <input type="checkbox" id="toggleAllWps" onchange="toggleAllWaypointsMap()" class="accent-magenta-500 w-3 h-3"> </label> </div>
-                        <p class="text-[8px] sm:text-[9px] text-slate-400 italic text-center">Drag titik putih untuk edit rute.</p>
+                        <p class="text-[8px] sm:text-[9px] text-slate-400 italic text-center pointer-events-none">Drag titik putih untuk edit rute.</p>
                     </div>
                 </div> <!-- Flight HUD Overlay -->
                 <div id="flightHUDOverlay" class="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 z-[1100] hidden w-full px-2 sm:w-max sm:px-0">
@@ -430,8 +429,14 @@
             <div id="tab-route" class="tab-content absolute inset-0 p-3 sm:p-6 hidden h-full overflow-hidden">
                 <div class="w-full h-full glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-6 flex flex-col relative overflow-hidden">
                     <div class="flex justify-between items-center mb-4 sm:mb-6 shrink-0">
-                        <h2 class="text-base sm:text-xl font-semibold"><i class="fas fa-route mr-2 text-blue-400"></i>Flight Routes</h2> <button onclick="openRouteForm()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg transition shadow-lg shadow-blue-500/20 flex items-center"> <i class="fas fa-plus sm:mr-2"></i> <span class="hidden sm:inline">Add New Route</span> </button>
+                        <h2 class="text-base sm:text-xl font-semibold"><i class="fas fa-route mr-2 text-blue-400"></i>Flight Routes</h2>
+                        <div class="flex items-center gap-2 sm:gap-4">
+                            <div class="relative hidden lg:block"> <i class="fas fa-search absolute left-3 top-2.5 text-slate-400 text-sm"></i> <input type="text" id="searchInputRoute" onkeyup="renderRouteList()" placeholder="Search Name..." class="bg-slate-800/80 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm text-white outline-none focus:border-blue-500 w-48 xl:w-64"> </div>
+                            <button onclick="openRouteForm()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg transition shadow-lg shadow-blue-500/20 flex items-center"> <i class="fas fa-plus sm:mr-2"></i> <span class="hidden sm:inline">Add New Route</span> </button>
+                        </div>
                     </div>
+                    <!-- Search input visible only on small screens -->
+                    <div class="relative block lg:hidden mb-3 shrink-0"> <i class="fas fa-search absolute left-3 top-2.5 text-slate-400 text-xs"></i> <input type="text" id="searchInputRouteMobile" onkeyup="if(document.getElementById('searchInputRoute')) document.getElementById('searchInputRoute').value = this.value; renderRouteList();" placeholder="Search Route Name..." class="w-full bg-slate-800/80 border border-slate-700 rounded-lg pl-8 pr-4 py-2 text-xs text-white outline-none focus:border-blue-500"> </div>
                     <div class="flex-1 overflow-auto rounded-xl border border-slate-700/50 bg-slate-900/20 h-full">
                         <table class="w-full text-left text-xs sm:text-sm whitespace-nowrap">
                             <thead class="bg-slate-800/80 text-slate-300 sticky top-0 z-10">
@@ -455,9 +460,9 @@
                         <h3 id="routeModalTitle" class="text-base sm:text-xl font-bold"><i class="fas fa-clipboard-list text-blue-400 mr-2"></i>Operational Flight Plan</h3> <button onclick="closeRouteForm()" class="text-slate-400 hover:text-white p-2 z-50 cursor-pointer"><i class="fas fa-times text-xl"></i></button>
                     </div>
                     <div class="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-6"> <input type="hidden" id="rtId">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 bg-slate-800/40 p-3 sm:p-4 rounded-xl border border-slate-700/50">
-                            <div> <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Route Name</label> <input type="text" id="rtName" required placeholder="e.g. WIMM-WIII" oninput="this.dataset.manualEdit='true'; this.value = this.value.toUpperCase()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-500 font-bold text-white"> </div>
-                            <div> <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Aircraft Profile</label> <select id="rtAircraft" onchange="handleRouteAircraftChange()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-500">
+                        <div class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 bg-slate-800/40 p-3 sm:p-4 rounded-xl border border-slate-700/50">
+                            <div class="col-span-2 lg:col-span-1"> <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Route Name</label> <input type="text" id="rtName" required placeholder="e.g. WIMM-WIII" oninput="this.dataset.manualEdit='true'; this.value = this.value.toUpperCase()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-500 font-bold text-white"> </div>
+                            <div class="col-span-2 lg:col-span-1"> <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Aircraft Profile</label> <select id="rtAircraft" onchange="handleRouteAircraftChange()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-500">
                                     <option value="">-- Select Aircraft --</option>
                                 </select> </div>
                             <div> <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">ETD (Local Time)</label> <input type="time" id="rtEtd" required oninput="renderOFPTable()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-500" style="color-scheme: dark;"> </div>
@@ -466,8 +471,12 @@
                                 <div class="flex"> <input type="number" id="rtFuelCons" required oninput="renderOFPTable()" class="w-full bg-slate-800 border border-slate-700 rounded-l-lg px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-500"> <span id="rtFuelUnitLabel1" class="bg-slate-700 border border-slate-700 rounded-r-lg px-2 py-2 text-[10px] sm:text-xs flex items-center text-slate-300 uppercase">-</span> </div>
                             </div>
                             <div> <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Fuel Onboard</label>
-                                <div class="flex"> <input type="number" id="rtFuelOnboard" required oninput="renderOFPTable()" class="w-full bg-slate-800 border border-slate-700 rounded-l-lg px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-500"> <span id="rtFuelUnitLabel2" class="bg-slate-700 border border-slate-700 rounded-r-lg px-2 py-2 text-[10px] sm:text-xs flex items-center text-slate-300 uppercase">-</span> </div>
+                                <div class="flex"> <input type="number" id="rtFuelOnboard" required oninput="renderOFPTable(); calculatePayload()" class="w-full bg-slate-800 border border-slate-700 rounded-l-lg px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-500"> <span id="rtFuelUnitLabel2" class="bg-slate-700 border border-slate-700 rounded-r-lg px-2 py-2 text-[10px] sm:text-xs flex items-center text-slate-300 uppercase">-</span> </div>
                             </div>
+                            <div> <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">MTOW</label> <input type="number" id="rtMtow" readonly class="w-full bg-slate-700/30 border border-slate-600 rounded-lg px-3 py-2 text-xs sm:text-sm outline-none text-slate-400 cursor-not-allowed font-mono"> </div>
+                            <div> <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Empty Weight</label> <input type="number" id="rtEmptyWt" readonly class="w-full bg-slate-700/30 border border-slate-600 rounded-lg px-3 py-2 text-xs sm:text-sm outline-none text-slate-400 cursor-not-allowed font-mono"> </div>
+                            <div> <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Crew Weight</label> <input type="number" id="rtCrewWt" required oninput="calculatePayload()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs sm:text-sm outline-none focus:border-blue-500 font-mono"> </div>
+                            <div> <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Payload (Auto)</label> <input type="number" id="rtPayload" readonly class="w-full bg-emerald-900/20 border border-emerald-500/30 rounded-lg px-3 py-2 text-xs sm:text-sm outline-none text-emerald-400 font-bold cursor-not-allowed font-mono transition-colors"> </div>
                         </div> <!-- OFP Table -->
                         <div class="border border-slate-700/50 rounded-xl overflow-hidden bg-slate-900/60 overflow-x-auto">
                             <table class="w-full text-left text-[10px] sm:text-sm whitespace-nowrap min-w-[600px]">
@@ -482,6 +491,7 @@
                                                 <option value="eet">EET</option>
                                                 <option value="eta">ETA</option>
                                                 <option value="fuel">Fuel</option>
+                                                <option value="remFuel">Rem Fuel</option>
                                             </select> </th>
                                         <th class="px-2 sm:px-4 py-2 sm:py-3"> <select id="ofpCol2" onchange="renderOFPTable()" class="bg-transparent border-b border-slate-500 text-blue-400 outline-none font-semibold cursor-pointer w-full">
                                                 <option value="distance" selected>Dist(NM)</option>
@@ -490,6 +500,7 @@
                                                 <option value="eet">EET</option>
                                                 <option value="eta">ETA</option>
                                                 <option value="fuel">Fuel</option>
+                                                <option value="remFuel">Rem Fuel</option>
                                             </select> </th>
                                         <th class="px-2 sm:px-4 py-2 sm:py-3"> <select id="ofpCol3" onchange="renderOFPTable()" class="bg-transparent border-b border-slate-500 text-blue-400 outline-none font-semibold cursor-pointer w-full">
                                                 <option value="eet" selected>EET</option>
@@ -498,6 +509,7 @@
                                                 <option value="distance">Dist(NM)</option>
                                                 <option value="eta">ETA</option>
                                                 <option value="fuel">Fuel</option>
+                                                <option value="remFuel">Rem Fuel</option>
                                             </select> </th>
                                         <th class="px-2 sm:px-4 py-2 sm:py-3 text-center w-20 sm:w-24"><i class="fas fa-cog"></i> Action</th>
                                     </tr>
@@ -526,7 +538,15 @@
                             </div>
                         </div>
                     </div>
-                    <div class="p-4 sm:p-6 border-t border-slate-700 bg-slate-900/90 flex justify-end gap-2 sm:gap-3 shrink-0"> <button type="button" onclick="closeRouteForm()" class="bg-slate-800 border border-slate-700 hover:bg-slate-700 px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm transition">Discard</button> <button type="button" onclick="saveRoute()" class="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 px-6 sm:px-8 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition shadow-lg shadow-blue-500/20 text-white">Save Plan</button> </div>
+                    <div class="p-4 sm:p-6 border-t border-slate-700 bg-slate-900/90 flex justify-between items-center shrink-0">
+                        <button type="button" onclick="invertCurrentRouteForm()" class="bg-orange-600/20 text-orange-400 border border-orange-500/30 hover:bg-orange-600/40 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm transition font-medium flex items-center">
+                            <i class="fas fa-exchange-alt mr-1 sm:mr-2"></i> <span class="hidden sm:inline">Invert</span>
+                        </button>
+                        <div class="flex gap-2 sm:gap-3">
+                            <button type="button" onclick="closeRouteForm()" class="bg-slate-800 border border-slate-700 hover:bg-slate-700 px-4 sm:px-6 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm transition text-white">Discard</button>
+                            <button type="button" onclick="saveRoute()" class="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 px-6 sm:px-8 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition shadow-lg shadow-blue-500/20 text-white">Save Plan</button>
+                        </div>
+                    </div>
                 </div>
             </div> <!-- BAGIAN 6.2: WAYPOINT SELECTOR MODAL -->
             <div id="routeWpSelectModal" class="print:hidden fixed inset-0 z-[10010] hidden flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
@@ -758,6 +778,52 @@
                                     </select> </div>
                             </div>
                         </div>
+                        
+                        <div class="border-t border-slate-700 pt-3 mt-2 space-y-3">
+                            <h4 class="text-[10px] sm:text-xs font-bold text-blue-400 uppercase"><i class="fas fa-balance-scale mr-1"></i> Weight & Balance</h4>
+                            <div class="grid grid-cols-3 gap-3">
+                                <div class="col-span-1">
+                                    <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Unit</label>
+                                    <select id="acWeightUnit" onchange="updateAcWeightLabels()" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs outline-none focus:border-blue-500">
+                                        <option value="kg">kg</option>
+                                        <option value="lbs">lbs</option>
+                                    </select>
+                                </div>
+                                <div class="col-span-1">
+                                    <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">MTOW</label>
+                                    <div class="relative">
+                                        <input type="number" id="acMtow" placeholder="0" class="w-full bg-slate-800 border border-slate-700 rounded-lg pl-2 pr-6 py-1.5 text-xs outline-none focus:border-blue-500">
+                                        <span class="ac-weight-lbl absolute right-2 top-1.5 text-[9px] text-slate-500">kg</span>
+                                    </div>
+                                </div>
+                                <div class="col-span-1">
+                                    <label class="text-[10px] sm:text-xs text-slate-400 mb-1 block">Empty Wt</label>
+                                    <div class="relative">
+                                        <input type="number" id="acEmptyWeight" placeholder="0" class="w-full bg-slate-800 border border-slate-700 rounded-lg pl-2 pr-6 py-1.5 text-xs outline-none focus:border-blue-500">
+                                        <span class="ac-weight-lbl absolute right-2 top-1.5 text-[9px] text-slate-500">kg</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-4 gap-2">
+                                <div>
+                                    <label class="text-[9px] text-slate-400 mb-1 block">PIC</label>
+                                    <div class="relative"><input type="number" id="acPic" placeholder="0" class="w-full bg-slate-800 border border-slate-700 rounded px-1.5 py-1 text-[10px] outline-none"><span class="ac-weight-lbl hidden"></span></div>
+                                </div>
+                                <div>
+                                    <label class="text-[9px] text-slate-400 mb-1 block">SIC</label>
+                                    <div class="relative"><input type="number" id="acSic" placeholder="0" class="w-full bg-slate-800 border border-slate-700 rounded px-1.5 py-1 text-[10px] outline-none"><span class="ac-weight-lbl hidden"></span></div>
+                                </div>
+                                <div>
+                                    <label class="text-[9px] text-slate-400 mb-1 block">ENG 1</label>
+                                    <div class="relative"><input type="number" id="acEng1" placeholder="0" class="w-full bg-slate-800 border border-slate-700 rounded px-1.5 py-1 text-[10px] outline-none"><span class="ac-weight-lbl hidden"></span></div>
+                                </div>
+                                <div>
+                                    <label class="text-[9px] text-slate-400 mb-1 block">ENG 2</label>
+                                    <div class="relative"><input type="number" id="acEng2" placeholder="0" class="w-full bg-slate-800 border border-slate-700 rounded px-1.5 py-1 text-[10px] outline-none"><span class="ac-weight-lbl hidden"></span></div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="flex gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-slate-700 mt-4 sm:mt-6"> <button type="button" onclick="closeAircraftForm()" class="flex-1 bg-slate-800 border border-slate-700 hover:bg-slate-700 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm transition">Cancel</button> <button type="submit" class="flex-1 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition shadow-lg shadow-blue-500/20 text-white">Save Profile</button> </div>
                     </form>
                 </div>
@@ -778,6 +844,20 @@
                         <div class="bg-slate-900/80 p-3 sm:p-4 rounded-xl border border-slate-700/50 flex justify-between items-center">
                             <div class="flex items-center text-slate-400 text-xs sm:text-sm"><i class="fas fa-gas-pump w-5 sm:w-6 text-center mr-1 sm:mr-2"></i> Fuel Consump.</div>
                             <div class="font-bold text-white text-sm sm:text-base"><span id="detailFuel">2500</span> <span id="detailFuelUnit" class="text-[10px] sm:text-xs text-slate-500 font-normal">lbs/hr</span></div>
+                        </div>
+                        
+                        <div class="bg-slate-900/80 p-3 sm:p-4 rounded-xl border border-slate-700/50">
+                            <div class="flex items-center text-slate-400 text-xs sm:text-sm mb-2"><i class="fas fa-balance-scale w-5 sm:w-6 text-center mr-1 sm:mr-2"></i> Weight & Balance</div>
+                            <div class="grid grid-cols-2 gap-2 mb-2 border-b border-slate-700/50 pb-2">
+                                <div class="flex justify-between items-center"><span class="text-[10px] sm:text-xs text-slate-400">MTOW</span><span class="text-xs sm:text-sm text-white font-mono" id="detailMtow">-</span></div>
+                                <div class="flex justify-between items-center pl-2 border-l border-slate-700/50"><span class="text-[10px] sm:text-xs text-slate-400">Empty</span><span class="text-xs sm:text-sm text-white font-mono" id="detailEmptyWt">-</span></div>
+                            </div>
+                            <div class="grid grid-cols-4 gap-1 text-center">
+                                <div><p class="text-[8px] text-slate-500 uppercase">PIC</p><p class="text-[10px] text-white" id="detailPic">-</p></div>
+                                <div><p class="text-[8px] text-slate-500 uppercase">SIC</p><p class="text-[10px] text-white" id="detailSic">-</p></div>
+                                <div><p class="text-[8px] text-slate-500 uppercase">ENG 1</p><p class="text-[10px] text-white" id="detailEng1">-</p></div>
+                                <div><p class="text-[8px] text-slate-500 uppercase">ENG 2</p><p class="text-[10px] text-white" id="detailEng2">-</p></div>
+                            </div>
                         </div>
                     </div>
                     <div class="relative z-10 flex gap-2 sm:gap-3 pt-4 sm:pt-6 mt-1 sm:mt-2"> <input type="hidden" id="detailId"> <button onclick="editAircraftFromDetail()" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-medium transition shadow-lg shadow-blue-500/20"><i class="fas fa-edit mr-1 sm:mr-2"></i>Edit</button> <button onclick="deleteAircraftFromDetail()" class="flex-1 bg-red-600/20 hover:bg-red-600/40 text-red-400 border border-red-500/30 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-medium transition"><i class="fas fa-trash mr-1 sm:mr-2"></i>Delete</button> </div>
@@ -878,13 +958,14 @@
         }
 
         function getIconHTML(type) {
+            // UKURAN ICON TELAH DIPERKECIL
             switch (type) {
                 case 'vfr':
-                    return '<div class="w-7 h-7 bg-orange-500 rounded-sm mx-auto shadow-md" title="VFR"></div>';
+                    return '<div class="w-4 h-4 bg-orange-500 rounded-sm mx-auto shadow-md" title="VFR"></div>';
                 case 'airport':
-                    return '<div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs mx-auto shadow-[0_0_10px_rgba(59,130,246,0.5)]" title="Airport"><i class="fas fa-plane"></i></div>';
+                    return '<div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-[10px] mx-auto shadow-[0_0_10px_rgba(59,130,246,0.5)]" title="Airport"><i class="fas fa-plane"></i></div>';
                 case 'heliport':
-                    return '<div class="w-8 h-8 bg-pink-300 rounded-full flex items-center justify-center text-slate-900 font-bold text-sm mx-auto shadow-md" title="Heliport">H</div>';
+                    return '<div class="w-6 h-6 bg-pink-300 rounded-full flex items-center justify-center text-slate-900 font-bold text-[10px] mx-auto shadow-md" title="Heliport">H</div>';
                 default:
                     return '-';
             }
@@ -958,7 +1039,83 @@
                 }, 1000);
             }, 3000);
             setupPWA();
+            
+            // Inisialisasi fitur drag untuk overlay Active Route
+            makeDraggable('activeRouteOverlay', 'activeRouteDragHandle');
         };
+
+        // Fungsi Helper untuk Drag and Drop Element Overlay
+        function makeDraggable(elementId, handleId) {
+            const elmnt = document.getElementById(elementId);
+            const handle = document.getElementById(handleId) || elmnt;
+            if (!elmnt || !handle) return;
+
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+            // Stop propagation ke map leaflet saat kursor berada di atas handle
+            handle.addEventListener('mouseenter', () => { if(map) map.dragging.disable(); });
+            handle.addEventListener('mouseleave', () => { if(map) map.dragging.enable(); });
+
+            handle.onmousedown = dragMouseDown;
+            handle.ontouchstart = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                // Jangan cegah event click pada tombol X atau Input
+                if (e.target.closest('button') || e.target.tagName.toLowerCase() === 'input') return;
+                
+                e.stopPropagation(); // Mencegah klik menembus ke layer bawah
+                
+                if (e.type === 'touchstart') {
+                    pos3 = e.touches[0].clientX;
+                    pos4 = e.touches[0].clientY;
+                } else {
+                    e.preventDefault();
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                }
+
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+                document.ontouchend = closeDragElement;
+                document.ontouchmove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                let clientX, clientY;
+
+                if (e.type === 'touchmove') {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                } else {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                }
+
+                pos1 = pos3 - clientX;
+                pos2 = pos4 - clientY;
+                pos3 = clientX;
+                pos4 = clientY;
+
+                // Hitung posisi baru dan set style top/left
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+                
+                // Pastikan bottom dan right dilepas agar tidak bentrok dengan tailwind class
+                elmnt.style.right = "auto";
+                elmnt.style.bottom = "auto";
+                elmnt.style.transform = "none";
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+                document.ontouchend = null;
+                document.ontouchmove = null;
+            }
+        }
 
         function setupPWA() {
             const manifestData = {
@@ -1199,8 +1356,7 @@
                 maxZoom: 19,
                 keepBuffer: 8,
                 updateWhenZooming: false,
-                updateInterval: 50,
-                crossOrigin: true
+                updateInterval: 50
             };
 
             // Definisi Layer
@@ -1228,6 +1384,11 @@
             }
 
             map.on('click', handleMapClick);
+
+            // TAMBAHAN EVENT LISTENER UNTUK SEMANTIC ZOOMING
+            map.on('zoomend', function() {
+                updateMapWaypoints();
+            });
 
             waypointLayerGroup = L.layerGroup().addTo(map);
             activeRouteLayerGroup = L.layerGroup().addTo(map);
@@ -1762,30 +1923,67 @@
         function updateMapWaypoints() {
             if (!map || !waypointLayerGroup) return;
             waypointLayerGroup.clearLayers();
+            
             if (!document.getElementById('wpTooltipStyle')) {
                 const style = document.createElement('style');
                 style.id = 'wpTooltipStyle';
                 style.innerHTML = `.wp-black-label { background-color: #000 !important; color: #fff !important; border: 1px solid #333 !important; padding: 2px 6px; font-weight: 700; font-size: 10px; border-radius: 4px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5); white-space: nowrap; } .custom-popup .leaflet-popup-content-wrapper { background: #1e293b; color: #f8fafc; border: 1px solid #334155; border-radius: 12px; } .custom-popup .leaflet-popup-content { margin: 12px; font-family: 'Inter', sans-serif; }`;
                 document.head.appendChild(style);
             }
+            
             let wpsToRender = waypointsData;
+            
+            // LOGIKA SEMANTIC ZOOM
+            const currentZoom = map.getZoom();
+            
             if (activeMapRouteId) {
                 const showAll = document.getElementById('toggleAllWps') ? document.getElementById('toggleAllWps').checked : false;
                 if (!showAll) {
                     const rt = routesData.find(r => r.id === activeMapRouteId);
                     if (rt && rt.waypoints) {
-                        const routeWpIds = rt.waypoints.map(w => w.id);
-                        wpsToRender = waypointsData.filter(wp => routeWpIds.includes(wp.id));
+                        // Pastikan mengambil waypoint langsung dari rute agar semua tampil terlepas dari level zoom
+                        const uniqueWps = [];
+                        const seenIds = new Set();
+                        rt.waypoints.forEach(w => {
+                            if (!seenIds.has(w.id)) {
+                                seenIds.add(w.id);
+                                uniqueWps.push(w);
+                            }
+                        });
+                        wpsToRender = uniqueWps;
                     }
+                } else {
+                    // Jika toggleAllWps dicentang, terapkan semantic zoom pada seluruh database
+                    wpsToRender = wpsToRender.filter(wp => {
+                        if (currentZoom < 7) return wp.type === 'airport';
+                        else if (currentZoom < 9) return wp.type === 'airport' || wp.type === 'heliport';
+                        else return true;
+                    });
                 }
+            } else {
+                // Filter waypoint berdasarkan tingkat zoom (Mode Default)
+                wpsToRender = wpsToRender.filter(wp => {
+                    if (currentZoom < 7) {
+                        // Zoom sangat jauh: Hanya munculkan Airport
+                        return wp.type === 'airport';
+                    } else if (currentZoom < 9) {
+                        // Zoom sedang: Munculkan Airport & Heliport
+                        return wp.type === 'airport' || wp.type === 'heliport';
+                    } else {
+                        // Zoom dekat: Munculkan semua waypoint
+                        return true;
+                    }
+                });
             }
+
             wpsToRender.forEach(wp => {
+                // UKURAN BASE ICON DIPERKECIL
                 const customIcon = L.divIcon({
                     html: getIconHTML(wp.type),
                     className: '',
-                    iconSize: [28, 28],
-                    iconAnchor: [14, 14],
-                    popupAnchor: [0, -14]
+                    iconSize: [20, 20], 
+                    iconAnchor: [10, 10],
+                    popupAnchor: [0, -10]
                 });
                 const marker = L.marker([wp.lat, wp.lon], {
                     icon: customIcon
@@ -2115,6 +2313,13 @@
             });
         }
 
+        function updateAcWeightLabels() {
+            const unit = document.getElementById('acWeightUnit').value;
+            document.querySelectorAll('.ac-weight-lbl').forEach(el => {
+                el.textContent = unit;
+            });
+        }
+
         function openAircraftForm(id = null) {
             document.getElementById('aircraftForm').reset();
             if (id) {
@@ -2127,12 +2332,30 @@
                     document.getElementById('acSpeed').value = ac.speed;
                     document.getElementById('acFuel').value = ac.fuel;
                     document.getElementById('acFuelUnit').value = ac.fuelUnit;
+                    
+                    document.getElementById('acWeightUnit').value = ac.weightUnit || 'kg';
+                    document.getElementById('acMtow').value = ac.mtow || '';
+                    document.getElementById('acEmptyWeight').value = ac.emptyWeight || '';
+                    document.getElementById('acPic').value = ac.pic || '';
+                    document.getElementById('acSic').value = ac.sic || '';
+                    document.getElementById('acEng1').value = ac.eng1 || '';
+                    document.getElementById('acEng2').value = ac.eng2 || '';
+
                     document.getElementById('acModalTitle').innerHTML = '<i class="fas fa-edit text-blue-400 mr-2"></i>Edit Aircraft Profile';
                 }
             } else {
                 document.getElementById('acId').value = '';
+                document.getElementById('acWeightUnit').value = 'kg';
+                document.getElementById('acMtow').value = '';
+                document.getElementById('acEmptyWeight').value = '';
+                document.getElementById('acPic').value = '';
+                document.getElementById('acSic').value = '';
+                document.getElementById('acEng1').value = '';
+                document.getElementById('acEng2').value = '';
+
                 document.getElementById('acModalTitle').innerHTML = '<i class="fas fa-plane text-blue-400 mr-2"></i>Add Aircraft Profile';
             }
+            updateAcWeightLabels();
             document.getElementById('aircraftFormModal').classList.remove('hidden');
         }
 
@@ -2150,7 +2373,14 @@
                 type: document.getElementById('acType').value,
                 speed: parseFloat(document.getElementById('acSpeed').value),
                 fuel: parseFloat(document.getElementById('acFuel').value),
-                fuelUnit: document.getElementById('acFuelUnit').value
+                fuelUnit: document.getElementById('acFuelUnit').value,
+                weightUnit: document.getElementById('acWeightUnit').value,
+                mtow: parseFloat(document.getElementById('acMtow').value) || 0,
+                emptyWeight: parseFloat(document.getElementById('acEmptyWeight').value) || 0,
+                pic: parseFloat(document.getElementById('acPic').value) || 0,
+                sic: parseFloat(document.getElementById('acSic').value) || 0,
+                eng1: parseFloat(document.getElementById('acEng1').value) || 0,
+                eng2: parseFloat(document.getElementById('acEng2').value) || 0
             };
             if (id) {
                 const idx = aircraftsData.findIndex(u => u.id === id);
@@ -2176,6 +2406,15 @@
             document.getElementById('detailSpeed').textContent = ac.speed;
             document.getElementById('detailFuel').textContent = ac.fuel;
             document.getElementById('detailFuelUnit').textContent = ac.fuelUnit + '/hr';
+            
+            const wUnit = ac.weightUnit || 'kg';
+            document.getElementById('detailMtow').textContent = ac.mtow ? `${ac.mtow} ${wUnit}` : '-';
+            document.getElementById('detailEmptyWt').textContent = ac.emptyWeight ? `${ac.emptyWeight} ${wUnit}` : '-';
+            document.getElementById('detailPic').textContent = ac.pic ? `${ac.pic} ${wUnit}` : '-';
+            document.getElementById('detailSic').textContent = ac.sic ? `${ac.sic} ${wUnit}` : '-';
+            document.getElementById('detailEng1').textContent = ac.eng1 ? `${ac.eng1} ${wUnit}` : '-';
+            document.getElementById('detailEng2').textContent = ac.eng2 ? `${ac.eng2} ${wUnit}` : '-';
+
             document.getElementById('detailIcon').innerHTML = `<i class="fas ${iconClass}"></i>`;
             document.getElementById('detailIconBg').className = `fas ${iconClass} text-6xl sm:text-8xl text-blue-400/10 absolute -right-4 sm:-right-6 -top-2 z-0 transform ${!isHeli ? '-rotate-45' : ''}`;
             document.getElementById('aircraftDetailModal').classList.remove('hidden');
@@ -2243,8 +2482,10 @@
 
         function renderRouteList() {
             const tbody = document.getElementById('routeTableBody');
+            const search = document.getElementById('searchInputRoute') ? document.getElementById('searchInputRoute').value.toLowerCase() : '';
             tbody.innerHTML = '';
-            routesData.forEach(rt => {
+            const filtered = routesData.filter(rt => rt.name.toLowerCase().includes(search) || (rt.aircraftReg && rt.aircraftReg.toLowerCase().includes(search)));
+            filtered.forEach(rt => {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-800/50 transition group cursor-pointer';
                 tr.onclick = () => openRouteDetailModal(rt.id);
@@ -2364,13 +2605,41 @@
                 document.getElementById('rtFuelCons').value = ac.fuel;
                 document.getElementById('rtFuelUnitLabel1').textContent = ac.fuelUnit;
                 document.getElementById('rtFuelUnitLabel2').textContent = ac.fuelUnit;
+                document.getElementById('rtMtow').value = ac.mtow || 0;
+                document.getElementById('rtEmptyWt').value = ac.emptyWeight || 0;
+                const crewTotal = (ac.pic || 0) + (ac.sic || 0) + (ac.eng1 || 0) + (ac.eng2 || 0);
+                document.getElementById('rtCrewWt').value = crewTotal;
             } else {
                 document.getElementById('rtSpeed').value = '';
                 document.getElementById('rtFuelCons').value = '';
                 document.getElementById('rtFuelUnitLabel1').textContent = '-';
                 document.getElementById('rtFuelUnitLabel2').textContent = '-';
+                document.getElementById('rtMtow').value = '';
+                document.getElementById('rtEmptyWt').value = '';
+                document.getElementById('rtCrewWt').value = '';
+                document.getElementById('rtPayload').value = '';
             }
             renderOFPTable();
+            calculatePayload();
+        }
+
+        function calculatePayload() {
+            const mtow = parseFloat(document.getElementById('rtMtow').value) || 0;
+            const emptyWt = parseFloat(document.getElementById('rtEmptyWt').value) || 0;
+            const crewWt = parseFloat(document.getElementById('rtCrewWt').value) || 0;
+            const fuelOnboard = parseFloat(document.getElementById('rtFuelOnboard').value) || 0;
+
+            const payload = mtow - emptyWt - crewWt - fuelOnboard;
+            const payloadEl = document.getElementById('rtPayload');
+            payloadEl.value = Math.round(payload);
+
+            if (payload < 0) {
+                payloadEl.classList.add('text-red-400', 'border-red-500/30', 'bg-red-900/20');
+                payloadEl.classList.remove('text-emerald-400', 'border-emerald-500/30', 'bg-emerald-900/20');
+            } else {
+                payloadEl.classList.remove('text-red-400', 'border-red-500/30', 'bg-red-900/20');
+                payloadEl.classList.add('text-emerald-400', 'border-emerald-500/30', 'bg-emerald-900/20');
+            }
         }
 
         function openRouteForm(id = null) {
@@ -2399,7 +2668,13 @@
                     if (ac) {
                         document.getElementById('rtFuelUnitLabel1').textContent = ac.fuelUnit;
                         document.getElementById('rtFuelUnitLabel2').textContent = ac.fuelUnit;
+                        document.getElementById('rtMtow').value = ac.mtow || 0;
+                        document.getElementById('rtEmptyWt').value = ac.emptyWeight || 0;
+                    } else {
+                        document.getElementById('rtMtow').value = '';
+                        document.getElementById('rtEmptyWt').value = '';
                     }
+                    document.getElementById('rtCrewWt').value = rt.crewWt !== undefined ? rt.crewWt : ((ac ? (ac.pic||0)+(ac.sic||0)+(ac.eng1||0)+(ac.eng2||0) : 0));
                 }
             } else {
                 document.getElementById('rtId').value = '';
@@ -2412,9 +2687,14 @@
                 document.getElementById('rtFuelOnboard').value = '';
                 document.getElementById('rtFuelUnitLabel1').textContent = '-';
                 document.getElementById('rtFuelUnitLabel2').textContent = '-';
+                document.getElementById('rtMtow').value = '';
+                document.getElementById('rtEmptyWt').value = '';
+                document.getElementById('rtCrewWt').value = '';
+                document.getElementById('rtPayload').value = '';
                 document.getElementById('routeModalTitle').innerHTML = '<i class="fas fa-clipboard-list text-blue-400 mr-2"></i>Create Operational Flight Plan';
             }
             renderOFPTable();
+            calculatePayload();
             document.getElementById('routeFormModal').classList.remove('hidden');
         }
 
@@ -2498,6 +2778,8 @@
             let totalDist = 0;
             let totalDecHours = 0;
             let totalFuel = 0;
+            let currentRemFuel = fuelOnboard;
+
             currentRouteWps.forEach((wp, i) => {
                 let dist = 0,
                     brng = 0,
@@ -2515,8 +2797,11 @@
                     totalFuel += fuelBurn;
                     etaHrs = totalDecHours;
                 }
+                
+                currentRemFuel -= fuelBurn;
+
                 const getColValueHTML = (type) => {
-                    if (i === 0 && type !== 'eta') return '-';
+                    if (i === 0 && type !== 'eta' && type !== 'remFuel') return '-';
                     if (i === 0 && type === 'eta') return document.getElementById('rtEtd').value || '00:00';
                     switch (type) {
                         case 'distance':
@@ -2530,6 +2815,8 @@
                             return addDecimalHoursToHHMM(etdVal, etaHrs);
                         case 'fuel':
                             return formatDecimal(fuelBurn);
+                        case 'remFuel':
+                            return `<span class="${currentRemFuel < 0 ? 'text-red-400 font-bold' : 'text-emerald-400'}">${formatDecimal(currentRemFuel)}</span>`;
                         default:
                             return '-';
                     }
@@ -2573,6 +2860,21 @@
             }
         }
 
+        function invertCurrentRouteForm() {
+            if (currentRouteWps.length < 2) return;
+            currentRouteWps.reverse();
+            
+            const nameInput = document.getElementById('rtName');
+            if (nameInput.dataset.manualEdit === 'true') {
+                const parts = nameInput.value.split('-');
+                if (parts.length === 2) {
+                    nameInput.value = parts[1].trim() + '-' + parts[0].trim();
+                }
+            }
+            
+            renderOFPTable();
+        }
+
         function saveRoute() {
             const id = document.getElementById('rtId').value;
             const name = document.getElementById('rtName').value.trim();
@@ -2606,6 +2908,8 @@
                 speed: speed,
                 fuelCons: parseFloat(document.getElementById('rtFuelCons').value) || 0,
                 fuelOnboard: parseFloat(document.getElementById('rtFuelOnboard').value) || 0,
+                crewWt: parseFloat(document.getElementById('rtCrewWt').value) || 0,
+                payload: parseFloat(document.getElementById('rtPayload').value) || 0,
                 waypoints: currentRouteWps,
                 totalDist: Math.round(totalDist),
                 totalEET: formatTimeHM(totalDecHours)
