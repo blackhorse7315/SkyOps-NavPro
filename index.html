@@ -1347,7 +1347,9 @@
                 preferCanvas: true,
                 wheelPxPerZoomLevel: 120,
                 fadeAnimation: true,
-                markerZoomAnimation: true
+                markerZoomAnimation: true,
+                bounceAtZoomLimits: false, // Mencegah efek "membal" (bounce) saat batas zoom tercapai agar CPU lebih ringan
+                maxBoundsViscosity: 1.0
             }).setView([-0.789, 118.921], 5);
 
             L.control.zoom({ position: 'bottomleft' }).addTo(map);
@@ -1355,9 +1357,10 @@
             const tileOpt = {
                 maxZoom: 22, // Mengizinkan zoom lebih dalam
                 maxNativeZoom: 19, // Mencegah blank hitam: jika tile detail tidak ada, regangkan gambar yang ada
-                keepBuffer: 2, // Kurangi dari 4 ke 2 agar RAM tidak kepenuhan yang bikin lag saat digeser
+                keepBuffer: 4, // Dinaikkan ke 4: Memperluas area pra-muat (pre-fetch) di luar layar. Mencegah pinggiran hitam saat digeser cepat.
                 updateWhenZooming: false, // FALSE: Biarkan peta meregang dulu saat di-zoom, baru load gambar tajam setelah animasi selesai (Super Smooth)
-                updateInterval: 250, // Beri jeda 250ms saat digeser agar CPU tidak kewalahan memproses gambar baru
+                updateWhenIdle: false, // KUNCI UTAMA: Paksa peramban memuat gambar seketika SAAT digeser, TIDAK menunggu pergeseran berhenti.
+                updateInterval: 100, // Dipercepat menjadi 100ms agar respon permintaan gambar baru lebih seketika
                 crossOrigin: true,
                 subdomains: ['0', '1', '2', '3'] // Trik Paralel: Bypass limitasi koneksi browser dengan 4 server Google sekaligus
             };
@@ -1386,9 +1389,15 @@
 
             map.on('click', handleMapClick);
 
-            // TAMBAHAN EVENT LISTENER UNTUK SEMANTIC ZOOMING
+            // TAMBAHAN EVENT LISTENER UNTUK SEMANTIC ZOOMING DENGAN DEBOUNCE
+            let zoomDebounceTimeout;
             map.on('zoomend', function() {
-                updateMapWaypoints();
+                // Mencegah patah-patah/lag dengan menunda rendering marker (waypoint) 
+                // jika pengguna melakukan zoom in/out dengan scroll/jari yang sangat cepat berkali-kali.
+                clearTimeout(zoomDebounceTimeout);
+                zoomDebounceTimeout = setTimeout(() => {
+                    updateMapWaypoints();
+                }, 150);
             });
 
             waypointLayerGroup = L.layerGroup().addTo(map);
