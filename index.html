@@ -2036,7 +2036,9 @@
                 const marker = L.marker([wp.lat, wp.lon], {
                     icon: customIcon
                 });
-                marker.bindTooltip(wp.name.toUpperCase(), {
+                
+                // PERBAIKAN: Memastikan wp.name diubah menjadi string pada tooltip peta
+                marker.bindTooltip(String(wp.name || '').toUpperCase(), {
                     permanent: true,
                     direction: 'bottom',
                     className: 'wp-black-label',
@@ -2055,7 +2057,8 @@
                     </div>`;
                 }
 
-                const popupHtml = `<div class="min-w-[180px]"><div class="flex items-center gap-2 mb-2 border-b border-slate-600 pb-2">${getIconHTML(wp.type).replace('mx-auto', '')}<h4 class="font-bold text-sm text-blue-400 m-0">${wp.name.toUpperCase()}</h4></div><div class="text-xs text-slate-300 space-y-1 mb-2"><p class="m-0 flex items-center"><i class="fas fa-map-pin w-4 text-center text-slate-400 mr-1"></i> ${decToDMSStr(wp.lat, true)}</p><p class="m-0 flex items-center"><i class="fas fa-map-pin w-4 text-center text-slate-400 opacity-0 mr-1"></i> ${decToDMSStr(wp.lon, false)}</p><p class="m-0 flex items-center mt-1"><i class="fas fa-mountain w-4 text-center text-slate-400 mr-1"></i> ${wp.elev} ft</p></div>${extraHtml}<div class="flex gap-2 mt-4"><button onclick="addToRoute('${wp.id}')" class="bg-blue-600 hover:bg-blue-500 text-white px-2 py-1.5 rounded text-[10px] flex-1 transition font-medium"><i class="fas fa-plus mr-1"></i> Route</button><button onclick="showWaypointDetail('${wp.id}')" class="bg-slate-700 hover:bg-slate-600 border border-slate-600 text-white px-2 py-1.5 rounded text-[10px] flex-1 transition font-medium"><i class="fas fa-info-circle mr-1"></i> Info</button></div></div>`;
+                // PERBAIKAN: Memastikan wp.name diubah menjadi string pada popup peta
+                const popupHtml = `<div class="min-w-[180px]"><div class="flex items-center gap-2 mb-2 border-b border-slate-600 pb-2">${getIconHTML(wp.type).replace('mx-auto', '')}<h4 class="font-bold text-sm text-blue-400 m-0">${String(wp.name || '').toUpperCase()}</h4></div><div class="text-xs text-slate-300 space-y-1 mb-2"><p class="m-0 flex items-center"><i class="fas fa-map-pin w-4 text-center text-slate-400 mr-1"></i> ${decToDMSStr(wp.lat, true)}</p><p class="m-0 flex items-center"><i class="fas fa-map-pin w-4 text-center text-slate-400 opacity-0 mr-1"></i> ${decToDMSStr(wp.lon, false)}</p><p class="m-0 flex items-center mt-1"><i class="fas fa-mountain w-4 text-center text-slate-400 mr-1"></i> ${wp.elev} ft</p></div>${extraHtml}<div class="flex gap-2 mt-4"><button onclick="addToRoute('${wp.id}')" class="bg-blue-600 hover:bg-blue-500 text-white px-2 py-1.5 rounded text-[10px] flex-1 transition font-medium"><i class="fas fa-plus mr-1"></i> Route</button><button onclick="showWaypointDetail('${wp.id}')" class="bg-slate-700 hover:bg-slate-600 border border-slate-600 text-white px-2 py-1.5 rounded text-[10px] flex-1 transition font-medium"><i class="fas fa-info-circle mr-1"></i> Info</button></div></div>`;
                 marker.bindPopup(popupHtml, {
                     className: 'custom-popup'
                 });
