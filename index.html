@@ -2532,7 +2532,8 @@
             const tbody = document.getElementById('routeTableBody');
             const search = document.getElementById('searchInputRoute') ? document.getElementById('searchInputRoute').value.toLowerCase() : '';
             tbody.innerHTML = '';
-            const filtered = routesData.filter(rt => rt.name.toLowerCase().includes(search) || (rt.aircraftReg && rt.aircraftReg.toLowerCase().includes(search)));
+            // PERBAIKAN: Bungkus name dan aircraftReg dengan String()
+            const filtered = routesData.filter(rt => String(rt.name || '').toLowerCase().includes(search) || String(rt.aircraftReg || '').toLowerCase().includes(search));
             filtered.forEach(rt => {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-800/50 transition group cursor-pointer';
@@ -2803,7 +2804,8 @@
             const listDiv = document.getElementById('routeWpSelectList');
             const search = document.getElementById('searchRouteWp').value.toLowerCase();
             listDiv.innerHTML = '';
-            const filtered = waypointsData.filter(wp => wp.name.toLowerCase().includes(search) || wp.id.toLowerCase().includes(search));
+            // PERBAIKAN: Bungkus wp.name dan wp.id dengan String()
+            const filtered = waypointsData.filter(wp => String(wp.name || '').toLowerCase().includes(search) || String(wp.id || '').toLowerCase().includes(search));
             if (filtered.length === 0) {
                 listDiv.innerHTML = '<div class="text-center p-4 text-slate-500">No waypoints found.</div>';
                 return;
