@@ -1859,12 +1859,17 @@
             const tbody = document.getElementById('waypointTableBody');
             const search = document.getElementById('searchInputWaypoint') ? document.getElementById('searchInputWaypoint').value.toLowerCase() : '';
             tbody.innerHTML = '';
-            const filtered = waypointsData.filter(wp => wp.name.toLowerCase().includes(search));
+            
+            // PERBAIKAN: Memastikan wp.name diubah menjadi String agar tidak error "toLowerCase is not a function"
+            const filtered = waypointsData.filter(wp => String(wp.name || '').toLowerCase().includes(search));
+            
             filtered.forEach(wp => {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-800/50 transition group cursor-pointer';
                 tr.onclick = () => showWaypointDetail(wp.id);
-                tr.innerHTML = `<td class="px-3 sm:px-6 py-3 sm:py-4">${getIconHTML(wp.type)}</td><td class="px-3 sm:px-6 py-3 sm:py-4 font-bold text-blue-400 tracking-wide">${wp.name.toUpperCase()}</td><td class="px-3 sm:px-6 py-3 sm:py-4 hidden md:table-cell text-slate-300"><div class="text-[10px] sm:text-xs">${decToDMSStr(wp.lat, true)}</div><div class="text-[10px] sm:text-xs text-slate-400">${decToDMSStr(wp.lon, false)}</div></td><td class="px-3 sm:px-6 py-3 sm:py-4 font-medium">${wp.elev} <span class="text-[8px] sm:text-[10px] text-slate-500">ft</span></td><td class="px-3 sm:px-6 py-3 sm:py-4 text-right opacity-50 group-hover:opacity-100 transition"><button onclick="event.stopPropagation(); editWaypoint('${wp.id}')" class="text-blue-400 hover:text-blue-300 mr-2 sm:mr-3 p-1.5 sm:p-2 bg-blue-500/10 rounded-lg"><i class="fas fa-edit"></i></button><button onclick="event.stopPropagation(); deleteWaypoint('${wp.id}')" class="text-red-400 hover:text-red-300 p-1.5 sm:p-2 bg-red-500/10 rounded-lg"><i class="fas fa-trash"></i></button></td>`;
+                
+                // PERBAIKAN: Memastikan wp.name diubah menjadi String saat merender baris tabel
+                tr.innerHTML = `<td class="px-3 sm:px-6 py-3 sm:py-4">${getIconHTML(wp.type)}</td><td class="px-3 sm:px-6 py-3 sm:py-4 font-bold text-blue-400 tracking-wide">${String(wp.name || '').toUpperCase()}</td><td class="px-3 sm:px-6 py-3 sm:py-4 hidden md:table-cell text-slate-300"><div class="text-[10px] sm:text-xs">${decToDMSStr(wp.lat, true)}</div><div class="text-[10px] sm:text-xs text-slate-400">${decToDMSStr(wp.lon, false)}</div></td><td class="px-3 sm:px-6 py-3 sm:py-4 font-medium">${wp.elev} <span class="text-[8px] sm:text-[10px] text-slate-500">ft</span></td><td class="px-3 sm:px-6 py-3 sm:py-4 text-right opacity-50 group-hover:opacity-100 transition"><button onclick="event.stopPropagation(); editWaypoint('${wp.id}')" class="text-blue-400 hover:text-blue-300 mr-2 sm:mr-3 p-1.5 sm:p-2 bg-blue-500/10 rounded-lg"><i class="fas fa-edit"></i></button><button onclick="event.stopPropagation(); deleteWaypoint('${wp.id}')" class="text-red-400 hover:text-red-300 p-1.5 sm:p-2 bg-red-500/10 rounded-lg"><i class="fas fa-trash"></i></button></td>`;
                 tbody.appendChild(tr);
             });
         }
