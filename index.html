@@ -3387,7 +3387,81 @@
             }
             updateHUD(hdg, spdKts, distToTarget, etaDestStr);
         }
+
+        // ==========================================
+        // --- BACK BUTTON / HISTORY MANAGER      ---
+        // ==========================================
+        window.addEventListener('load', () => {
+            // Push initial state untuk membuat "jebakan" riwayat agar tombol back bisa dicegat
+            history.pushState({ page: 'init' }, null, window.location.href);
+        });
+
+        window.addEventListener('popstate', (e) => {
+            let blocked = false;
+
+            // 1. Cek Modal yang sedang terbuka (Sub-modal/popup sekunder dicek lebih dulu)
+            const modals = [
+                { id: 'routeWpSelectModal', closeFn: closeRouteWpSelector },
+                { id: 'parseWaypointModal', closeFn: closeParseModal },
+                { id: 'waypointModal', closeFn: closeWaypointModal },
+                { id: 'waypointDetailModal', closeFn: closeWaypointDetail },
+                { id: 'aircraftFormModal', closeFn: closeAircraftForm },
+                { id: 'aircraftDetailModal', closeFn: closeAircraftDetail },
+                { id: 'routeFormModal', closeFn: closeRouteForm },
+                { id: 'routeDetailModal', closeFn: closeRouteDetailModal },
+                { id: 'userModal', closeFn: closeUserModal }
+            ];
+
+            for (let m of modals) {
+                const el = document.getElementById(m.id);
+                if (el && !el.classList.contains('hidden')) {
+                    m.closeFn();
+                    blocked = true;
+                    break; // Hanya tutup satu modal/layer per satu kali klik "Back"
+                }
+            }
+
+            // 2. Cek Mode Penerbangan atau Builder HUD yang sedang aktif
+            if (!blocked) {
+                if (flightMode !== 'none') {
+                    stopFlightMode();
+                    blocked = true;
+                } else {
+                    const builderHUD = document.getElementById('mapRouteBuilderHUD');
+                    if (builderHUD && !builderHUD.classList.contains('hidden')) {
+                        cancelMapBuilder();
+                        blocked = true;
+                    }
+                }
+            }
+
+            // 3. Cek Tab Navigasi yang aktif (Jika bukan di Map, kembalikan ke Map)
+            if (!blocked) {
+                const mainScreen = document.getElementById('mainScreen');
+                if (mainScreen && !mainScreen.classList.contains('hidden')) {
+                    const mapTab = document.getElementById('tab-map');
+                    if (mapTab && mapTab.classList.contains('hidden')) {
+                        switchTab('map');
+                        blocked = true;
+                    }
+                }
+            }
+
+            // 4. Cek Admin Screen (kembali ke Login jika sedang di Admin Screen)
+            if (!blocked) {
+                const adminScreen = document.getElementById('adminScreen');
+                if (adminScreen && !adminScreen.classList.contains('hidden')) {
+                    logout();
+                    blocked = true;
+                }
+            }
+
+            // Jika kita mencegat aksi "Back" (mengubah UI), 
+            // kita harus memasukkan ulang history state agar aplikasi tetap tidak keluar pada klik berikutnya.
+            if (blocked) {
+                history.pushState({ page: 'internal' }, null, window.location.href);
+            }
+        });
     </script>
 </body>
-
 </html>
