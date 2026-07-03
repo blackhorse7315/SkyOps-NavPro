@@ -5,6 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SkyOps Navigation Pro V.01</title>
+    <!-- Preconnect to map tile servers for faster loading -->
+    <link rel="preconnect" href="https://mt0.google.com" crossorigin>
+    <link rel="preconnect" href="https://mt1.google.com" crossorigin>
+    <link rel="preconnect" href="https://mt2.google.com" crossorigin>
+    <link rel="preconnect" href="https://mt3.google.com" crossorigin>
     <!-- PWA / Installability Tags -->
     <meta name="theme-color" content="#0f172a">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -41,11 +46,11 @@
         }
 
         .fade-in {
-            animation: fadeIn 0.8s ease-in forwards;
+            animation: fadeIn 0.4s ease-in-out forwards;
         }
 
         .fade-out {
-            animation: fadeOut 0.8s ease-out forwards;
+            animation: fadeOut 0.4s ease-in-out forwards;
         }
 
         @keyframes fadeIn {
@@ -120,6 +125,12 @@
         .leaflet-container {
             font-family: 'Inter', sans-serif;
             background: #0f172a;
+        }
+
+        /* Smooth hardware acceleration for map tiles */
+        .smooth-tile {
+            will-change: opacity, transform;
+            backface-visibility: hidden;
         }
 
         .leaflet-top,
@@ -1385,7 +1396,7 @@
                     } else {
                         map.invalidateSize();
                     }
-                }, 150);
+                }, 50); // Jeda dipercepat dari 150ms agar map lebih cepat tampil
             }
         }
         // ==========================================
@@ -1408,12 +1419,13 @@
             const tileOpt = {
                 maxZoom: 22, // Mengizinkan zoom lebih dalam
                 maxNativeZoom: 19, // Mencegah blank hitam: jika tile detail tidak ada, regangkan gambar yang ada
-                keepBuffer: 4, // Dinaikkan ke 4: Memperluas area pra-muat (pre-fetch) di luar layar. Mencegah pinggiran hitam saat digeser cepat.
-                updateWhenZooming: false, // FALSE: Biarkan peta meregang dulu saat di-zoom, baru load gambar tajam setelah animasi selesai (Super Smooth)
-                updateWhenIdle: false, // KUNCI UTAMA: Paksa peramban memuat gambar seketika SAAT digeser, TIDAK menunggu pergeseran berhenti.
-                updateInterval: 100, // Dipercepat menjadi 100ms agar respon permintaan gambar baru lebih seketika
+                keepBuffer: 3, // Pre-fetch diseimbangkan agar cepat namun hemat memori
+                updateWhenZooming: false, // FALSE: Biarkan peta meregang dulu saat di-zoom, baru load gambar tajam (Super Smooth)
+                updateWhenIdle: false, // KUNCI UTAMA: Paksa load gambar seketika SAAT digeser.
+                updateInterval: 50, // Dipercepat menjadi 50ms agar respon permintaan tile lebih ngebut
                 crossOrigin: true,
-                subdomains: ['0', '1', '2', '3'] // Trik Paralel: Bypass limitasi koneksi browser dengan 4 server Google sekaligus
+                subdomains: ['0', '1', '2', '3'], // Bypass limitasi koneksi browser (4 server)
+                className: 'smooth-tile' // Memicu GPU acceleration
             };
 
             // Definisi Layer (Menggunakan Google CDN 1-Layer yang jauh lebih cepat daripada ESRI 2-Layer)
