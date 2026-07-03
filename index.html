@@ -881,7 +881,24 @@
             </div>
         </main>
     </div> <!-- AREA CETAK OFP -->
-    <div id="printArea" class="hidden print:block bg-white text-black p-8 min-h-screen absolute inset-0 z-[99999]"></div> <!-- ========================================== -->
+    <div id="printArea" class="hidden print:block bg-white text-black p-8 min-h-screen absolute inset-0 z-[99999]"></div> 
+
+    <!-- EXIT CONFIRM MODAL -->
+    <div id="exitConfirmModal" class="print:hidden fixed inset-0 z-[100000] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div class="glass-panel w-full max-w-sm p-6 rounded-2xl relative shadow-2xl text-center fade-in">
+            <div class="w-16 h-16 bg-red-500/20 text-red-400 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 border border-red-500/30">
+                <i class="fas fa-sign-out-alt"></i>
+            </div>
+            <h3 class="text-xl font-bold text-white mb-2">Keluar Aplikasi?</h3>
+            <p class="text-sm text-slate-400 mb-6">Apakah Anda yakin ingin menutup SkyOps Navigation Pro?</p>
+            <div class="flex gap-3">
+                <button onclick="cancelExit()" class="flex-1 bg-slate-800 border border-slate-700 hover:bg-slate-700 py-2.5 rounded-xl text-sm transition text-white font-medium">Batal</button>
+                <button onclick="confirmExit()" class="flex-1 bg-red-600 hover:bg-red-500 py-2.5 rounded-xl text-sm transition shadow-lg shadow-red-500/20 text-white font-bold">Keluar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
     <!--         BAGIAN 9: JAVASCRIPT LOGIC         -->
     <!-- ========================================== -->
     <script>
@@ -915,6 +932,7 @@
         let flightCurrentLon = 0;
         let flightTargetWpIndex = 1;
         let flightMarker = null;
+        let isExiting = false;
         if (!localStorage.getItem('adminUser')) {
             localStorage.setItem('adminUser', 'admin');
             localStorage.setItem('adminPass', 'ramdan28');
@@ -3391,6 +3409,21 @@
         // ==========================================
         // --- BACK BUTTON / HISTORY MANAGER      ---
         // ==========================================
+        function showExitConfirm() {
+            document.getElementById('exitConfirmModal').classList.remove('hidden');
+        }
+
+        function cancelExit() {
+            document.getElementById('exitConfirmModal').classList.add('hidden');
+        }
+
+        function confirmExit() {
+            isExiting = true;
+            document.getElementById('exitConfirmModal').classList.add('hidden');
+            // Trigger history back untuk keluar sepenuhnya
+            history.back();
+        }
+
         window.addEventListener('load', () => {
             // Push initial state untuk membuat "jebakan" riwayat agar tombol back bisa dicegat
             history.pushState({ page: 'init' }, null, window.location.href);
@@ -3399,8 +3432,12 @@
         window.addEventListener('popstate', (e) => {
             let blocked = false;
 
+            // Jika sedang dalam proses exit yang dikonfirmasi, biarkan popstate berjalan natural
+            if (isExiting) return;
+
             // 1. Cek Modal yang sedang terbuka (Sub-modal/popup sekunder dicek lebih dulu)
             const modals = [
+                { id: 'exitConfirmModal', closeFn: cancelExit },
                 { id: 'routeWpSelectModal', closeFn: closeRouteWpSelector },
                 { id: 'parseWaypointModal', closeFn: closeParseModal },
                 { id: 'waypointModal', closeFn: closeWaypointModal },
@@ -3452,6 +3489,15 @@
                 const adminScreen = document.getElementById('adminScreen');
                 if (adminScreen && !adminScreen.classList.contains('hidden')) {
                     logout();
+                    blocked = true;
+                }
+            }
+
+            // 5. Cek Exit Confirmation di Halaman Utama (Main Screen & Map Tab)
+            if (!blocked) {
+                const mainScreen = document.getElementById('mainScreen');
+                if (mainScreen && !mainScreen.classList.contains('hidden')) {
+                    showExitConfirm();
                     blocked = true;
                 }
             }
