@@ -164,6 +164,11 @@
             pointer-events: auto;
         }
 
+        /* TAMBAHAN: Animasi fade mulus untuk peralihan layer peta */
+        .leaflet-layer {
+            transition: opacity 0.6s ease-in-out !important;
+        }
+
         .leaflet-control-layers {
             background: rgba(15, 23, 42, 0.9) !important;
             color: white !important;
@@ -1419,19 +1424,19 @@
             const tileOpt = {
                 maxZoom: 22, // Mengizinkan zoom lebih dalam
                 maxNativeZoom: 19, // Mencegah blank hitam: jika tile detail tidak ada, regangkan gambar yang ada
-                keepBuffer: 3, // Pre-fetch diseimbangkan agar cepat namun hemat memori
-                updateWhenZooming: false, // FALSE: Biarkan peta meregang dulu saat di-zoom, baru load gambar tajam (Super Smooth)
-                updateWhenIdle: false, // KUNCI UTAMA: Paksa load gambar seketika SAAT digeser.
-                updateInterval: 50, // Dipercepat menjadi 50ms agar respon permintaan tile lebih ngebut
-                crossOrigin: true,
-                subdomains: ['0', '1', '2', '3'], // Bypass limitasi koneksi browser (4 server)
-                className: 'smooth-tile' // Memicu GPU acceleration
+                keepBuffer: 6, // DITINGKATKAN: Menyimpan lebih banyak area di cache memori agar geser map lebih instan
+                updateWhenZooming: false, // FALSE: Biarkan peta meregang dulu saat di-zoom, baru load gambar tajam setelah animasi selesai (Super Smooth)
+                updateWhenIdle: false, // KUNCI UTAMA: Paksa peramban memuat gambar seketika SAAT digeser, TIDAK menunggu pergeseran berhenti.
+                updateInterval: 50, // Dipercepat menjadi 50ms agar respon permintaan gambar baru lebih seketika
+                // crossOrigin dihapus untuk menghindari delay CORS Preflight HTTP request dari server Google
+                subdomains: ['0', '1', '2', '3'], // Trik Paralel: Bypass limitasi koneksi browser dengan 4 server Google sekaligus
+                className: 'smooth-tile'
             };
 
-            // Definisi Layer (Menggunakan Google CDN 1-Layer yang jauh lebih cepat daripada ESRI 2-Layer)
-            const satelliteHybrid = L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google' });
-            const streetMap = L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google' });
-            const terrainMap = L.tileLayer('https://mt{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google' });
+            // Definisi Layer (Tambahkan zIndex awal agar tumpukan (stacking) teratur saat ditimpa)
+            const satelliteHybrid = L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google', zIndex: 1 });
+            const streetMap = L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google', zIndex: 1 });
+            const terrainMap = L.tileLayer('https://mt{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google', zIndex: 1 });
 
             satelliteHybrid.addTo(map);
 
@@ -1442,6 +1447,34 @@
             };
             
             L.control.layers(baseMaps, null, { position: 'topright', collapsed: true }).addTo(map);
+
+            // --- TRIK TRANSISI LAYER MAP SEAMLESS (ANTI LAYAR ABU-ABU) ---
+            let currentBaseLayer = satelliteHybrid;
+            map.on('baselayerchange', function (e) {
+                const newLayer = e.layer;
+                if (currentBaseLayer && currentBaseLayer !== newLayer) {
+                    // Turunkan z-index layer lama ke lapisan bawah, layer baru di lapisan atas
+                    currentBaseLayer.setZIndex(0);
+                    newLayer.setZIndex(1);
+                    
+                    // Leaflet otomatis menghapus layer lama saat berganti tab map.
+                    // Kita tambahkan kembali layer lama secara paksa agar menutupi layar yang kosong.
+                    map.addLayer(currentBaseLayer);
+                    
+                    const oldLayer = currentBaseLayer;
+                    
+                    // Tunggu hingga layer baru selesai 100% memuat gambar
+                    newLayer.once('load', function () {
+                        // Setelah layer baru siap, hapus layer lama perlahan dengan efek fade
+                        setTimeout(() => {
+                            if (map.hasLayer(oldLayer)) {
+                                map.removeLayer(oldLayer);
+                            }
+                        }, 500); // Jeda sinkronasi dengan durasi animasi CSS opacity
+                    });
+                }
+                currentBaseLayer = newLayer;
+            });
 
             // Pindahkan kontainer kontrol agar stabil
             const mapContainer = map.getContainer();
