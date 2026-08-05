@@ -1485,13 +1485,13 @@
 
             map.on('click', handleMapClick);
 
-            // TAMBAHAN EVENT LISTENER UNTUK SEMANTIC ZOOMING DENGAN DEBOUNCE
-            let zoomDebounceTimeout;
-            map.on('zoomend', function() {
+            // OPTIMASI EKSTREM: Update waypoint tidak hanya saat zoom, tapi juga saat map selesai digeser (panning)
+            let mapUpdateDebounce;
+            map.on('moveend', function() {
                 // Mencegah patah-patah/lag dengan menunda rendering marker (waypoint) 
-                // jika pengguna melakukan zoom in/out dengan scroll/jari yang sangat cepat berkali-kali.
-                clearTimeout(zoomDebounceTimeout);
-                zoomDebounceTimeout = setTimeout(() => {
+                // hingga pengguna selesai menggeser atau men-zoom peta.
+                clearTimeout(mapUpdateDebounce);
+                mapUpdateDebounce = setTimeout(() => {
                     updateMapWaypoints();
                 }, 150);
             });
@@ -2044,8 +2044,12 @@
             
             let wpsToRender = waypointsData;
             
-            // LOGIKA SEMANTIC ZOOM
+            // LOGIKA SEMANTIC ZOOM & VIEWPORT CULLING
             const currentZoom = map.getZoom();
+            
+            // VIEWPORT CULLING: Hanya perhitungkan koordinat yang ada di dalam kotak pandang layar ponsel + sedikit padding
+            const bounds = map.getBounds();
+            const paddedBounds = bounds.pad(0.3); // Lebihkan area sedikit di luar layar agar saat digeser tidak kosong melompong
             
             if (activeMapRouteId) {
                 const showAll = document.getElementById('toggleAllWps') ? document.getElementById('toggleAllWps').checked : false;
@@ -2066,6 +2070,7 @@
                 } else {
                     // Jika toggleAllWps dicentang, terapkan semantic zoom pada seluruh database
                     wpsToRender = wpsToRender.filter(wp => {
+                        if (!paddedBounds.contains([wp.lat, wp.lon])) return false; // Abaikan jika di luar layar!
                         if (currentZoom < 7) return wp.type === 'airport';
                         else if (currentZoom < 9) return wp.type === 'airport' || wp.type === 'heliport';
                         else return true;
@@ -2074,6 +2079,9 @@
             } else {
                 // Filter waypoint berdasarkan tingkat zoom (Mode Default)
                 wpsToRender = wpsToRender.filter(wp => {
+                    // OPTIMASI DOM KUNCI: Abaikan jika koordinat berada jauh di luar layar! (Paling ampuh atasi Lemot)
+                    if (!paddedBounds.contains([wp.lat, wp.lon])) return false;
+                    
                     if (currentZoom < 7) {
                         // Zoom sangat jauh: Hanya munculkan Airport
                         return wp.type === 'airport';
@@ -2100,13 +2108,24 @@
                     icon: customIcon
                 });
                 
-                // PERBAIKAN: Memastikan wp.name diubah menjadi string pada tooltip peta
-                marker.bindTooltip(String(wp.name || '').toUpperCase(), {
-                    permanent: true,
-                    direction: 'bottom',
-                    className: 'wp-black-label',
-                    offset: [0, 10]
-                });
+                // OPTIMASI MEMORI: Tampilkan label teks permanen hanya jika di-zoom cukup dekat.
+                // Text rendering (Permanent Tooltip) menghabiskan RAM ponsel yang sangat besar.
+                const showLabel = currentZoom >= 8 || activeMapRouteId;
+
+                if (showLabel) {
+                    marker.bindTooltip(String(wp.name || '').toUpperCase(), {
+                        permanent: true,
+                        direction: 'bottom',
+                        className: 'wp-black-label',
+                        offset: [0, 10]
+                    });
+                } else {
+                    // Jika terlalu jauh (zoom out), cukup hover/tap saja untuk melihat namanya
+                    marker.bindTooltip(String(wp.name || '').toUpperCase(), {
+                        permanent: false,
+                        direction: 'top'
+                    });
+                }
 
                 let extraHtml = '';
                 if (wp.type === 'airport') {
