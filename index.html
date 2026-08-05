@@ -949,6 +949,9 @@
         let flightTargetWpIndex = 1;
         let flightMarker = null;
         let isExiting = false;
+        // --- TAMBAHAN VARIABEL UNTUK OPTIMASI MARKER ---
+        let activeWpMarkers = {};
+        let lastZoomState = -1;
         if (!localStorage.getItem('adminUser')) {
             localStorage.setItem('adminUser', 'admin');
             localStorage.setItem('adminPass', 'ramdan28');
@@ -1408,35 +1411,37 @@
         // --- REAL MAP LOGIC (LEAFLET)           ---
         // ==========================================
         function initLeafletMap() {
-            // Optimasi Performa Mesin Leaflet
+            // Hapus CSS Transition yang menyebabkan delay/lag saat digeser
+            const mapEl = document.getElementById('realMap');
+            if(mapEl) mapEl.style.transition = 'none';
+
+            // Optimasi Performa Mesin Leaflet Maksimal
             map = L.map('realMap', {
                 zoomControl: false,
-                preferCanvas: true,
-                wheelPxPerZoomLevel: 120,
-                fadeAnimation: true,
-                markerZoomAnimation: true,
-                bounceAtZoomLimits: false, // Mencegah efek "membal" (bounce) saat batas zoom tercapai agar CPU lebih ringan
-                maxBoundsViscosity: 1.0
+                preferCanvas: true, // Render marker di HTML5 Canvas (BUKAN DOM, sangat krusial untuk HP)
+                wheelPxPerZoomLevel: 60, 
+                fadeAnimation: false, 
+                markerZoomAnimation: false, 
+                zoomAnimation: true,
+                bounceAtZoomLimits: false,
+                inertiaDeceleration: 3000 // Hentikan geseran dengan cepat di HP agar tidak meluncur berlebih
             }).setView([-0.789, 118.921], 5);
 
             L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
             const tileOpt = {
-                maxZoom: 22, // Mengizinkan zoom lebih dalam
-                maxNativeZoom: 19, // Mencegah blank hitam: jika tile detail tidak ada, regangkan gambar yang ada
-                keepBuffer: 6, // DITINGKATKAN: Menyimpan lebih banyak area di cache memori agar geser map lebih instan
-                updateWhenZooming: false, // FALSE: Biarkan peta meregang dulu saat di-zoom, baru load gambar tajam setelah animasi selesai (Super Smooth)
-                updateWhenIdle: false, // KUNCI UTAMA: Paksa peramban memuat gambar seketika SAAT digeser, TIDAK menunggu pergeseran berhenti.
-                updateInterval: 50, // Dipercepat menjadi 50ms agar respon permintaan gambar baru lebih seketika
-                // crossOrigin dihapus untuk menghindari delay CORS Preflight HTTP request dari server Google
-                subdomains: ['0', '1', '2', '3'], // Trik Paralel: Bypass limitasi koneksi browser dengan 4 server Google sekaligus
-                className: 'smooth-tile'
+                maxZoom: 22,
+                maxNativeZoom: 18, 
+                keepBuffer: 16, 
+                updateWhenZooming: false, // MATIKAN loading tile saat zoom agar animasi zoom sangat mulus
+                updateWhenIdle: false, 
+                updateInterval: 16 
             };
 
-            // Definisi Layer (Tambahkan zIndex awal agar tumpukan (stacking) teratur saat ditimpa)
-            const satelliteHybrid = L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google', zIndex: 1 });
-            const streetMap = L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google', zIndex: 1 });
-            const terrainMap = L.tileLayer('https://mt{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google', zIndex: 1 });
+            // Definisi Layer dengan subdomain paralel untuk bypass limit koneksi
+            const satelliteHybrid = L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', { subdomains: ['0', '1', '2', '3'], ...tileOpt, attribution: '&copy; Google', zIndex: 1 });
+            const streetMap = L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { subdomains: ['0', '1', '2', '3'], ...tileOpt, attribution: '&copy; Google', zIndex: 1 });
+            const terrainMap = L.tileLayer('https://mt{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', { subdomains: ['0', '1', '2', '3'], ...tileOpt, attribution: '&copy; Google', zIndex: 1 });
 
             satelliteHybrid.addTo(map);
 
@@ -1485,15 +1490,18 @@
 
             map.on('click', handleMapClick);
 
-            // OPTIMASI EKSTREM: Update waypoint tidak hanya saat zoom, tapi juga saat map selesai digeser (panning)
-            let mapUpdateDebounce;
+            // Render secepat kilat saat selesai geser, tanpa setTimeout
             map.on('moveend', function() {
-                // Mencegah patah-patah/lag dengan menunda rendering marker (waypoint) 
-                // hingga pengguna selesai menggeser atau men-zoom peta.
-                clearTimeout(mapUpdateDebounce);
-                mapUpdateDebounce = setTimeout(() => {
+                requestAnimationFrame(() => {
                     updateMapWaypoints();
-                }, 150);
+                });
+            });
+            
+            // Render ulang segera setelah animasi zoom selesai
+            map.on('zoomend', function() {
+                requestAnimationFrame(() => {
+                    updateMapWaypoints();
+                });
             });
 
             waypointLayerGroup = L.layerGroup().addTo(map);
@@ -2033,7 +2041,6 @@
 
         function updateMapWaypoints() {
             if (!map || !waypointLayerGroup) return;
-            waypointLayerGroup.clearLayers();
             
             if (!document.getElementById('wpTooltipStyle')) {
                 const style = document.createElement('style');
@@ -2042,109 +2049,108 @@
                 document.head.appendChild(style);
             }
             
-            let wpsToRender = waypointsData;
-            
-            // LOGIKA SEMANTIC ZOOM & VIEWPORT CULLING
             const currentZoom = map.getZoom();
             
-            // VIEWPORT CULLING: Hanya perhitungkan koordinat yang ada di dalam kotak pandang layar ponsel + sedikit padding
-            const bounds = map.getBounds();
-            const paddedBounds = bounds.pad(0.3); // Lebihkan area sedikit di luar layar agar saat digeser tidak kosong melompong
+            // Pre-load area yang LEBIH LUAS (1.5x layar) agar geser kiri-kanan seketika muncul
+            const bounds = map.getBounds().pad(1.5); 
             
-            if (activeMapRouteId) {
-                const showAll = document.getElementById('toggleAllWps') ? document.getElementById('toggleAllWps').checked : false;
-                if (!showAll) {
-                    const rt = routesData.find(r => r.id === activeMapRouteId);
-                    if (rt && rt.waypoints) {
-                        // Pastikan mengambil waypoint langsung dari rute agar semua tampil terlepas dari level zoom
-                        const uniqueWps = [];
-                        const seenIds = new Set();
-                        rt.waypoints.forEach(w => {
-                            if (!seenIds.has(w.id)) {
-                                seenIds.add(w.id);
-                                uniqueWps.push(w);
-                            }
-                        });
-                        wpsToRender = uniqueWps;
-                    }
-                } else {
-                    // Jika toggleAllWps dicentang, terapkan semantic zoom pada seluruh database
-                    wpsToRender = wpsToRender.filter(wp => {
-                        if (!paddedBounds.contains([wp.lat, wp.lon])) return false; // Abaikan jika di luar layar!
-                        if (currentZoom < 7) return wp.type === 'airport';
-                        else if (currentZoom < 9) return wp.type === 'airport' || wp.type === 'heliport';
-                        else return true;
+            const showAll = document.getElementById('toggleAllWps') ? document.getElementById('toggleAllWps').checked : false;
+            const showLabel = currentZoom >= 8 || activeMapRouteId;
+            
+            // Cek apakah status tooltip berubah (perlu render ulang tooltip)
+            let forceRecreate = false;
+            if (lastZoomState !== -1 && ((lastZoomState >= 8 && currentZoom < 8) || (lastZoomState < 8 && currentZoom >= 8))) {
+                forceRecreate = true;
+            }
+            lastZoomState = currentZoom;
+
+            if (forceRecreate) {
+                waypointLayerGroup.clearLayers();
+                activeWpMarkers = {};
+            }
+            
+            let wpsToRender = [];
+            
+            // LOGIKA SEMANTIC ZOOM
+            if (activeMapRouteId && !showAll) {
+                const rt = routesData.find(r => r.id === activeMapRouteId);
+                if (rt && rt.waypoints) {
+                    const uniqueWps = [];
+                    const seenIds = new Set();
+                    rt.waypoints.forEach(w => {
+                        if (!seenIds.has(w.id)) {
+                            seenIds.add(w.id);
+                            uniqueWps.push(w);
+                        }
                     });
+                    wpsToRender = uniqueWps;
                 }
             } else {
-                // Filter waypoint berdasarkan tingkat zoom (Mode Default)
-                wpsToRender = wpsToRender.filter(wp => {
-                    // OPTIMASI DOM KUNCI: Abaikan jika koordinat berada jauh di luar layar! (Paling ampuh atasi Lemot)
-                    if (!paddedBounds.contains([wp.lat, wp.lon])) return false;
+                wpsToRender = waypointsData.filter(wp => {
+                    // Optimasi CPU: Singkirkan titik di luar padding screen secepat mungkin!
+                    if (!bounds.contains([wp.lat, wp.lon])) return false;
                     
-                    if (currentZoom < 7) {
-                        // Zoom sangat jauh: Hanya munculkan Airport
-                        return wp.type === 'airport';
-                    } else if (currentZoom < 9) {
-                        // Zoom sedang: Munculkan Airport & Heliport
-                        return wp.type === 'airport' || wp.type === 'heliport';
-                    } else {
-                        // Zoom dekat: Munculkan semua waypoint
-                        return true;
-                    }
+                    if (currentZoom < 7) return wp.type === 'airport';
+                    else if (currentZoom < 9) return wp.type === 'airport' || wp.type === 'heliport';
+                    else return true;
                 });
             }
 
+            // --- DIFFING ALGORITHM UNTUK MENCEGAH RE-RENDER DOM YANG BERAT ---
+            const wpsToRenderIds = new Set(wpsToRender.map(w => w.id));
+
+            // 1. Hapus marker yang sudah keluar dari layar HP + padding
+            for (const id in activeWpMarkers) {
+                if (!wpsToRenderIds.has(id)) {
+                    waypointLayerGroup.removeLayer(activeWpMarkers[id]);
+                    delete activeWpMarkers[id];
+                }
+            }
+
+            // 2. Tambahkan marker baru yang baru masuk ke layar HP
             wpsToRender.forEach(wp => {
-                // UKURAN BASE ICON DIPERKECIL
-                const customIcon = L.divIcon({
-                    html: getIconHTML(wp.type),
-                    className: '',
-                    iconSize: [20, 20], 
-                    iconAnchor: [10, 10],
-                    popupAnchor: [0, -10]
-                });
-                const marker = L.marker([wp.lat, wp.lon], {
-                    icon: customIcon
-                });
-                
-                // OPTIMASI MEMORI: Tampilkan label teks permanen hanya jika di-zoom cukup dekat.
-                // Text rendering (Permanent Tooltip) menghabiskan RAM ponsel yang sangat besar.
-                const showLabel = currentZoom >= 8 || activeMapRouteId;
-
-                if (showLabel) {
-                    marker.bindTooltip(String(wp.name || '').toUpperCase(), {
-                        permanent: true,
-                        direction: 'bottom',
-                        className: 'wp-black-label',
-                        offset: [0, 10]
+                if (!activeWpMarkers[wp.id]) {
+                    const customIcon = L.divIcon({
+                        html: getIconHTML(wp.type),
+                        className: '',
+                        iconSize: [20, 20], 
+                        iconAnchor: [10, 10],
+                        popupAnchor: [0, -10]
                     });
-                } else {
-                    // Jika terlalu jauh (zoom out), cukup hover/tap saja untuk melihat namanya
-                    marker.bindTooltip(String(wp.name || '').toUpperCase(), {
-                        permanent: false,
-                        direction: 'top'
-                    });
-                }
+                    const marker = L.marker([wp.lat, wp.lon], { icon: customIcon });
 
-                let extraHtml = '';
-                if (wp.type === 'airport') {
-                    extraHtml = `
-                    <div class="mt-3 pt-2 border-t border-slate-700/50">
-                        <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px]">
-                            <p class="m-0"><span class="text-slate-500">RWY:</span> <span class="text-white">${wp.runway || '-'}</span></p>
-                            <p class="m-0"><span class="text-slate-500">FREQ:</span> <span class="text-white">${wp.generalFreq || '-'}</span></p>
-                        </div>
-                        ${wp.towers && wp.towers.length > 0 ? `<div class="mt-1 text-[9px] text-emerald-400 font-bold">TWR: ${wp.towers[0].name} (${wp.towers[0].freq})</div>` : ''}
-                    </div>`;
-                }
+                    if (showLabel) {
+                        marker.bindTooltip((wp.name || '').toString().toUpperCase(), {
+                            permanent: true,
+                            direction: 'bottom',
+                            className: 'wp-black-label',
+                            offset: [0, 10]
+                        });
+                    } else {
+                        marker.bindTooltip((wp.name || '').toString().toUpperCase(), {
+                            permanent: false,
+                            direction: 'top'
+                        });
+                    }
 
-                // PERBAIKAN: Memastikan wp.name diubah menjadi string pada popup peta
-                const popupHtml = `<div class="min-w-[180px]"><div class="flex items-center gap-2 mb-2 border-b border-slate-600 pb-2">${getIconHTML(wp.type).replace('mx-auto', '')}<h4 class="font-bold text-sm text-blue-400 m-0">${String(wp.name || '').toUpperCase()}</h4></div><div class="text-xs text-slate-300 space-y-1 mb-2"><p class="m-0 flex items-center"><i class="fas fa-map-pin w-4 text-center text-slate-400 mr-1"></i> ${decToDMSStr(wp.lat, true)}</p><p class="m-0 flex items-center"><i class="fas fa-map-pin w-4 text-center text-slate-400 opacity-0 mr-1"></i> ${decToDMSStr(wp.lon, false)}</p><p class="m-0 flex items-center mt-1"><i class="fas fa-mountain w-4 text-center text-slate-400 mr-1"></i> ${wp.elev} ft</p></div>${extraHtml}<div class="flex gap-2 mt-4"><button onclick="addToRoute('${wp.id}')" class="bg-blue-600 hover:bg-blue-500 text-white px-2 py-1.5 rounded text-[10px] flex-1 transition font-medium"><i class="fas fa-plus mr-1"></i> Route</button><button onclick="showWaypointDetail('${wp.id}')" class="bg-slate-700 hover:bg-slate-600 border border-slate-600 text-white px-2 py-1.5 rounded text-[10px] flex-1 transition font-medium"><i class="fas fa-info-circle mr-1"></i> Info</button></div></div>`;
-                marker.bindPopup(popupHtml, {
-                    className: 'custom-popup'
-                });
-                waypointLayerGroup.addLayer(marker);
+                    let extraHtml = '';
+                    if (wp.type === 'airport') {
+                        extraHtml = `
+                        <div class="mt-3 pt-2 border-t border-slate-700/50">
+                            <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px]">
+                                <p class="m-0"><span class="text-slate-500">RWY:</span> <span class="text-white">${wp.runway || '-'}</span></p>
+                                <p class="m-0"><span class="text-slate-500">FREQ:</span> <span class="text-white">${wp.generalFreq || '-'}</span></p>
+                            </div>
+                            ${wp.towers && wp.towers.length > 0 ? `<div class="mt-1 text-[9px] text-emerald-400 font-bold">TWR: ${wp.towers[0].name} (${wp.towers[0].freq})</div>` : ''}
+                        </div>`;
+                    }
+
+                    const popupHtml = `<div class="min-w-[180px]"><div class="flex items-center gap-2 mb-2 border-b border-slate-600 pb-2">${getIconHTML(wp.type).replace('mx-auto', '')}<h4 class="font-bold text-sm text-blue-400 m-0">${(wp.name || '').toString().toUpperCase()}</h4></div><div class="text-xs text-slate-300 space-y-1 mb-2"><p class="m-0 flex items-center"><i class="fas fa-map-pin w-4 text-center text-slate-400 mr-1"></i> ${decToDMSStr(wp.lat, true)}</p><p class="m-0 flex items-center"><i class="fas fa-map-pin w-4 text-center text-slate-400 opacity-0 mr-1"></i> ${decToDMSStr(wp.lon, false)}</p><p class="m-0 flex items-center mt-1"><i class="fas fa-mountain w-4 text-center text-slate-400 mr-1"></i> ${wp.elev} ft</p></div>${extraHtml}<div class="flex gap-2 mt-4"><button onclick="addToRoute('${wp.id}')" class="bg-blue-600 hover:bg-blue-500 text-white px-2 py-1.5 rounded text-[10px] flex-1 transition font-medium"><i class="fas fa-plus mr-1"></i> Route</button><button onclick="showWaypointDetail('${wp.id}')" class="bg-slate-700 hover:bg-slate-600 border border-slate-600 text-white px-2 py-1.5 rounded text-[10px] flex-1 transition font-medium"><i class="fas fa-info-circle mr-1"></i> Info</button></div></div>`;
+                    marker.bindPopup(popupHtml, { className: 'custom-popup' });
+                    
+                    waypointLayerGroup.addLayer(marker);
+                    activeWpMarkers[wp.id] = marker;
+                }
             });
         }
 
@@ -3297,6 +3303,7 @@
 
             // Kembalikan ukuran canvas Leaflet ke ukuran normal
             const mapContainer = document.getElementById('realMap');
+            mapContainer.style.transition = 'none'; // Kunci: Buang animasi CSS saat mode normal agar tidak ngelag
             mapContainer.style.width = '100%';
             mapContainer.style.height = '100%';
             mapContainer.style.top = '0';
@@ -3367,6 +3374,8 @@
         function updateTrackUp(heading) {
             const mapContainer = document.getElementById('realMap');
             mapContainer.style.transformOrigin = 'center center';
+            // Aktifkan transisi HANYA saat rotasi simulasi
+            mapContainer.style.transition = 'transform 0.1s linear';
             mapContainer.style.transform = `rotate(${-heading}deg)`;
             map.panTo([flightCurrentLat, flightCurrentLon], {
                 animate: true,
