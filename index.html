@@ -445,7 +445,10 @@
             <div id="tab-route" class="tab-content absolute inset-0 p-3 sm:p-6 hidden h-full overflow-hidden">
                 <div class="w-full h-full glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-6 flex flex-col relative overflow-hidden">
                     <div class="flex justify-between items-center mb-4 sm:mb-6 shrink-0">
-                        <h2 class="text-base sm:text-xl font-semibold"><i class="fas fa-route mr-2 text-blue-400"></i>Flight Routes</h2>
+                        <h2 class="text-base sm:text-xl font-semibold flex items-center">
+                            <i class="fas fa-route mr-2 text-blue-400"></i>Flight Routes
+                            <span id="routeSlotIndicator" class="ml-3 px-2 py-0.5 text-[10px] sm:text-xs font-bold rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">0/90</span>
+                        </h2>
                         <div class="flex items-center gap-2 sm:gap-4">
                             <div class="relative hidden lg:block"> <i class="fas fa-search absolute left-3 top-2.5 text-slate-400 text-sm"></i> <input type="text" id="searchInputRoute" onkeyup="renderRouteList()" placeholder="Search Name..." class="bg-slate-800/80 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm text-white outline-none focus:border-blue-500 w-48 xl:w-64"> </div>
                             <button onclick="openRouteForm()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg transition shadow-lg shadow-blue-500/20 flex items-center"> <i class="fas fa-plus sm:mr-2"></i> <span class="hidden sm:inline">Add New Route</span> </button>
@@ -2622,6 +2625,21 @@
         function renderRouteList() {
             const tbody = document.getElementById('routeTableBody');
             const search = document.getElementById('searchInputRoute') ? document.getElementById('searchInputRoute').value.toLowerCase() : '';
+            
+            // Update Indikator Sisa Slot Rute
+            const indicator = document.getElementById('routeSlotIndicator');
+            if (indicator) {
+                const count = routesData.length;
+                indicator.textContent = `${count}/90`;
+                if (count >= 90) {
+                    indicator.className = 'ml-3 px-2 py-0.5 text-[10px] sm:text-xs font-bold rounded-full bg-red-500/20 text-red-400 border border-red-500/30';
+                } else if (count >= 80) {
+                    indicator.className = 'ml-3 px-2 py-0.5 text-[10px] sm:text-xs font-bold rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30';
+                } else {
+                    indicator.className = 'ml-3 px-2 py-0.5 text-[10px] sm:text-xs font-bold rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30';
+                }
+            }
+            
             tbody.innerHTML = '';
             // PERBAIKAN: Bungkus name dan aircraftReg dengan String()
             const filtered = routesData.filter(rt => String(rt.name || '').toLowerCase().includes(search) || String(rt.aircraftReg || '').toLowerCase().includes(search));
@@ -2701,10 +2719,14 @@
         }
 
         function closeRouteDetailModal() {
-            document.getElementById('routeDetailModal').classList.add('hidden');
+             document.getElementById('routeDetailModal').classList.add('hidden');
         }
 
         function duplicateRoute(id) {
+            if (routesData.length >= 90) {
+                alert("Peringatan: Kuota maksimal 90 rute telah tercapai! Anda tidak dapat menduplikasi rute. Silakan hapus rute lama terlebih dahulu.");
+                return;
+            }
             const rt = routesData.find(r => r.id === id);
             if (!rt) return;
             const clone = JSON.parse(JSON.stringify(rt));
@@ -3056,6 +3078,13 @@
 
         function saveRoute() {
             const id = document.getElementById('rtId').value;
+
+            // Validasi Kuota Maksimal Rute (hanya berlaku untuk penambahan rute baru, bukan edit)
+            if (!id && routesData.length >= 90) {
+                alert("Peringatan: Kuota maksimal 90 rute telah tercapai! Anda tidak dapat menyimpan rute baru. Silakan hapus rute lama terlebih dahulu.");
+                return;
+            }
+
             const name = document.getElementById('rtName').value.trim();
             const acId = document.getElementById('rtAircraft').value;
             const etd = document.getElementById('rtEtd').value;
