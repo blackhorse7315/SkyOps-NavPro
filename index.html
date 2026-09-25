@@ -164,7 +164,7 @@
             pointer-events: auto;
         }
 
-        /* TAMBAHAN: Animasi fade mulus untuk peralihan layer peta */
+        /* Animasi fade mulus untuk peralihan layer peta */
         .leaflet-layer {
             transition: opacity 0.6s ease-in-out !important;
         }
@@ -232,6 +232,7 @@
         <h1 class="text-2xl md:text-5xl font-light tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300 fade-in" style="animation-delay: 0.3s;"> Welcome To </h1>
         <h2 class="text-xl md:text-4xl font-bold mt-2 text-white tracking-widest fade-in text-center px-4" style="animation-delay: 0.6s;"> SkyOps Navigation Pro <span class="text-blue-500 text-sm md:text-lg align-top">V.01</span> </h2>
     </div>
+
     <!-- ========================================== -->
     <!--         BAGIAN 2: LOGIN SCREEN             -->
     <!-- ========================================== -->
@@ -252,6 +253,7 @@
             </form>
         </div>
     </div>
+
     <!-- ========================================== -->
     <!--         BAGIAN 3: ADMIN DASHBOARD          -->
     <!-- ========================================== -->
@@ -263,7 +265,7 @@
                     <p class="text-[9px] md:text-xs text-slate-400 hidden sm:block mt-0.5 truncate">System Management Console</p>
                 </div>
             </div>
-            <div class="flex items-center gap-2 md:gap-4 flex-none"> <button onclick="syncWithGoogleSheet()" class="text-[10px] md:text-sm bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 px-2 sm:px-3 md:px-4 py-1.5 md:py-2 rounded-lg hover:bg-emerald-600/40 transition flex-none"> <i class="fas fa-sync-alt sm:mr-2"></i><span class="hidden sm:inline">Sync Sheet</span> </button> <button onclick="logout()" class="text-[10px] md:text-sm bg-red-500/20 text-red-400 border border-red-500/30 px-2 sm:px-3 md:px-4 py-1.5 md:py-2 rounded-lg hover:bg-red-500/40 transition flex-none"> <i class="fas fa-sign-out-alt sm:mr-2"></i><span class="hidden sm:inline">Logout</span> </button> </div>
+            <div class="flex items-center gap-2 md:gap-4 flex-none"> <button onclick="syncWithCloud()" class="text-[10px] md:text-sm bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 px-2 sm:px-3 md:px-4 py-1.5 md:py-2 rounded-lg hover:bg-emerald-600/40 transition flex-none"> <i class="fas fa-sync-alt sm:mr-2"></i><span class="hidden sm:inline">Sync Cloud</span> </button> <button onclick="logout()" class="text-[10px] md:text-sm bg-red-500/20 text-red-400 border border-red-500/30 px-2 sm:px-3 md:px-4 py-1.5 md:py-2 rounded-lg hover:bg-red-500/40 transition flex-none"> <i class="fas fa-sign-out-alt sm:mr-2"></i><span class="hidden sm:inline">Logout</span> </button> </div>
         </header>
         <div class="flex-1 overflow-y-auto p-4 md:p-6 relative">
             <div class="max-w-7xl mx-auto w-full grid grid-cols-1 xl:grid-cols-3 gap-6">
@@ -296,7 +298,9 @@
                 </div>
             </div>
         </div>
-    </div> <!-- Add/Edit User Modal -->
+    </div> 
+    
+    <!-- Add/Edit User Modal -->
     <div id="userModal" class="print:hidden fixed inset-0 z-[10000] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-4">
         <div class="glass-panel w-full max-w-md p-5 sm:p-6 rounded-2xl relative"> <button onclick="closeUserModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white z-50 cursor-pointer p-1"><i class="fas fa-times text-lg"></i></button>
             <h3 id="modalTitle" class="text-lg sm:text-xl font-bold mb-4 pr-6">Add New User</h3>
@@ -312,7 +316,9 @@
                 <div class="flex gap-3 pt-2 sm:pt-4"> <button type="button" onclick="closeUserModal()" class="flex-1 bg-slate-700 hover:bg-slate-600 py-2 rounded-lg text-sm transition">Cancel</button> <button type="submit" class="flex-1 bg-blue-600 hover:bg-blue-500 py-2 rounded-lg text-sm transition font-medium">Save User</button> </div>
             </form>
         </div>
-    </div> <!-- ========================================== -->
+    </div> 
+
+    <!-- ========================================== -->
     <!--         BAGIAN 4: MAIN APP CONTAINER       -->
     <!-- ========================================== -->
     <div id="mainScreen" class="print:hidden hidden absolute inset-0 flex flex-col bg-[#0b1121] overflow-hidden">
@@ -327,7 +333,7 @@
                 <div class="text-right hidden md:block">
                     <p class="text-sm font-medium text-white truncate" id="displayUserName">Pilot</p>
                     <p class="text-xs text-slate-400 truncate">Active Session</p>
-                </div> <button onclick="syncWithGoogleSheet()" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-800 border border-slate-700 hover:bg-emerald-500/20 hover:text-emerald-400 hover:border-emerald-500/50 transition flex items-center justify-center text-slate-300 flex-none" title="Sync Data dari Cloud"> <i class="fas fa-sync-alt text-xs md:text-base"></i> </button> <button onclick="logout()" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-800 border border-slate-700 hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/50 transition flex items-center justify-center text-slate-300 flex-none" title="Logout"> <i class="fas fa-power-off text-xs md:text-base"></i> </button>
+                </div> <button onclick="syncWithCloud()" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-800 border border-slate-700 hover:bg-emerald-500/20 hover:text-emerald-400 hover:border-emerald-500/50 transition flex items-center justify-center text-slate-300 flex-none" title="Sync Data dari Cloud"> <i class="fas fa-sync-alt text-xs md:text-base"></i> </button> <button onclick="logout()" class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-slate-800 border border-slate-700 hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/50 transition flex items-center justify-center text-slate-300 flex-none" title="Logout"> <i class="fas fa-power-off text-xs md:text-base"></i> </button>
             </div>
         </header>
         <nav class="bg-slate-900/80 border-b border-slate-800 px-2 md:px-4 py-2 z-20 overflow-x-auto no-scrollbar relative flex-none">
@@ -339,6 +345,7 @@
             </ul>
         </nav>
         <main class="flex-1 relative bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-opacity-5 w-full">
+            
             <!-- ========================================== -->
             <!--         BAGIAN 5: TAB - MAP                -->
             <!-- ========================================== -->
@@ -439,16 +446,14 @@
                     </div>
                 </div> <button id="btnAutoDetectMap" onclick="locateUser()" title="Auto Detect Position" class="absolute bottom-20 right-2 sm:bottom-6 sm:right-6 z-[1000] w-10 h-10 sm:w-12 sm:h-12 bg-blue-600/90 hover:bg-blue-500 backdrop-blur border border-blue-400/50 text-white rounded-full shadow-[0_0_20px_rgba(59,130,246,0.5)] flex items-center justify-center transition-all transform hover:scale-105 active:scale-95 group"> <i class="fas fa-crosshairs text-base sm:text-xl group-hover:rotate-90 transition-transform duration-500"></i> </button>
             </div>
+
             <!-- ========================================== -->
             <!--         BAGIAN 6: TAB - ROUTE              -->
             <!-- ========================================== -->
             <div id="tab-route" class="tab-content absolute inset-0 p-3 sm:p-6 hidden h-full overflow-hidden">
                 <div class="w-full h-full glass-panel rounded-2xl sm:rounded-3xl p-4 sm:p-6 flex flex-col relative overflow-hidden">
                     <div class="flex justify-between items-center mb-4 sm:mb-6 shrink-0">
-                        <h2 class="text-base sm:text-xl font-semibold flex items-center">
-                            <i class="fas fa-route mr-2 text-blue-400"></i>Flight Routes
-                            <span id="routeSlotIndicator" class="ml-3 px-2 py-0.5 text-[10px] sm:text-xs font-bold rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">0/90</span>
-                        </h2>
+                        <h2 class="text-base sm:text-xl font-semibold"><i class="fas fa-route mr-2 text-blue-400"></i>Flight Routes</h2>
                         <div class="flex items-center gap-2 sm:gap-4">
                             <div class="relative hidden lg:block"> <i class="fas fa-search absolute left-3 top-2.5 text-slate-400 text-sm"></i> <input type="text" id="searchInputRoute" onkeyup="renderRouteList()" placeholder="Search Name..." class="bg-slate-800/80 border border-slate-700 rounded-lg pl-9 pr-4 py-2 text-sm text-white outline-none focus:border-blue-500 w-48 xl:w-64"> </div>
                             <button onclick="openRouteForm()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg transition shadow-lg shadow-blue-500/20 flex items-center"> <i class="fas fa-plus sm:mr-2"></i> <span class="hidden sm:inline">Add New Route</span> </button>
@@ -623,7 +628,9 @@
                         <div class="grid grid-cols-2 gap-2 sm:gap-3 mt-1 sm:mt-2 pb-2"> <button id="btnDetSimulate" class="bg-indigo-600 hover:bg-indigo-500 text-white py-2 sm:py-3 rounded-xl text-xs sm:text-sm transition font-bold flex justify-center items-center shadow-lg shadow-indigo-500/20"><i class="fas fa-play-circle mr-1.5 sm:mr-2 text-sm sm:text-lg"></i> Simulate</button> <button id="btnDetNavigate" class="bg-emerald-600 hover:bg-emerald-500 text-white py-2 sm:py-3 rounded-xl text-xs sm:text-sm transition font-bold flex justify-center items-center shadow-lg shadow-emerald-500/20"><i class="fas fa-location-arrow mr-1.5 sm:mr-2 text-sm sm:text-lg"></i> Navigate</button> <button id="btnDetViewMap" class="col-span-2 bg-slate-700 hover:bg-slate-600 text-white py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm transition font-medium flex items-center justify-center mt-1 sm:mt-2 border border-slate-600"> <i class="fas fa-map-marked-alt mr-2"></i> View Route on Map </button> <button id="btnDetPrint" class="col-span-2 bg-slate-200 hover:bg-slate-300 text-slate-900 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm transition font-bold flex items-center justify-center border border-slate-300 mb-1 sm:mb-2"> <i class="fas fa-file-pdf mr-2 text-red-600"></i> Print OFP (PDF / A4) </button> <button id="btnDetEdit" class="bg-slate-800 hover:bg-blue-600/50 border border-slate-700 text-slate-300 hover:text-white py-1.5 sm:py-2 rounded-xl text-[10px] sm:text-xs transition font-medium flex justify-center items-center"><i class="fas fa-edit mr-1 sm:mr-2"></i> Edit</button> <button id="btnDetDuplicate" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white py-1.5 sm:py-2 rounded-xl text-[10px] sm:text-xs transition font-medium flex justify-center items-center"><i class="fas fa-copy mr-1 sm:mr-2"></i> Dup</button> <button id="btnDetInvert" class="bg-slate-800 hover:bg-orange-600/50 border border-slate-700 text-slate-300 hover:text-white py-1.5 sm:py-2 rounded-xl text-[10px] sm:text-xs transition font-medium flex justify-center items-center"><i class="fas fa-exchange-alt mr-1 sm:mr-2"></i> Invert</button> <button id="btnDetDelete" class="bg-slate-800 hover:bg-red-600/50 border border-slate-700 text-red-400 hover:text-white py-1.5 sm:py-2 rounded-xl text-[10px] sm:text-xs transition font-medium flex justify-center items-center"><i class="fas fa-trash mr-1 sm:mr-2"></i> Del</button> </div>
                     </div>
                 </div>
-            </div> <!-- ========================================== -->
+            </div>
+
+            <!-- ========================================== -->
             <!--         BAGIAN 7: TAB - WAYPOINT DB        -->
             <!-- ========================================== -->
             <div id="tab-waypoint" class="tab-content absolute inset-0 p-3 sm:p-6 hidden h-full overflow-hidden">
@@ -727,6 +734,12 @@
                                     <input type="text" id="apNdbFreq" placeholder="Freq" class="w-full bg-transparent border-b border-slate-700 text-[10px] outline-none">
                                 </div>
                             </div>
+                            
+                            <!-- CHART URLs SECTION -->
+                            <div class="grid grid-cols-2 gap-3 border-t border-slate-700/50 pt-3 mt-1">
+                                <div><label class="text-[10px] text-slate-400 block mb-1">Aerodrome Chart (URL)</label><input type="url" id="apAerodromeChart" placeholder="https://..." class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-emerald-500"></div>
+                                <div><label class="text-[10px] text-slate-400 block mb-1">Approach Chart (URL)</label><input type="url" id="apApproachChart" placeholder="https://..." class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-emerald-500"></div>
+                            </div>
                         </div>
                         <div class="flex gap-3 pt-2 sm:pt-4 border-t border-slate-700 mt-4 sm:mt-6"> <button type="button" onclick="closeWaypointModal()" class="flex-1 bg-slate-800 border border-slate-700 hover:bg-slate-700 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm transition">Cancel</button> <button type="submit" class="flex-1 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition shadow-lg shadow-blue-500/20 text-white">Save Data</button> </div>
                     </form>
@@ -766,11 +779,15 @@
                                 <div><p class="text-[9px] text-emerald-400 uppercase font-bold">ILS</p><p id="detApIls" class="text-[10px] text-white font-mono">-</p></div>
                                 <div><p class="text-[9px] text-emerald-400 uppercase font-bold">NDB</p><p id="detApNdb" class="text-[10px] text-white font-mono">-</p></div>
                             </div>
+                            <!-- CHARTS RENDER SECTION -->
+                            <div id="detApCharts" class="grid grid-cols-2 gap-2 border-t border-emerald-500/10 pt-3 mt-1 hidden"></div>
                         </div>
                         <div class="grid grid-cols-3 gap-2 pt-2"> <button id="btnWpShowMap" class="bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-xl text-xs transition font-bold flex flex-col items-center gap-1"><i class="fas fa-map-marked-alt text-lg"></i> Map</button> <button id="btnWpEdit" class="bg-blue-600 hover:bg-blue-500 text-white py-2.5 rounded-xl text-xs transition font-bold flex flex-col items-center gap-1"><i class="fas fa-edit text-lg"></i> Edit</button> <button id="btnWpDelete" class="bg-red-600/20 hover:bg-red-600/40 text-red-400 border border-red-500/30 py-2.5 rounded-xl text-xs transition font-bold flex flex-col items-center gap-1"><i class="fas fa-trash text-lg"></i> Del</button> </div>
                     </div>
                 </div>
-            </div> <!-- ========================================== -->
+            </div> 
+
+            <!-- ========================================== -->
             <!--         BAGIAN 8: TAB - AIRCRAFT PROFILE   -->
             <!-- ========================================== -->
             <div id="tab-aircraft" class="tab-content absolute inset-0 p-3 sm:p-6 hidden h-full overflow-hidden">
@@ -917,13 +934,104 @@
         </div>
     </div>
 
+    <!-- Custom Modals to Replace alert() and confirm() -->
+    <div id="msgModal" class="fixed inset-0 z-[1000000] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div class="glass-panel w-full max-w-sm p-6 rounded-2xl relative shadow-2xl text-center fade-in">
+            <h3 id="msgTitle" class="text-xl font-bold text-white mb-2">Message</h3>
+            <p id="msgBody" class="text-sm text-slate-300 mb-6">...</p>
+            <button onclick="closeMsgModal()" class="w-full bg-blue-600 hover:bg-blue-500 py-2.5 rounded-xl text-sm transition text-white font-bold">OK</button>
+        </div>
+    </div>
+
+    <div id="confirmModal" class="fixed inset-0 z-[1000000] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+        <div class="glass-panel w-full max-w-sm p-6 rounded-2xl relative shadow-2xl text-center fade-in">
+            <h3 id="confirmTitle" class="text-xl font-bold text-white mb-2">Confirm</h3>
+            <p id="confirmBody" class="text-sm text-slate-300 mb-6">...</p>
+            <div class="flex gap-3">
+                <button onclick="cancelConfirm()" class="flex-1 bg-slate-800 border border-slate-700 hover:bg-slate-700 py-2.5 rounded-xl text-sm transition text-white font-medium">Batal</button>
+                <button onclick="executeConfirm()" class="flex-1 bg-red-600 hover:bg-red-500 py-2.5 rounded-xl text-sm transition shadow-lg shadow-red-500/20 text-white font-bold">Ya</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ========================================== -->
     <!--         BAGIAN 9: JAVASCRIPT LOGIC         -->
     <!-- ========================================== -->
-    <script>
-        // --- KONFIGURASI GOOGLE SHEETS ---
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-Lhji7xa9WwfgSlqBcLSaoIGTvEBLl3Y-yhNZFtbatUWhLZgkNnbDROuve9HQ0MQ-ZA/exec';
-        // --- GLOBAL STATE ---
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDocs, setDoc, deleteDoc, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = typeof __firebase_config !== 'undefined'
+            ? JSON.parse(__firebase_config)
+            : {
+                apiKey: "AIzaSyA7o-iwr_RTnFPGyBGgOUaLa3RKGz7FZkg",
+                authDomain: "skynavpro.firebaseapp.com",
+                projectId: "skynavpro",
+                storageBucket: "skynavpro.firebasestorage.app",
+                messagingSenderId: "20991699222",
+                appId: "1:20991699222:web:0905a6c681d9a55e124837",
+                measurementId: "G-DMLXGKGPN4"
+            };
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'skynavpro';
+
+        let app, db, auth;
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+        } catch (error) {
+            console.error("Firebase initialization failed:", error);
+        }
+
+        // Helpers untuk Public Path Firestore sesuai panduan
+        function getColRef(colName) {
+            return collection(db, 'artifacts', appId, 'public', 'data', colName);
+        }
+        function getDocRef(colName, docId) {
+            return doc(db, 'artifacts', appId, 'public', 'data', colName, String(docId));
+        }
+
+        // Sanitasi objek rekursif untuk mencegah field 'undefined' merusak penyimpanan Firestore
+        function sanitizeForFirestore(data) {
+            if (data === undefined) return null;
+            if (data === null || typeof data !== 'object') return data;
+            if (Array.isArray(data)) return data.map(sanitizeForFirestore);
+            const result = {};
+            for (const key of Object.keys(data)) {
+                if (data[key] !== undefined) {
+                    result[key] = sanitizeForFirestore(data[key]);
+                }
+            }
+            return result;
+        }
+
+        function showMessage(title, text) {
+            document.getElementById('msgTitle').textContent = title;
+            document.getElementById('msgBody').textContent = text;
+            document.getElementById('msgModal').classList.remove('hidden');
+        }
+        function closeMsgModal() {
+            document.getElementById('msgModal').classList.add('hidden');
+        }
+
+        let confirmCallback = null;
+        function showConfirm(title, text, onYes) {
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmBody').textContent = text;
+            confirmCallback = onYes;
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
+        function cancelConfirm() {
+            document.getElementById('confirmModal').classList.add('hidden');
+            confirmCallback = null;
+        }
+        function executeConfirm() {
+            if (confirmCallback) confirmCallback();
+            cancelConfirm();
+        }
+
         let usersData = [];
         let currentUser = null;
         let map = null;
@@ -933,15 +1041,12 @@
         let aircraftsData = [];
         let routesData = [];
         let currentRouteWps = [];
-        // State Map Route Builder
         let mapBuilderWps = [];
         let mapBuilderLayerGroup = null;
         let pendingBuilderInsert = null;
-        // State Map Active Route Overlay & Dragging
         let activeMapRouteId = null;
         let activeRouteLayerGroup = null;
         let pendingRouteInsert = null;
-        // State Flight Mode (Simulasi / Navigasi)
         let flightMode = 'none'; // 'none', 'sim', 'nav'
         let flightRouteData = null;
         let flightAircraftData = null;
@@ -952,42 +1057,16 @@
         let flightTargetWpIndex = 1;
         let flightMarker = null;
         let isExiting = false;
-        // --- TAMBAHAN VARIABEL UNTUK OPTIMASI MARKER ---
+
+        // Variabel state untuk Optimasi Marker Map
         let activeWpMarkers = {};
         let lastZoomState = -1;
+
         if (!localStorage.getItem('adminUser')) {
             localStorage.setItem('adminUser', 'admin');
             localStorage.setItem('adminPass', 'ramdan28');
         }
-        // ==========================================
-        // --- GOOGLE SHEETS API HELPERS          ---
-        // ==========================================
-        async function fetchFromSheet(sheetName) {
-            if (!GOOGLE_SCRIPT_URL) return null;
-            try {
-                const res = await fetch(`${GOOGLE_SCRIPT_URL}?sheet=${sheetName}&t=${Date.now()}`);
-                if (!res.ok) throw new Error("Gagal merespon dari server.");
-                const text = await res.text();
-                return JSON.parse(text);
-            } catch (err) {
-                console.error(`Error Fetching ${sheetName}:`, err);
-                return null;
-            }
-        }
-        async function postToSheet(sheetName, data) {
-            if (!GOOGLE_SCRIPT_URL) return;
-            try {
-                await fetch(`${GOOGLE_SCRIPT_URL}?sheet=${sheetName}`, {
-                    method: 'POST',
-                    body: JSON.stringify(data)
-                });
-            } catch (err) {
-                console.error(`Error Posting ${sheetName}:`, err);
-            }
-        }
-        // ==========================================
-        // --- MATH & UTILITY HELPERS             ---
-        // ==========================================
+
         function decToDMSStr(dec, isLat) {
             const dir = dec < 0 ? (isLat ? 'S' : 'W') : (isLat ? 'N' : 'E');
             let abs = Math.abs(dec);
@@ -1014,7 +1093,6 @@
         }
 
         function getIconHTML(type) {
-            // UKURAN ICON TELAH DIPERKECIL
             switch (type) {
                 case 'vfr':
                     return '<div class="w-4 h-4 bg-orange-500 rounded-sm mx-auto shadow-md" title="VFR"></div>';
@@ -1048,12 +1126,9 @@
 
         function formatTimeHM(decHours) {
             if (isNaN(decHours) || decHours === Infinity) return "00:00";
-            const hrs = Math.floor(decHours);
+            let hrs = Math.floor(decHours);
             let mins = Math.round((decHours - hrs) * 60);
-            if (mins === 60) {
-                hrs++;
-                mins = 0;
-            }
+            if (mins === 60) { hrs++; mins = 0; }
             return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
         }
 
@@ -1065,17 +1140,14 @@
             let totalDec = h + (m / 60) + decHours;
             let finalH = Math.floor(totalDec) % 24;
             let finalM = Math.round((totalDec - Math.floor(totalDec)) * 60);
-            if (finalM === 60) {
-                finalH = (finalH + 1) % 24;
-                finalM = 0;
-            }
+            if (finalM === 60) { finalH = (finalH + 1) % 24; finalM = 0; }
             return `${finalH.toString().padStart(2, '0')}:${finalM.toString().padStart(2, '0')}`;
         }
 
         function formatDecimal(val) {
-            return isNaN(val) ? 0 : val.toFixed(1);
+            return isNaN(val) ? '0.0' : val.toFixed(1);
         }
-        // --- VIEW CONTROLLER ---
+
         function showView(viewId) {
             document.getElementById('splashScreen').classList.add('hidden');
             document.getElementById('loginScreen').classList.add('hidden');
@@ -1084,93 +1156,6 @@
             const view = document.getElementById(viewId);
             view.classList.remove('hidden');
             view.classList.add('fade-in');
-        }
-        window.onload = () => {
-            setTimeout(() => {
-                const splash = document.getElementById('splashScreen');
-                splash.classList.remove('fade-in');
-                splash.classList.add('fade-out');
-                setTimeout(() => {
-                    initApp();
-                }, 1000);
-            }, 3000);
-            setupPWA();
-            
-            // Inisialisasi fitur drag untuk overlay Active Route
-            makeDraggable('activeRouteOverlay', 'activeRouteDragHandle');
-        };
-
-        // Fungsi Helper untuk Drag and Drop Element Overlay
-        function makeDraggable(elementId, handleId) {
-            const elmnt = document.getElementById(elementId);
-            const handle = document.getElementById(handleId) || elmnt;
-            if (!elmnt || !handle) return;
-
-            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-
-            // Stop propagation ke map leaflet saat kursor berada di atas handle
-            handle.addEventListener('mouseenter', () => { if(map) map.dragging.disable(); });
-            handle.addEventListener('mouseleave', () => { if(map) map.dragging.enable(); });
-
-            handle.onmousedown = dragMouseDown;
-            handle.ontouchstart = dragMouseDown;
-
-            function dragMouseDown(e) {
-                e = e || window.event;
-                // Jangan cegah event click pada tombol X atau Input
-                if (e.target.closest('button') || e.target.tagName.toLowerCase() === 'input') return;
-                
-                e.stopPropagation(); // Mencegah klik menembus ke layer bawah
-                
-                if (e.type === 'touchstart') {
-                    pos3 = e.touches[0].clientX;
-                    pos4 = e.touches[0].clientY;
-                } else {
-                    e.preventDefault();
-                    pos3 = e.clientX;
-                    pos4 = e.clientY;
-                }
-
-                document.onmouseup = closeDragElement;
-                document.onmousemove = elementDrag;
-                document.ontouchend = closeDragElement;
-                document.ontouchmove = elementDrag;
-            }
-
-            function elementDrag(e) {
-                e = e || window.event;
-                e.preventDefault();
-                let clientX, clientY;
-
-                if (e.type === 'touchmove') {
-                    clientX = e.touches[0].clientX;
-                    clientY = e.touches[0].clientY;
-                } else {
-                    clientX = e.clientX;
-                    clientY = e.clientY;
-                }
-
-                pos1 = pos3 - clientX;
-                pos2 = pos4 - clientY;
-                pos3 = clientX;
-                pos4 = clientY;
-
-                // Hitung posisi baru dan set style top/left
-                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-                
-                // Pastikan bottom dan right dilepas agar tidak bentrok dengan tailwind class
-                elmnt.style.right = "auto";
-                elmnt.style.bottom = "auto";
-                elmnt.style.transform = "none";
-            }
-
-            function closeDragElement() {
-                document.onmouseup = null;
-                document.onmousemove = null;
-                document.ontouchend = null;
-                document.ontouchmove = null;
-            }
         }
 
         function setupPWA() {
@@ -1188,23 +1173,85 @@
                     "purpose": "any"
                 }]
             };
-            const manifestBlob = new Blob([JSON.stringify(manifestData)], {
-                type: 'application/json'
-            });
+            const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
             document.getElementById('manifest-link').href = URL.createObjectURL(manifestBlob);
-            if ('serviceWorker' in navigator) {
-                const swCode = `self.addEventListener('install', (e) => { self.skipWaiting(); }); self.addEventListener('activate', (e) => { e.waitUntil(clients.claim()); }); self.addEventListener('fetch', (e) => { });`;
-                const swBlob = new Blob([swCode], {
-                    type: 'application/javascript'
-                });
-                navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(console.warn);
+        }
+
+        function makeDraggable(elementId, handleId) {
+            const elmnt = document.getElementById(elementId);
+            const handle = document.getElementById(handleId) || elmnt;
+            if (!elmnt || !handle) return;
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            handle.addEventListener('mouseenter', () => { if(map) map.dragging.disable(); });
+            handle.addEventListener('mouseleave', () => { if(map) map.dragging.enable(); });
+            handle.onmousedown = dragMouseDown;
+            handle.ontouchstart = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e = e || window.event;
+                if (e.target.closest('button') || e.target.tagName.toLowerCase() === 'input') return;
+                e.stopPropagation();
+                if (e.type === 'touchstart') {
+                    pos3 = e.touches[0].clientX;
+                    pos4 = e.touches[0].clientY;
+                } else {
+                    e.preventDefault();
+                    pos3 = e.clientX;
+                    pos4 = e.clientY;
+                }
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+                document.ontouchend = closeDragElement;
+                document.ontouchmove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                let clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+                let clientY = e.type === 'touchmove' ? e.touches[0].clientY : e.clientY;
+                pos1 = pos3 - clientX;
+                pos2 = pos4 - clientY;
+                pos3 = clientX;
+                pos4 = clientY;
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+                elmnt.style.right = "auto";
+                elmnt.style.bottom = "auto";
+                elmnt.style.transform = "none";
+            }
+            function closeDragElement() {
+                document.onmouseup = null; document.onmousemove = null; document.ontouchend = null; document.ontouchmove = null;
             }
         }
-        // --- APP INIT ---
-        async function initApp() {
-            if (GOOGLE_SCRIPT_URL === '') {
-                console.warn('PERINGATAN: URL Google Sheet belum diatur! Aplikasi murni menggunakan Cloud Data. Masukkan URL Script di source code agar data dapat tampil.');
+
+        window.onload = async () => {
+            setupPWA();
+            makeDraggable('activeRouteOverlay', 'activeRouteDragHandle');
+            
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (error) {
+                console.error("Firebase Auth initialized with anonymous fallback:", error);
             }
+
+            setTimeout(() => {
+                const splash = document.getElementById('splashScreen');
+                if (splash) {
+                    splash.classList.remove('fade-in');
+                    splash.classList.add('fade-out');
+                    setTimeout(() => { initApp(); }, 800);
+                }
+            }, 2500); 
+            
+            history.pushState({ page: 'init' }, null, window.location.href);
+        };
+
+        async function initApp() {
             showView('loginScreen');
             await loadUsers();
             await loadWaypoints();
@@ -1213,33 +1260,36 @@
             document.getElementById('editAdminUser').value = localStorage.getItem('adminUser') || 'admin';
             document.getElementById('editAdminPass').value = localStorage.getItem('adminPass') || 'ramdan28';
         }
-        // ==========================================
-        // --- DATA MANAGEMENT & AUTH ---
-        // ==========================================
+
         async function loadUsers() {
-            const data = await fetchFromSheet('users');
-            if (data !== null) {
-                usersData = data;
-            }
-            renderUserTable();
+            if (!auth.currentUser) return;
+            try {
+                const snapshot = await getDocs(getColRef('users'));
+                usersData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderUserTable();
+            } catch(e) { console.error("Error loading users from Firestore:", e); }
         }
 
-        function saveUsers() {
-            postToSheet('users', usersData);
-        }
-        async function syncWithGoogleSheet() {
-            if (GOOGLE_SCRIPT_URL === '') {
-                alert('URL Google Script belum diatur.');
+        async function syncWithCloud() {
+            if (!auth.currentUser) {
+                showMessage("Akses Ditolak", "Menghubungkan ke sesi Cloud...");
                 return;
             }
             const icons = document.querySelectorAll('.fa-sync-alt');
             icons.forEach(i => i.classList.add('fa-spin'));
-            await loadUsers();
-            await loadWaypoints();
-            await loadAircrafts();
-            await loadRoutes();
-            icons.forEach(i => i.classList.remove('fa-spin'));
-            alert('Semua data berhasil ditarik dan diperbarui dari Google Sheets!');
+            try {
+                await Promise.all([
+                    loadUsers(),
+                    loadWaypoints(),
+                    loadAircrafts(),
+                    loadRoutes()
+                ]);
+                showMessage('Sukses', 'Semua data berhasil disinkronkan dari Cloud Firestore!');
+            } catch(e) {
+                showMessage('Error', 'Gagal menyinkronkan data.');
+            } finally {
+                icons.forEach(i => i.classList.remove('fa-spin'));
+            }
         }
 
         function handleLogin(e) {
@@ -1247,14 +1297,11 @@
             const userIn = document.getElementById('loginUsername').value;
             const passIn = document.getElementById('loginPassword').value;
             const errorDiv = document.getElementById('loginError');
-            const adminU = localStorage.getItem('adminUser');
-            const adminP = localStorage.getItem('adminPass');
+            const adminU = localStorage.getItem('adminUser') || 'admin';
+            const adminP = localStorage.getItem('adminPass') || 'ramdan28';
             if (userIn === adminU && passIn === adminP) {
                 errorDiv.classList.add('hidden');
-                currentUser = {
-                    name: 'Super Admin',
-                    role: 'admin'
-                };
+                currentUser = { name: 'Super Admin', role: 'admin' };
                 document.getElementById('loginForm').reset();
                 showView('adminScreen');
                 return;
@@ -1289,7 +1336,7 @@
             e.preventDefault();
             localStorage.setItem('adminUser', document.getElementById('editAdminUser').value);
             localStorage.setItem('adminPass', document.getElementById('editAdminPass').value);
-            alert('Admin credentials updated successfully!');
+            showMessage('Sukses', 'Kredensial Admin berhasil diperbarui!');
         }
 
         function renderUserTable() {
@@ -1297,13 +1344,8 @@
             tbody.innerHTML = '';
             usersData.forEach(user => {
                 const tr = document.createElement('tr');
-                
-                // Memformat tanggal agar bebas dari zona waktu "T17:00:00.000Z"
                 let displayDate = user.expired;
-                if (displayDate && displayDate.includes('T')) {
-                    displayDate = displayDate.split('T')[0];
-                }
-                
+                if (displayDate && displayDate.includes('T')) displayDate = displayDate.split('T')[0];
                 tr.innerHTML = `<td class="px-4 py-3">${user.name}</td><td class="px-4 py-3"><span class="px-2 py-1 ${user.role === 'admin' ? 'bg-red-500/20 text-red-400' : 'bg-blue-500/20 text-blue-400'} rounded text-xs">${user.role.toUpperCase()}</span></td><td class="px-4 py-3">${user.username}</td><td class="px-4 py-3 text-slate-500">******</td><td class="px-4 py-3 ${new Date(user.expired) < new Date() ? 'text-red-400' : 'text-emerald-400'}">${displayDate}</td><td class="px-4 py-3 text-right"><button onclick="editUser('${user.id}')" class="text-blue-400 hover:text-blue-300 mr-2"><i class="fas fa-edit"></i></button><button onclick="deleteUser('${user.id}')" class="text-red-400 hover:text-red-300"><i class="fas fa-trash"></i></button></td>`;
                 tbody.appendChild(tr);
             });
@@ -1320,8 +1362,9 @@
             document.getElementById('userModal').classList.add('hidden');
         }
 
-        function saveUser(e) {
+        async function saveUser(e) {
             e.preventDefault();
+            if (!auth.currentUser) return;
             const id = document.getElementById('userId').value;
             const userData = {
                 id: id || Date.now().toString(),
@@ -1331,20 +1374,23 @@
                 password: document.getElementById('uPassword').value,
                 expired: document.getElementById('uExpired').value
             };
-            if (id) {
-                // Gunakan String() untuk mencegah gagal cocok karena beda tipe data (Number vs String dari Sheet)
-                const idx = usersData.findIndex(u => String(u.id) === String(id));
-                if (idx !== -1) usersData[idx] = userData;
-            } else {
-                usersData.push(userData);
+            
+            try {
+                await setDoc(getDocRef('users', userData.id), sanitizeForFirestore(userData));
+                if (id) {
+                    const idx = usersData.findIndex(u => String(u.id) === String(id));
+                    if (idx !== -1) usersData[idx] = userData;
+                } else {
+                    usersData.push(userData);
+                }
+                renderUserTable();
+                closeUserModal();
+            } catch(error) {
+                showMessage("Error", "Gagal menyimpan user ke Firestore.");
             }
-            saveUsers();
-            renderUserTable();
-            closeUserModal();
         }
 
         function editUser(id) {
-            // Gunakan String() agar jika ID dari Google Sheet berupa Angka, tetap cocok dengan id dari tombol
             const user = usersData.find(u => String(u.id) === String(id));
             if (user) {
                 document.getElementById('userId').value = user.id;
@@ -1352,99 +1398,90 @@
                 document.getElementById('uRole').value = user.role;
                 document.getElementById('uUsername').value = user.username;
                 document.getElementById('uPassword').value = user.password;
-                
-                // Memastikan kolom input Date mendukung format YYYY-MM-DD
                 let expDateVal = user.expired;
-                if (expDateVal && expDateVal.includes('T')) {
-                    expDateVal = expDateVal.split('T')[0];
-                }
+                if (expDateVal && expDateVal.includes('T')) expDateVal = expDateVal.split('T')[0];
                 document.getElementById('uExpired').value = expDateVal;
-                
                 document.getElementById('modalTitle').textContent = 'Edit User';
                 document.getElementById('userModal').classList.remove('hidden');
             }
         }
 
         function deleteUser(id) {
-            if (confirm("Are you sure?")) {
-                // Filter menggunakan String() untuk memastikan ID tercocokkan dengan benar
-                usersData = usersData.filter(u => String(u.id) !== String(id));
-                saveUsers();
-                renderUserTable();
-            }
+            showConfirm("Hapus User", "Apakah Anda yakin ingin menghapus user ini?", async () => {
+                if (!auth.currentUser) return;
+                try {
+                    await deleteDoc(getDocRef('users', id));
+                    usersData = usersData.filter(u => String(u.id) !== String(id));
+                    renderUserTable();
+                } catch(e) {
+                    showMessage("Error", "Gagal menghapus user dari Firestore.");
+                }
+            });
         }
 
         function setupMainApp(user) {
             document.getElementById('displayUserName').textContent = user.name;
-            const formattedDate = new Date(user.expired).toLocaleDateString('id-ID', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            });
+            const formattedDate = new Date(user.expired).toLocaleDateString('id-ID', { year: 'numeric', month: 'long', day: 'numeric' });
             document.getElementById('displayExpired').textContent = formattedDate;
             switchTab('map');
         }
 
         function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => {
-                el.classList.add('hidden');
-                el.classList.remove('fade-in');
-            });
+            document.querySelectorAll('.tab-content').forEach(el => { el.classList.add('hidden'); el.classList.remove('fade-in'); });
             document.querySelectorAll('.tab-btn').forEach(el => {
                 el.classList.remove('bg-blue-600/20', 'text-blue-400', 'border', 'border-blue-500/50');
                 el.classList.add('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-800');
             });
             const activeTab = document.getElementById(`tab-${tabId}`);
-            activeTab.classList.remove('hidden');
-            activeTab.classList.add('fade-in');
+            if (activeTab) {
+                activeTab.classList.remove('hidden');
+                activeTab.classList.add('fade-in');
+            }
             const activeBtn = document.getElementById(`tabBtn-${tabId}`);
-            activeBtn.classList.remove('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-800');
-            activeBtn.classList.add('bg-blue-600/20', 'text-blue-400', 'border', 'border-blue-500/50');
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-800');
+                activeBtn.classList.add('bg-blue-600/20', 'text-blue-400', 'border', 'border-blue-500/50');
+            }
             if (tabId === 'map') {
                 setTimeout(() => {
-                    if (!map) {
-                        initLeafletMap();
-                    } else {
-                        map.invalidateSize();
-                    }
-                }, 50); // Jeda dipercepat dari 150ms agar map lebih cepat tampil
+                    if (!map) initLeafletMap();
+                    else map.invalidateSize();
+                }, 50);
             }
         }
-        // ==========================================
-        // --- REAL MAP LOGIC (LEAFLET)           ---
-        // ==========================================
+
         function initLeafletMap() {
-            // Hapus CSS Transition yang menyebabkan delay/lag saat digeser
             const mapEl = document.getElementById('realMap');
             if(mapEl) mapEl.style.transition = 'none';
 
-            // Optimasi Performa Mesin Leaflet Maksimal
             map = L.map('realMap', {
-                zoomControl: false,
-                preferCanvas: true, // Render marker di HTML5 Canvas (BUKAN DOM, sangat krusial untuk HP)
+                zoomControl: false, 
+                preferCanvas: true, 
                 wheelPxPerZoomLevel: 60, 
-                fadeAnimation: false, 
+                fadeAnimation: false,
                 markerZoomAnimation: false, 
                 zoomAnimation: true,
-                bounceAtZoomLimits: false,
-                inertiaDeceleration: 3000 // Hentikan geseran dengan cepat di HP agar tidak meluncur berlebih
+                bounceAtZoomLimits: false, 
+                inertiaDeceleration: 3000,
+                maxBoundsViscosity: 1.0
             }).setView([-0.789, 118.921], 5);
 
             L.control.zoom({ position: 'bottomleft' }).addTo(map);
 
             const tileOpt = {
-                maxZoom: 22,
+                maxZoom: 22, 
                 maxNativeZoom: 18, 
                 keepBuffer: 16, 
-                updateWhenZooming: false, // MATIKAN loading tile saat zoom agar animasi zoom sangat mulus
-                updateWhenIdle: false, 
-                updateInterval: 16 
+                updateWhenZooming: false, 
+                updateWhenIdle: false,
+                updateInterval: 16, 
+                subdomains: ['0', '1', '2', '3'], 
+                className: 'smooth-tile'
             };
 
-            // Definisi Layer dengan subdomain paralel untuk bypass limit koneksi
-            const satelliteHybrid = L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', { subdomains: ['0', '1', '2', '3'], ...tileOpt, attribution: '&copy; Google', zIndex: 1 });
-            const streetMap = L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { subdomains: ['0', '1', '2', '3'], ...tileOpt, attribution: '&copy; Google', zIndex: 1 });
-            const terrainMap = L.tileLayer('https://mt{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', { subdomains: ['0', '1', '2', '3'], ...tileOpt, attribution: '&copy; Google', zIndex: 1 });
+            const satelliteHybrid = L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google', zIndex: 1 });
+            const streetMap = L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google', zIndex: 1 });
+            const terrainMap = L.tileLayer('https://mt{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}', { ...tileOpt, attribution: '&copy; Google', zIndex: 1 });
 
             satelliteHybrid.addTo(map);
 
@@ -1453,54 +1490,35 @@
                 "<span class='text-white font-medium'>Street View</span>": streetMap,
                 "<span class='text-white font-medium'>Terrain View</span>": terrainMap
             };
-            
             L.control.layers(baseMaps, null, { position: 'topright', collapsed: true }).addTo(map);
 
-            // --- TRIK TRANSISI LAYER MAP SEAMLESS (ANTI LAYAR ABU-ABU) ---
             let currentBaseLayer = satelliteHybrid;
             map.on('baselayerchange', function (e) {
                 const newLayer = e.layer;
                 if (currentBaseLayer && currentBaseLayer !== newLayer) {
-                    // Turunkan z-index layer lama ke lapisan bawah, layer baru di lapisan atas
                     currentBaseLayer.setZIndex(0);
                     newLayer.setZIndex(1);
-                    
-                    // Leaflet otomatis menghapus layer lama saat berganti tab map.
-                    // Kita tambahkan kembali layer lama secara paksa agar menutupi layar yang kosong.
                     map.addLayer(currentBaseLayer);
-                    
                     const oldLayer = currentBaseLayer;
-                    
-                    // Tunggu hingga layer baru selesai 100% memuat gambar
                     newLayer.once('load', function () {
-                        // Setelah layer baru siap, hapus layer lama perlahan dengan efek fade
-                        setTimeout(() => {
-                            if (map.hasLayer(oldLayer)) {
-                                map.removeLayer(oldLayer);
-                            }
-                        }, 500); // Jeda sinkronasi dengan durasi animasi CSS opacity
+                        setTimeout(() => { if (map.hasLayer(oldLayer)) map.removeLayer(oldLayer); }, 500);
                     });
                 }
                 currentBaseLayer = newLayer;
             });
 
-            // Pindahkan kontainer kontrol agar stabil
             const mapContainer = map.getContainer();
             const controlContainer = mapContainer.querySelector('.leaflet-control-container');
-            if (controlContainer) {
-                document.getElementById('tab-map').appendChild(controlContainer);
-            }
+            if (controlContainer) document.getElementById('tab-map').appendChild(controlContainer);
 
             map.on('click', handleMapClick);
 
-            // Render secepat kilat saat selesai geser, tanpa setTimeout
             map.on('moveend', function() {
                 requestAnimationFrame(() => {
                     updateMapWaypoints();
                 });
             });
             
-            // Render ulang segera setelah animasi zoom selesai
             map.on('zoomend', function() {
                 requestAnimationFrame(() => {
                     updateMapWaypoints();
@@ -1510,16 +1528,13 @@
             waypointLayerGroup = L.layerGroup().addTo(map);
             activeRouteLayerGroup = L.layerGroup().addTo(map);
             mapBuilderLayerGroup = L.layerGroup().addTo(map);
-
             updateMapWaypoints();
         }
+
         async function handleMapClick(e) {
             if (flightMode !== 'none') return;
-            const lat = e.latlng.lat;
-            const lng = e.latlng.lng;
-            const popup = L.popup({
-                className: 'custom-popup'
-            }).setLatLng(e.latlng).setContent('<div class="min-w-[180px] p-2 text-center text-slate-300 text-sm"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data elevasi...</div>').openOn(map);
+            const lat = e.latlng.lat; const lng = e.latlng.lng;
+            const popup = L.popup({ className: 'custom-popup' }).setLatLng(e.latlng).setContent('<div class="min-w-[180px] p-2 text-center text-slate-300 text-sm"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data elevasi...</div>').openOn(map);
             try {
                 const res = await fetch(`https://api.open-meteo.com/v1/elevation?latitude=${lat}&longitude=${lng}`);
                 const data = await res.json();
@@ -1551,398 +1566,43 @@
             statusBadge.className = 'px-3 py-1.5 sm:px-4 sm:py-2 bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 rounded-l-full text-[10px] sm:text-xs animate-pulse';
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-                    map.flyTo([lat, lng], 14, {
-                        animate: true,
-                        duration: 1.5
-                    });
-                    const pulseIcon = L.divIcon({
-                        className: 'custom-div-icon',
-                        html: "<div class='gps-pulse'></div>",
-                        iconSize: [16, 16],
-                        iconAnchor: [8, 8]
-                    });
-                    if (userMarker) {
-                        userMarker.setLatLng([lat, lng]);
-                    } else {
-                        userMarker = L.marker([lat, lng], {
-                            icon: pulseIcon
-                        }).addTo(map);
-                    }
+                    const lat = position.coords.latitude; const lng = position.coords.longitude;
+                    map.flyTo([lat, lng], 14, { animate: true, duration: 1.5 });
+                    const pulseIcon = L.divIcon({ className: 'custom-div-icon', html: "<div class='gps-pulse'></div>", iconSize: [16, 16], iconAnchor: [8, 8] });
+                    if (userMarker) userMarker.setLatLng([lat, lng]);
+                    else userMarker = L.marker([lat, lng], { icon: pulseIcon }).addTo(map);
                     coordBadge.textContent = `LAT: ${lat.toFixed(4)}° | LON: ${lng.toFixed(4)}°`;
                     statusBadge.textContent = 'GPS ACTIVE';
                     statusBadge.className = 'px-3 py-1.5 sm:px-4 sm:py-2 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-l-full text-[10px] sm:text-xs animate-pulse';
                 }, (error) => {
                     statusBadge.textContent = 'GPS ERROR';
                     statusBadge.className = 'px-3 py-1.5 sm:px-4 sm:py-2 bg-red-500/20 text-red-400 border border-red-500/30 rounded-l-full text-[10px] sm:text-xs';
-                    alert('Gagal mendeteksi lokasi.');
-                }, {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0
-                });
+                    showMessage('Peringatan', 'Gagal mendeteksi lokasi GPS Anda.');
+                }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
             } else {
-                alert('Geolocation tidak didukung browser.');
+                showMessage('Peringatan', 'Geolocation tidak didukung browser.');
             }
         }
 
-        function addToRoute(id) {
-            const wp = waypointsData.find(w => w.id === id);
-            if (!wp) return;
-            if (!document.getElementById('routeFormModal').classList.contains('hidden')) {
-                currentRouteWps.push({
-                    ...wp
-                });
-                renderOFPTable();
-                map.closePopup();
-                return;
-            }
-            if (flightMode !== 'none') {
-                alert("Harap matikan mode Simulasi/Navigasi terlebih dahulu.");
-                return;
-            }
-            if (activeMapRouteId) clearActiveMapRoute();
-            mapBuilderWps.push({
-                ...wp
-            });
-            const builderHUD = document.getElementById('mapRouteBuilderHUD');
-            if (builderHUD.classList.contains('hidden')) {
-                builderHUD.classList.remove('hidden');
-                populateBuilderAircrafts();
-            }
-            updateMapBuilderHUD();
-            drawMapBuilderRoute();
-            map.closePopup();
-        }
-        // --- MAP ROUTE BUILDER LOGIC ---
-        function populateBuilderAircrafts() {
-            const select = document.getElementById('builderAircraft');
-            const currentVal = select.value;
-            select.innerHTML = '<option value="">-- Choose Aircraft --</option>';
-            aircraftsData.forEach(ac => {
-                select.innerHTML += `<option value="${ac.id}">${ac.reg} (${ac.type})</option>`;
-            });
-            select.value = currentVal;
-        }
-
-        function updateMapBuilderHUD() {
-            document.getElementById('bldWpCount').textContent = mapBuilderWps.length;
-            let totalDist = 0;
-            let totalDecHours = 0;
-            let totalFuel = 0;
-            const acId = document.getElementById('builderAircraft').value;
-            const fuelOnboard = parseFloat(document.getElementById('builderFuelOnboard').value) || 0;
-            const ac = aircraftsData.find(a => a.id === acId);
-            const speed = ac ? ac.speed : 0;
-            const fuelCons = ac ? ac.fuel : 0;
-            for (let i = 1; i < mapBuilderWps.length; i++) {
-                const dist = calcDistanceNM(mapBuilderWps[i - 1].lat, mapBuilderWps[i - 1].lon, mapBuilderWps[i].lat, mapBuilderWps[i].lon);
-                totalDist += dist;
-                if (speed > 0) totalDecHours += (dist / speed);
-            }
-            if (speed > 0) totalFuel = totalDecHours * fuelCons;
-            document.getElementById('bldDist').textContent = Math.round(totalDist);
-            document.getElementById('bldEet').textContent = formatTimeHM(totalDecHours);
-            document.getElementById('bldReq').textContent = Math.round(totalFuel) + (ac ? ' ' + ac.fuelUnit : '');
-            const rem = fuelOnboard - totalFuel;
-            const remEl = document.getElementById('bldRem');
-            remEl.textContent = Math.round(rem) + (ac ? ' ' + ac.fuelUnit : '');
-            if (rem < 0) remEl.className = "text-[10px] sm:text-xs font-bold text-red-500";
-            else remEl.className = "text-[10px] sm:text-xs font-bold text-emerald-400";
-        }
-
-        function drawMapBuilderRoute() {
-            if (!mapBuilderLayerGroup) return;
-            mapBuilderLayerGroup.clearLayers();
-            if (mapBuilderWps.length < 2) return;
-            const latlngs = mapBuilderWps.map(wp => [wp.lat, wp.lon]);
-            const polyline = L.polyline(latlngs, {
-                color: '#d946ef',
-                weight: 5,
-                opacity: 0.9
-            }).addTo(mapBuilderLayerGroup);
-            for (let i = 0; i < mapBuilderWps.length - 1; i++) {
-                const wp1 = mapBuilderWps[i];
-                const wp2 = mapBuilderWps[i + 1];
-                const midLat = (wp1.lat + wp2.lat) / 2;
-                const midLon = (wp1.lon + wp2.lon) / 2;
-                const midIcon = L.divIcon({
-                    className: 'custom-div-icon',
-                    html: '<div class="midpoint-marker" style="width: 14px; height: 14px;"></div>',
-                    iconSize: [14, 14],
-                    iconAnchor: [7, 7]
-                });
-                const midMarker = L.marker([midLat, midLon], {
-                    icon: midIcon,
-                    draggable: true
-                }).addTo(mapBuilderLayerGroup);
-                midMarker.on('drag', (e) => {
-                    const tempLatLngs = [...latlngs];
-                    tempLatLngs.splice(i + 1, 0, e.latlng);
-                    polyline.setLatLngs(tempLatLngs);
-                });
-                midMarker.on('dragend', (e) => {
-                    const markerLatLng = e.target.getLatLng();
-                    handleBuilderTrackDrop(markerLatLng.lat, markerLatLng.lng, i + 1);
-                    polyline.setLatLngs(latlngs);
-                    midMarker.setLatLng([midLat, midLon]);
-                });
-            }
-        }
-        async function handleBuilderTrackDrop(lat, lng, insertIndex) {
-            let nearbyWps = waypointsData.map(wp => {
-                return {
-                    wp: wp,
-                    dist: calcDistanceNM(lat, lng, wp.lat, wp.lon)
-                };
-            });
-            nearbyWps = nearbyWps.filter(item => item.dist <= 5).sort((a, b) => a.dist - b.dist);
-            if (nearbyWps.length > 0) {
-                let listHtml = '';
-                nearbyWps.forEach(item => {
-                    listHtml += `<div class="flex justify-between items-center bg-slate-800 p-2 rounded mb-2 border border-slate-700"><div><span class="font-bold text-blue-400 text-sm">${item.wp.name}</span><span class="text-[10px] text-slate-400 block">${item.dist.toFixed(2)} NM away</span></div><button onclick="addExistingWpToBuilderRoute('${item.wp.id}', ${insertIndex})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2 py-1 rounded text-[10px] transition"><i class="fas fa-plus"></i> Route</button></div>`;
-                });
-                const popupHtml = `<div class="min-w-[200px]"><h4 class="font-bold text-xs text-slate-300 mb-2 border-b border-slate-600 pb-1">Titik Ditemukan (Radius 5 NM)</h4>${listHtml}<p class="text-[10px] text-slate-400 italic text-center mt-2">Atau klik area kosong map untuk buat WP baru.</p></div>`;
-                L.popup({
-                    className: 'custom-popup'
-                }).setLatLng([lat, lng]).setContent(popupHtml).openOn(map);
-            } else {
-                const popup = L.popup({
-                    className: 'custom-popup'
-                }).setLatLng([lat, lng]).setContent('<div class="p-2 text-slate-300 text-xs"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</div>').openOn(map);
-                try {
-                    const res = await fetch(`https://api.open-meteo.com/v1/elevation?latitude=${lat}&longitude=${lng}`);
-                    const data = await res.json();
-                    const elevFeet = Math.round((data.elevation && data.elevation.length > 0 ? data.elevation[0] : 0) * 3.28084);
-                    const popupHtml = ` <div class="min-w-[180px]"> <h4 class="font-bold text-sm text-emerald-400 m-0 mb-2 border-b border-slate-600 pb-1"><i class="fas fa-magic mr-1"></i> ADD NEW WAYPOINT</h4> <div class="text-xs text-slate-300 space-y-1 mb-3"> <p class="m-0"><i class="fas fa-map-pin w-4 text-center mr-1"></i> ${decToDMSStr(lat, true)}</p> <p class="m-0"><i class="fas fa-map-pin w-4 text-center opacity-0 mr-1"></i> ${decToDMSStr(lng, false)}</p> <p class="m-0 mt-1"><i class="fas fa-mountain w-4 text-center mr-1"></i> ${elevFeet} ft</p> </div> <button onclick="pendingBuilderInsert = { insertIndex: ${insertIndex} }; addClickedToWaypoint(${lat}, ${lng}, ${elevFeet})" class="bg-emerald-600 hover:bg-emerald-500 text-white w-full px-2 py-2 rounded text-xs transition font-bold"><i class="fas fa-plus mr-1"></i> Create & Insert to Route</button> </div> `;
-                    popup.setContent(popupHtml);
-                } catch (e) {
-                    popup.setContent('<div class="p-2 text-red-400 text-xs">Gagal mengambil data elevasi.</div>');
-                }
-            }
-        }
-
-        function addExistingWpToBuilderRoute(wpId, insertIndex) {
-            const wp = waypointsData.find(w => w.id === wpId);
-            if (wp) {
-                mapBuilderWps.splice(insertIndex, 0, wp);
-                updateMapBuilderHUD();
-                drawMapBuilderRoute();
-                map.closePopup();
-            }
-        }
-
-        function cancelMapBuilder() {
-            mapBuilderWps = [];
-            document.getElementById('mapRouteBuilderHUD').classList.add('hidden');
-            if (mapBuilderLayerGroup) mapBuilderLayerGroup.clearLayers();
-        }
-
-        function finishMapBuilder() {
-            if (mapBuilderWps.length < 2) {
-                alert("Tambahkan minimal 2 Waypoint untuk merangkai rute.");
-                return;
-            }
-            const acId = document.getElementById('builderAircraft').value;
-            const fuelOb = document.getElementById('builderFuelOnboard').value;
-            switchTab('route');
-            openRouteForm();
-            currentRouteWps = [...mapBuilderWps];
-            if (acId) {
-                document.getElementById('rtAircraft').value = acId;
-                handleRouteAircraftChange();
-            }
-            if (fuelOb) {
-                document.getElementById('rtFuelOnboard').value = fuelOb;
-            }
-            renderOFPTable();
-            cancelMapBuilder();
-        }
-        // --- MAP ACTIVE ROUTE ---
-        function viewRouteOnMap(id) {
-            activeMapRouteId = id;
-            if (document.getElementById('toggleAllWps')) document.getElementById('toggleAllWps').checked = false;
-            closeRouteDetailModal();
-            switchTab('map');
-            drawActiveRoute();
-            updateMapWaypoints();
-        }
-
-        function clearActiveMapRoute() {
-            activeMapRouteId = null;
-            document.getElementById('activeRouteOverlay').classList.add('hidden');
-            const infoHud = document.getElementById('activeRouteInfoHUD');
-            if (infoHud) infoHud.classList.add('hidden');
-            if (activeRouteLayerGroup) activeRouteLayerGroup.clearLayers();
-            if (document.getElementById('toggleAllWps')) document.getElementById('toggleAllWps').checked = false;
-            updateMapWaypoints();
-        }
-
-        function fitMapToActiveRoute() {
-            if (!activeMapRouteId || !map) return;
-            const rt = routesData.find(r => r.id === activeMapRouteId);
-            if (!rt || !rt.waypoints || rt.waypoints.length === 0) return;
-            const latlngs = rt.waypoints.map(wp => [wp.lat, wp.lon]);
-            const bounds = L.latLngBounds(latlngs);
-            map.flyToBounds(bounds, {
-                padding: [50, 50],
-                duration: 1.5
-            });
-        }
-
-        function updateActiveRouteInfoHUD() {
-            if (!activeMapRouteId) return;
-            const rt = routesData.find(r => r.id === activeMapRouteId);
-            if (!rt) return;
-            const ac = aircraftsData.find(a => a.id === rt.aircraftId);
-            const fuelUnit = ac ? ac.fuelUnit : '';
-            document.getElementById('infoHudRouteName').textContent = rt.name;
-            document.getElementById('infoHudAircraft').textContent = ac ? `${ac.reg} (${ac.type})` : rt.aircraftReg;
-            document.getElementById('infoHudDist').textContent = rt.totalDist;
-            document.getElementById('infoHudEet').textContent = rt.totalEET;
-            const fob = rt.fuelOnboard || 0;
-            document.getElementById('infoHudFOB').textContent = fob + (fuelUnit ? ' ' + fuelUnit : '');
-            let totalDecHours = 0;
-            if (rt.speed > 0 && rt.waypoints && rt.waypoints.length > 1) {
-                for (let i = 1; i < rt.waypoints.length; i++) {
-                    const dist = calcDistanceNM(rt.waypoints[i - 1].lat, rt.waypoints[i - 1].lon, rt.waypoints[i].lat, rt.waypoints[i].lon);
-                    totalDecHours += (dist / rt.speed);
-                }
-            }
-            const fuelReq = totalDecHours * (rt.fuelCons || 0);
-            const rem = fob - fuelReq;
-            const remEl = document.getElementById('infoHudRem');
-            remEl.textContent = Math.round(rem) + (fuelUnit ? ' ' + fuelUnit : '');
-            if (rem < 0) remEl.className = "text-[10px] sm:text-xs font-bold text-red-500";
-            else if (rem < (fuelReq * 0.1)) remEl.className = "text-[10px] sm:text-xs font-bold text-orange-400";
-            else remEl.className = "text-[10px] sm:text-xs font-bold text-emerald-400";
-        }
-
-        function drawActiveRoute() {
-            if (!activeRouteLayerGroup) return;
-            activeRouteLayerGroup.clearLayers();
-            const rt = routesData.find(r => r.id === activeMapRouteId);
-            if (!rt || !rt.waypoints || rt.waypoints.length === 0) return;
-            document.getElementById('activeRouteOverlay').classList.remove('hidden');
-            document.getElementById('activeRouteOverlayName').textContent = rt.name;
-            const infoHud = document.getElementById('activeRouteInfoHUD');
-            if (infoHud) {
-                infoHud.classList.remove('hidden');
-                updateActiveRouteInfoHUD();
-            }
-            const latlngs = rt.waypoints.map(wp => [wp.lat, wp.lon]);
-            const polyline = L.polyline(latlngs, {
-                color: '#d946ef',
-                weight: 5,
-                opacity: 0.9
-            }).addTo(activeRouteLayerGroup);
-            map.fitBounds(polyline.getBounds(), {
-                padding: [50, 50]
-            });
-            for (let i = 0; i < rt.waypoints.length - 1; i++) {
-                const wp1 = rt.waypoints[i];
-                const wp2 = rt.waypoints[i + 1];
-                const midLat = (wp1.lat + wp2.lat) / 2;
-                const midLon = (wp1.lon + wp2.lon) / 2;
-                const midIcon = L.divIcon({
-                    className: 'custom-div-icon',
-                    html: '<div class="midpoint-marker" style="width: 14px; height: 14px;"></div>',
-                    iconSize: [14, 14],
-                    iconAnchor: [7, 7]
-                });
-                const midMarker = L.marker([midLat, midLon], {
-                    icon: midIcon,
-                    draggable: true
-                }).addTo(activeRouteLayerGroup);
-                midMarker.on('drag', (e) => {
-                    const tempLatLngs = [...latlngs];
-                    tempLatLngs.splice(i + 1, 0, e.latlng);
-                    polyline.setLatLngs(tempLatLngs);
-                });
-                midMarker.on('dragend', (e) => {
-                    const markerLatLng = e.target.getLatLng();
-                    handleTrackDrop(markerLatLng.lat, markerLatLng.lng, i + 1);
-                    polyline.setLatLngs(latlngs);
-                    midMarker.setLatLng([midLat, midLon]);
-                });
-            }
-        }
-        async function handleTrackDrop(lat, lng, insertIndex) {
-            let nearbyWps = waypointsData.map(wp => {
-                return {
-                    wp: wp,
-                    dist: calcDistanceNM(lat, lng, wp.lat, wp.lon)
-                };
-            });
-            nearbyWps = nearbyWps.filter(item => item.dist <= 5).sort((a, b) => a.dist - b.dist);
-            if (nearbyWps.length > 0) {
-                let listHtml = '';
-                nearbyWps.forEach(item => {
-                    listHtml += `<div class="flex justify-between items-center bg-slate-800 p-2 rounded mb-2 border border-slate-700"><div><span class="font-bold text-blue-400 text-sm">${item.wp.name}</span><span class="text-[10px] text-slate-400 block">${item.dist.toFixed(2)} NM away</span></div><button onclick="addExistingWpToActiveRoute('${item.wp.id}', ${insertIndex})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2 py-1 rounded text-[10px] transition"><i class="fas fa-plus"></i> Route</button></div>`;
-                });
-                const popupHtml = `<div class="min-w-[200px]"><h4 class="font-bold text-xs text-slate-300 mb-2 border-b border-slate-600 pb-1">Titik Ditemukan (Radius 5 NM)</h4>${listHtml}<p class="text-[10px] text-slate-400 italic text-center mt-2">Atau klik area kosong map untuk buat WP baru.</p></div>`;
-                L.popup({
-                    className: 'custom-popup'
-                }).setLatLng([lat, lng]).setContent(popupHtml).openOn(map);
-            } else {
-                const popup = L.popup({
-                    className: 'custom-popup'
-                }).setLatLng([lat, lng]).setContent('<div class="p-2 text-slate-300 text-xs"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</div>').openOn(map);
-                try {
-                    const res = await fetch(`https://api.open-meteo.com/v1/elevation?latitude=${lat}&longitude=${lng}`);
-                    const data = await res.json();
-                    const elevFeet = Math.round((data.elevation && data.elevation.length > 0 ? data.elevation[0] : 0) * 3.28084);
-                    const popupHtml = ` <div class="min-w-[180px]"> <h4 class="font-bold text-sm text-magenta-400 m-0 mb-2 border-b border-slate-600 pb-1"><i class="fas fa-magic mr-1"></i> ADD NEW WAYPOINT</h4> <div class="text-xs text-slate-300 space-y-1 mb-3"> <p class="m-0"><i class="fas fa-map-pin w-4 text-center mr-1"></i> ${decToDMSStr(lat, true)}</p> <p class="m-0"><i class="fas fa-map-pin w-4 text-center opacity-0 mr-1"></i> ${decToDMSStr(lng, false)}</p> <p class="m-0 mt-1"><i class="fas fa-mountain w-4 text-center mr-1"></i> ${elevFeet} ft</p> </div> <button onclick="pendingRouteInsert = { routeId: activeMapRouteId, insertIndex: ${insertIndex} }; addClickedToWaypoint(${lat}, ${lng}, ${elevFeet})" class="bg-magenta-600 hover:bg-magenta-500 text-white w-full px-2 py-2 rounded text-xs transition font-bold"><i class="fas fa-plus mr-1"></i> Create & Insert to Route</button> </div> `;
-                    popup.setContent(popupHtml);
-                } catch (e) {
-                    popup.setContent('<div class="p-2 text-red-400 text-xs">Gagal mengambil data elevasi.</div>');
-                }
-            }
-        }
-
-        function addExistingWpToActiveRoute(wpId, insertIndex) {
-            const rt = routesData.find(r => r.id === activeMapRouteId);
-            const wp = waypointsData.find(w => w.id === wpId);
-            if (rt && wp) {
-                rt.waypoints.splice(insertIndex, 0, wp);
-                recalcRouteTotals(rt);
-                saveRoutes();
-                drawActiveRoute();
-                updateActiveRouteInfoHUD();
-                map.closePopup();
-            }
-        }
-        // ==========================================
-        // --- WAYPOINT DATABASE LOGIC            ---
-        // ==========================================
         async function loadWaypoints() {
-            const data = await fetchFromSheet('waypoints');
-            if (data !== null) {
-                waypointsData = data;
-            }
-            renderWaypoints();
-            updateMapWaypoints();
-        }
-
-        function saveWaypoints() {
-            postToSheet('waypoints', waypointsData);
+            if (!auth.currentUser) return;
+            try {
+                const snapshot = await getDocs(getColRef('waypoints'));
+                waypointsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderWaypoints();
+                updateMapWaypoints();
+            } catch(e) { console.error("Error loading waypoints from Firestore:", e); }
         }
 
         function renderWaypoints() {
             const tbody = document.getElementById('waypointTableBody');
             const search = document.getElementById('searchInputWaypoint') ? document.getElementById('searchInputWaypoint').value.toLowerCase() : '';
             tbody.innerHTML = '';
-            
-            // PERBAIKAN: Memastikan wp.name diubah menjadi String agar tidak error "toLowerCase is not a function"
             const filtered = waypointsData.filter(wp => String(wp.name || '').toLowerCase().includes(search));
-            
             filtered.forEach(wp => {
                 const tr = document.createElement('tr');
                 tr.className = 'hover:bg-slate-800/50 transition group cursor-pointer';
                 tr.onclick = () => showWaypointDetail(wp.id);
-                
-                // PERBAIKAN: Memastikan wp.name diubah menjadi String saat merender baris tabel
                 tr.innerHTML = `<td class="px-3 sm:px-6 py-3 sm:py-4">${getIconHTML(wp.type)}</td><td class="px-3 sm:px-6 py-3 sm:py-4 font-bold text-blue-400 tracking-wide">${String(wp.name || '').toUpperCase()}</td><td class="px-3 sm:px-6 py-3 sm:py-4 hidden md:table-cell text-slate-300"><div class="text-[10px] sm:text-xs">${decToDMSStr(wp.lat, true)}</div><div class="text-[10px] sm:text-xs text-slate-400">${decToDMSStr(wp.lon, false)}</div></td><td class="px-3 sm:px-6 py-3 sm:py-4 font-medium">${wp.elev} <span class="text-[8px] sm:text-[10px] text-slate-500">ft</span></td><td class="px-3 sm:px-6 py-3 sm:py-4 text-right opacity-50 group-hover:opacity-100 transition"><button onclick="event.stopPropagation(); editWaypoint('${wp.id}')" class="text-blue-400 hover:text-blue-300 mr-2 sm:mr-3 p-1.5 sm:p-2 bg-blue-500/10 rounded-lg"><i class="fas fa-edit"></i></button><button onclick="event.stopPropagation(); deleteWaypoint('${wp.id}')" class="text-red-400 hover:text-red-300 p-1.5 sm:p-2 bg-red-500/10 rounded-lg"><i class="fas fa-trash"></i></button></td>`;
                 tbody.appendChild(tr);
             });
@@ -1977,6 +1637,20 @@
                 } else {
                     towerList.innerHTML = '<p class="text-[9px] text-slate-500 italic">No Tower Data</p>';
                 }
+                
+                // --- RENDER CHARTS ---
+                const chartsDiv = document.getElementById('detApCharts');
+                chartsDiv.innerHTML = '';
+                chartsDiv.classList.add('hidden');
+                if (wp.aerodromeChart || wp.approachChart) {
+                    chartsDiv.classList.remove('hidden');
+                    if (wp.aerodromeChart) {
+                        chartsDiv.innerHTML += `<a href="${wp.aerodromeChart}" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 py-2 rounded-lg text-[10px] text-center transition shadow flex flex-col items-center justify-center gap-1.5"><i class="fas fa-map text-sm"></i> Aerodrome Chart</a>`;
+                    }
+                    if (wp.approachChart) {
+                        chartsDiv.innerHTML += `<a href="${wp.approachChart}" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-blue-400 border border-blue-500/30 py-2 rounded-lg text-[10px] text-center transition shadow flex flex-col items-center justify-center gap-1.5"><i class="fas fa-layer-group text-sm"></i> Approach Chart</a>`;
+                    }
+                }
             } else {
                 apSection.classList.add('hidden');
             }
@@ -2003,10 +1677,7 @@
             closeWaypointDetail();
             switchTab('map');
             setTimeout(() => {
-                map.flyTo([wp.lat, wp.lon], 15, {
-                    animate: true,
-                    duration: 1.5
-                });
+                map.flyTo([wp.lat, wp.lon], 15, { animate: true, duration: 1.5 });
                 waypointLayerGroup.eachLayer(layer => {
                     if (layer instanceof L.Marker && layer.getLatLng().lat === wp.lat && layer.getLatLng().lng === wp.lon) {
                         layer.openPopup();
@@ -2015,150 +1686,9 @@
             }, 300);
         }
 
-        function toggleWpTypeFields() {
-            const type = document.getElementById('wpType').value;
-            const extra = document.getElementById('airportExtraFields');
-            if (type === 'airport') {
-                extra.classList.remove('hidden');
-                if (document.getElementById('towerInputsContainer').children.length === 0) addTowerRow();
-            } else {
-                extra.classList.add('hidden');
-            }
-        }
-
-        function addTowerRow(name = '', freq = '') {
-            const container = document.getElementById('towerInputsContainer');
-            const div = document.createElement('div');
-            div.className = 'tower-row flex gap-2 items-center';
-            div.innerHTML = `
-                <input type="text" placeholder="Name" value="${name}" class="twr-name flex-[2] bg-slate-800 border border-slate-700 rounded px-2 py-1 text-[10px] outline-none text-white focus:border-blue-500">
-                <input type="text" placeholder="Freq" value="${freq}" class="twr-freq flex-[1] bg-slate-800 border border-slate-700 rounded px-2 py-1 text-[10px] outline-none text-white focus:border-blue-500 font-mono">
-                <button type="button" onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-300 p-1"><i class="fas fa-minus-circle"></i></button>
-            `;
-            container.appendChild(div);
-        }
-
-        function toggleAllWaypointsMap() {
-            updateMapWaypoints();
-        }
-
-        function updateMapWaypoints() {
-            if (!map || !waypointLayerGroup) return;
-            
-            if (!document.getElementById('wpTooltipStyle')) {
-                const style = document.createElement('style');
-                style.id = 'wpTooltipStyle';
-                style.innerHTML = `.wp-black-label { background-color: #000 !important; color: #fff !important; border: 1px solid #333 !important; padding: 2px 6px; font-weight: 700; font-size: 10px; border-radius: 4px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5); white-space: nowrap; } .custom-popup .leaflet-popup-content-wrapper { background: #1e293b; color: #f8fafc; border: 1px solid #334155; border-radius: 12px; } .custom-popup .leaflet-popup-content { margin: 12px; font-family: 'Inter', sans-serif; }`;
-                document.head.appendChild(style);
-            }
-            
-            const currentZoom = map.getZoom();
-            
-            // Pre-load area yang LEBIH LUAS (1.5x layar) agar geser kiri-kanan seketika muncul
-            const bounds = map.getBounds().pad(1.5); 
-            
-            const showAll = document.getElementById('toggleAllWps') ? document.getElementById('toggleAllWps').checked : false;
-            const showLabel = currentZoom >= 8 || activeMapRouteId;
-            
-            // Cek apakah status tooltip berubah (perlu render ulang tooltip)
-            let forceRecreate = false;
-            if (lastZoomState !== -1 && ((lastZoomState >= 8 && currentZoom < 8) || (lastZoomState < 8 && currentZoom >= 8))) {
-                forceRecreate = true;
-            }
-            lastZoomState = currentZoom;
-
-            if (forceRecreate) {
-                waypointLayerGroup.clearLayers();
-                activeWpMarkers = {};
-            }
-            
-            let wpsToRender = [];
-            
-            // LOGIKA SEMANTIC ZOOM
-            if (activeMapRouteId && !showAll) {
-                const rt = routesData.find(r => r.id === activeMapRouteId);
-                if (rt && rt.waypoints) {
-                    const uniqueWps = [];
-                    const seenIds = new Set();
-                    rt.waypoints.forEach(w => {
-                        if (!seenIds.has(w.id)) {
-                            seenIds.add(w.id);
-                            uniqueWps.push(w);
-                        }
-                    });
-                    wpsToRender = uniqueWps;
-                }
-            } else {
-                wpsToRender = waypointsData.filter(wp => {
-                    // Optimasi CPU: Singkirkan titik di luar padding screen secepat mungkin!
-                    if (!bounds.contains([wp.lat, wp.lon])) return false;
-                    
-                    if (currentZoom < 7) return wp.type === 'airport';
-                    else if (currentZoom < 9) return wp.type === 'airport' || wp.type === 'heliport';
-                    else return true;
-                });
-            }
-
-            // --- DIFFING ALGORITHM UNTUK MENCEGAH RE-RENDER DOM YANG BERAT ---
-            const wpsToRenderIds = new Set(wpsToRender.map(w => w.id));
-
-            // 1. Hapus marker yang sudah keluar dari layar HP + padding
-            for (const id in activeWpMarkers) {
-                if (!wpsToRenderIds.has(id)) {
-                    waypointLayerGroup.removeLayer(activeWpMarkers[id]);
-                    delete activeWpMarkers[id];
-                }
-            }
-
-            // 2. Tambahkan marker baru yang baru masuk ke layar HP
-            wpsToRender.forEach(wp => {
-                if (!activeWpMarkers[wp.id]) {
-                    const customIcon = L.divIcon({
-                        html: getIconHTML(wp.type),
-                        className: '',
-                        iconSize: [20, 20], 
-                        iconAnchor: [10, 10],
-                        popupAnchor: [0, -10]
-                    });
-                    const marker = L.marker([wp.lat, wp.lon], { icon: customIcon });
-
-                    if (showLabel) {
-                        marker.bindTooltip((wp.name || '').toString().toUpperCase(), {
-                            permanent: true,
-                            direction: 'bottom',
-                            className: 'wp-black-label',
-                            offset: [0, 10]
-                        });
-                    } else {
-                        marker.bindTooltip((wp.name || '').toString().toUpperCase(), {
-                            permanent: false,
-                            direction: 'top'
-                        });
-                    }
-
-                    let extraHtml = '';
-                    if (wp.type === 'airport') {
-                        extraHtml = `
-                        <div class="mt-3 pt-2 border-t border-slate-700/50">
-                            <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px]">
-                                <p class="m-0"><span class="text-slate-500">RWY:</span> <span class="text-white">${wp.runway || '-'}</span></p>
-                                <p class="m-0"><span class="text-slate-500">FREQ:</span> <span class="text-white">${wp.generalFreq || '-'}</span></p>
-                            </div>
-                            ${wp.towers && wp.towers.length > 0 ? `<div class="mt-1 text-[9px] text-emerald-400 font-bold">TWR: ${wp.towers[0].name} (${wp.towers[0].freq})</div>` : ''}
-                        </div>`;
-                    }
-
-                    const popupHtml = `<div class="min-w-[180px]"><div class="flex items-center gap-2 mb-2 border-b border-slate-600 pb-2">${getIconHTML(wp.type).replace('mx-auto', '')}<h4 class="font-bold text-sm text-blue-400 m-0">${(wp.name || '').toString().toUpperCase()}</h4></div><div class="text-xs text-slate-300 space-y-1 mb-2"><p class="m-0 flex items-center"><i class="fas fa-map-pin w-4 text-center text-slate-400 mr-1"></i> ${decToDMSStr(wp.lat, true)}</p><p class="m-0 flex items-center"><i class="fas fa-map-pin w-4 text-center text-slate-400 opacity-0 mr-1"></i> ${decToDMSStr(wp.lon, false)}</p><p class="m-0 flex items-center mt-1"><i class="fas fa-mountain w-4 text-center text-slate-400 mr-1"></i> ${wp.elev} ft</p></div>${extraHtml}<div class="flex gap-2 mt-4"><button onclick="addToRoute('${wp.id}')" class="bg-blue-600 hover:bg-blue-500 text-white px-2 py-1.5 rounded text-[10px] flex-1 transition font-medium"><i class="fas fa-plus mr-1"></i> Route</button><button onclick="showWaypointDetail('${wp.id}')" class="bg-slate-700 hover:bg-slate-600 border border-slate-600 text-white px-2 py-1.5 rounded text-[10px] flex-1 transition font-medium"><i class="fas fa-info-circle mr-1"></i> Info</button></div></div>`;
-                    marker.bindPopup(popupHtml, { className: 'custom-popup' });
-                    
-                    waypointLayerGroup.addLayer(marker);
-                    activeWpMarkers[wp.id] = marker;
-                }
-            });
-        }
-
-        function saveWaypoint(e) {
+        async function saveWaypoint(e) {
             e.preventDefault();
+            if (!auth.currentUser) return;
             const id = document.getElementById('wpId').value;
             const isDec = document.querySelector('input[name="coordFormat"][value="decimal"]').checked;
             let lat = isDec ? parseFloat(document.getElementById('wpLatDec').value) : getDecimalFromDMSForm(true);
@@ -2185,6 +1715,10 @@
                 newWp.ilsFreq = document.getElementById('apIlsFreq').value;
                 newWp.ndbName = document.getElementById('apNdbName').value;
                 newWp.ndbFreq = document.getElementById('apNdbFreq').value;
+                
+                // Tambahan Chart URLs
+                newWp.aerodromeChart = document.getElementById('apAerodromeChart').value;
+                newWp.approachChart = document.getElementById('apApproachChart').value;
 
                 const towers = [];
                 document.querySelectorAll('.tower-row').forEach(row => {
@@ -2195,16 +1729,26 @@
                 newWp.towers = towers;
             }
 
-            if (id) {
-                const idx = waypointsData.findIndex(w => w.id === id);
-                if (idx !== -1) waypointsData[idx] = newWp;
-            } else {
-                waypointsData.push(newWp);
+            try {
+                await setDoc(getDocRef('waypoints', newWp.id), sanitizeForFirestore(newWp));
+                if (id) {
+                    const idx = waypointsData.findIndex(w => w.id === id);
+                    if (idx !== -1) waypointsData[idx] = newWp;
+                    
+                    // MENGHAPUS MARKER LAMA DARI CACHE AGAR POPUP TER-UPDATE
+                    if (activeWpMarkers[id]) {
+                        if (waypointLayerGroup) waypointLayerGroup.removeLayer(activeWpMarkers[id]);
+                        delete activeWpMarkers[id];
+                    }
+                } else {
+                    waypointsData.push(newWp);
+                }
+                renderWaypoints();
+                updateMapWaypoints();
+                closeWaypointModal();
+            } catch (error) {
+                showMessage("Error", "Gagal menyimpan data waypoint ke Firestore.");
             }
-            saveWaypoints();
-            renderWaypoints();
-            updateMapWaypoints();
-            closeWaypointModal();
         }
 
         function editWaypoint(id) {
@@ -2227,16 +1771,15 @@
                 document.getElementById('apIlsFreq').value = wp.ilsFreq || '';
                 document.getElementById('apNdbName').value = wp.ndbName || '';
                 document.getElementById('apNdbFreq').value = wp.ndbFreq || '';
+                
+                document.getElementById('apAerodromeChart').value = wp.aerodromeChart || '';
+                document.getElementById('apApproachChart').value = wp.approachChart || '';
 
                 const container = document.getElementById('towerInputsContainer');
                 container.innerHTML = '';
-                if (wp.towers && wp.towers.length > 0) {
-                    wp.towers.forEach(t => addTowerRow(t.name, t.freq));
-                } else {
-                    addTowerRow();
-                }
+                if (wp.towers && wp.towers.length > 0) wp.towers.forEach(t => addTowerRow(t.name, t.freq));
+                else addTowerRow();
             }
-
             document.querySelector('input[name="coordFormat"][value="decimal"]').checked = true;
             document.getElementById('coordDecimalGroup').style.display = 'grid';
             document.getElementById('coordDMSGroup').style.display = 'none';
@@ -2247,12 +1790,43 @@
         }
 
         function deleteWaypoint(id) {
-            if (confirm("Hapus Waypoint ini dari Database?")) {
-                waypointsData = waypointsData.filter(w => w.id !== id);
-                saveWaypoints();
-                renderWaypoints();
-                updateMapWaypoints();
-            }
+            showConfirm("Konfirmasi Hapus", "Hapus Waypoint ini dari Database?", async () => {
+                if (!auth.currentUser) return;
+                try {
+                    await deleteDoc(getDocRef('waypoints', id));
+                    waypointsData = waypointsData.filter(w => w.id !== id);
+                    renderWaypoints();
+                    updateMapWaypoints();
+                } catch(e) {
+                    showMessage("Error", "Gagal menghapus waypoint dari Firestore.");
+                }
+            });
+        }
+
+        function openWaypointModal() {
+            document.getElementById('waypointForm').reset();
+            document.getElementById('wpId').value = '';
+            document.getElementById('towerInputsContainer').innerHTML = '';
+            
+            // Reset Chart URLs
+            if (document.getElementById('apAerodromeChart')) document.getElementById('apAerodromeChart').value = '';
+            if (document.getElementById('apApproachChart')) document.getElementById('apApproachChart').value = '';
+            
+            toggleWpTypeFields();
+            ['latDeg', 'latMin', 'latSec', 'lonDeg', 'lonMin', 'lonSec', 'wpLatDec', 'wpLonDec'].forEach(id => {
+                document.getElementById(id).value = '';
+            });
+            document.getElementById('latDir').value = 'N';
+            document.getElementById('lonDir').value = 'E';
+            document.getElementById('wpModalTitle').innerHTML = '<i class="fas fa-map-marker-alt text-blue-400 mr-2"></i>Add New Waypoint';
+            document.querySelector('input[name="coordFormat"][value="decimal"]').checked = true;
+            document.getElementById('coordDecimalGroup').style.display = 'grid';
+            document.getElementById('coordDMSGroup').style.display = 'none';
+            document.getElementById('waypointModal').classList.remove('hidden');
+        }
+
+        function closeWaypointModal() {
+            document.getElementById('waypointModal').classList.add('hidden');
         }
 
         function toggleCoordFormat() {
@@ -2288,25 +1862,25 @@
             }
         }
 
-        function openWaypointModal() {
-            document.getElementById('waypointForm').reset();
-            document.getElementById('wpId').value = '';
-            document.getElementById('towerInputsContainer').innerHTML = '';
-            toggleWpTypeFields();
-            ['latDeg', 'latMin', 'latSec', 'lonDeg', 'lonMin', 'lonSec', 'wpLatDec', 'wpLonDec'].forEach(id => {
-                document.getElementById(id).value = '';
-            });
-            document.getElementById('latDir').value = 'N';
-            document.getElementById('lonDir').value = 'E';
-            document.getElementById('wpModalTitle').innerHTML = '<i class="fas fa-map-marker-alt text-blue-400 mr-2"></i>Add New Waypoint';
-            document.querySelector('input[name="coordFormat"][value="decimal"]').checked = true;
-            document.getElementById('coordDecimalGroup').style.display = 'grid';
-            document.getElementById('coordDMSGroup').style.display = 'none';
-            document.getElementById('waypointModal').classList.remove('hidden');
+        function toggleWpTypeFields() {
+            const type = document.getElementById('wpType').value;
+            const extra = document.getElementById('airportExtraFields');
+            if (type === 'airport') {
+                extra.classList.remove('hidden');
+                if (document.getElementById('towerInputsContainer').children.length === 0) addTowerRow();
+            } else {
+                extra.classList.add('hidden');
+            }
         }
 
-        function closeWaypointModal() {
-            document.getElementById('waypointModal').classList.add('hidden');
+        function addTowerRow(name = '', freq = '') {
+            const container = document.getElementById('towerInputsContainer');
+            const div = document.createElement('div');
+            div.className = 'tower-row flex gap-2 items-center';
+            div.innerHTML = `<input type="text" placeholder="Name" value="${name}" class="twr-name flex-[2] bg-slate-800 border border-slate-700 rounded px-2 py-1 text-[10px] outline-none text-white focus:border-blue-500">
+                             <input type="text" placeholder="Freq" value="${freq}" class="twr-freq flex-[1] bg-slate-800 border border-slate-700 rounded px-2 py-1 text-[10px] outline-none text-white focus:border-blue-500 font-mono">
+                             <button type="button" onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-300 p-1"><i class="fas fa-minus-circle"></i></button>`;
+            container.appendChild(div);
         }
 
         function openParseModal() {
@@ -2317,22 +1891,19 @@
         function closeParseModal() {
             document.getElementById('parseWaypointModal').classList.add('hidden');
         }
+
         async function processBulkWaypoints() {
+            if (!auth.currentUser) return;
             const text = document.getElementById('bulkWaypointData').value;
-            if (!text.trim()) {
-                alert("Silahkan masukkan data waypoint.");
-                return;
-            }
+            if (!text.trim()) { showMessage("Notice", "Silahkan masukkan data waypoint."); return; }
             const lines = text.split('\n');
             const regex = /([a-zA-Z0-9_-]+)\s+([NS])(\d{1,3})\s+(\d{1,2})'(\d{1,2}(?:\.\d+)?)"\s+([EW])(\d{1,3})\s+(\d{1,2})'(\d{1,2}(?:\.\d+)?)"\s+([a-zA-Z]+)/i;
-            let newWaypoints = [];
-            let lats = [];
-            let lons = [];
+            let newWaypoints = []; let lats = []; let lons = [];
+            
             lines.forEach(line => {
                 const match = line.trim().match(regex);
                 if (match) {
-                    const name = match[1];
-                    const latDir = match[2].toUpperCase();
+                    const name = match[1]; const latDir = match[2].toUpperCase();
                     let lat = parseFloat(match[3]) + (parseFloat(match[4]) / 60) + (parseFloat(match[5]) / 3600);
                     if (latDir === 'S') lat = -lat;
                     const lonDir = match[6].toUpperCase();
@@ -2340,25 +1911,21 @@
                     if (lonDir === 'W') lon = -lon;
                     let type = match[10].toLowerCase();
                     if (!['vfr', 'airport', 'heliport'].includes(type)) type = 'vfr';
+                    
                     newWaypoints.push({
                         id: 'wp_bulk_' + Date.now().toString() + Math.floor(Math.random() * 10000),
-                        name: name.toUpperCase(),
-                        type: type,
-                        lat: lat,
-                        lon: lon,
-                        elev: 0
+                        name: name.toUpperCase(), type: type, lat: lat, lon: lon, elev: 0
                     });
-                    lats.push(lat.toFixed(6));
-                    lons.push(lon.toFixed(6));
+                    lats.push(lat.toFixed(6)); lons.push(lon.toFixed(6));
                 }
             });
-            if (newWaypoints.length === 0) {
-                alert("Tidak ada waypoint valid yang ditemukan.");
-                return;
-            }
+            
+            if (newWaypoints.length === 0) { showMessage("Notice", "Tidak ada waypoint valid yang ditemukan."); return; }
+            
             const btn = document.getElementById('btnProcessBulk');
             btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
             btn.disabled = true;
+            
             try {
                 const chunkSize = 50;
                 for (let i = 0; i < lats.length; i += chunkSize) {
@@ -2368,71 +1935,158 @@
                     const data = await res.json();
                     if (data.elevation && data.elevation.length > 0) {
                         for (let j = 0; j < data.elevation.length; j++) {
-                            const elevMeters = data.elevation[j];
-                            newWaypoints[i + j].elev = Math.round(elevMeters * 3.28084);
+                            newWaypoints[i + j].elev = Math.round(data.elevation[j] * 3.28084);
                         }
                     }
                 }
+                
+                const promises = newWaypoints.map(wp => setDoc(getDocRef('waypoints', wp.id), sanitizeForFirestore(wp)));
+                await Promise.all(promises);
+                
+                waypointsData = [...waypointsData, ...newWaypoints];
+                renderWaypoints();
+                updateMapWaypoints();
+                closeParseModal();
+                showMessage("Berhasil", `${newWaypoints.length} Waypoint berhasil diimport dan disimpan di Firestore!`);
             } catch (e) {
                 console.error("Gagal sync elevasi massal:", e);
-                alert("Gagal sync elevasi sebagian.");
+                showMessage("Error", "Gagal memproses bulk waypoint.");
+            } finally {
+                btn.innerHTML = 'Import & Auto Sync Elevasi';
+                btn.disabled = false;
             }
-            waypointsData = [...waypointsData, ...newWaypoints];
-            saveWaypoints();
-            renderWaypoints();
-            updateMapWaypoints();
-            closeParseModal();
-            btn.innerHTML = 'Import & Auto Sync Elevasi';
-            btn.disabled = false;
-            alert(`${newWaypoints.length} Waypoint berhasil diimport dan disinkronkan!`);
         }
+
         async function syncElevation() {
             const btn = document.getElementById('btnSyncElev');
             const isDec = document.querySelector('input[name="coordFormat"][value="decimal"]').checked;
             let lat, lon;
-            if (isDec) {
-                lat = parseFloat(document.getElementById('wpLatDec').value);
-                lon = parseFloat(document.getElementById('wpLonDec').value);
-            } else {
-                lat = getDecimalFromDMSForm(true);
-                lon = getDecimalFromDMSForm(false);
-            }
-            if (isNaN(lat) || isNaN(lon)) {
-                alert("Harap isi koordinat Latitude & Longitude.");
-                return;
-            }
+            if (isDec) { lat = parseFloat(document.getElementById('wpLatDec').value); lon = parseFloat(document.getElementById('wpLonDec').value); }
+            else { lat = getDecimalFromDMSForm(true); lon = getDecimalFromDMSForm(false); }
+            if (isNaN(lat) || isNaN(lon)) return showMessage("Notice", "Harap isi koordinat Latitude & Longitude.");
+            
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Syncing...'; btn.disabled = true;
             try {
-                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Syncing...';
-                btn.disabled = true;
                 const res = await fetch(`https://api.open-meteo.com/v1/elevation?latitude=${lat}&longitude=${lon}`);
                 const data = await res.json();
-                if (data.elevation && data.elevation.length > 0) {
-                    const elevMeters = data.elevation[0];
-                    const elevFeet = Math.round(elevMeters * 3.28084);
-                    document.getElementById('wpElev').value = elevFeet;
-                } else {
-                    throw new Error("Data elevasi kosong.");
-                }
-            } catch (err) {
-                alert("Gagal mengambil data elevasi.");
-            } finally {
-                btn.innerHTML = '<i class="fas fa-cloud-download-alt mr-2"></i>Sync Elev';
-                btn.disabled = false;
-            }
-        }
-        // ==========================================
-        // --- AIRCRAFT PROFILE LOGIC             ---
-        // ==========================================
-        async function loadAircrafts() {
-            const data = await fetchFromSheet('aircrafts');
-            if (data !== null) {
-                aircraftsData = data;
-            }
-            renderAircrafts();
+                if (data.elevation && data.elevation.length > 0) document.getElementById('wpElev').value = Math.round(data.elevation[0] * 3.28084);
+            } catch (err) { showMessage("Error", "Gagal mengambil data elevasi."); } 
+            finally { btn.innerHTML = '<i class="fas fa-cloud-download-alt mr-2"></i>Sync Elev'; btn.disabled = false; }
         }
 
-        function saveAircrafts() {
-            postToSheet('aircrafts', aircraftsData);
+        function toggleAllWaypointsMap() {
+            updateMapWaypoints();
+        }
+
+        function updateMapWaypoints() {
+            if (!map || !waypointLayerGroup) return;
+            
+            if (!document.getElementById('wpTooltipStyle')) {
+                const style = document.createElement('style');
+                style.id = 'wpTooltipStyle';
+                style.innerHTML = `.wp-black-label { background-color: #000 !important; color: #fff !important; border: 1px solid #333 !important; padding: 2px 6px; font-weight: 700; font-size: 10px; border-radius: 4px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5); white-space: nowrap; } .custom-popup .leaflet-popup-content-wrapper { background: #1e293b; color: #f8fafc; border: 1px solid #334155; border-radius: 12px; } .custom-popup .leaflet-popup-content { margin: 12px; font-family: 'Inter', sans-serif; }`;
+                document.head.appendChild(style);
+            }
+            
+            const currentZoom = map.getZoom();
+            const bounds = map.getBounds().pad(1.5);
+            const showAll = document.getElementById('toggleAllWps') ? document.getElementById('toggleAllWps').checked : false;
+            const showLabel = currentZoom >= 8 || activeMapRouteId;
+
+            let forceRecreate = false;
+            if (lastZoomState !== -1 && ((lastZoomState >= 8 && currentZoom < 8) || (lastZoomState < 8 && currentZoom >= 8))) {
+                forceRecreate = true;
+            }
+            lastZoomState = currentZoom;
+
+            if (forceRecreate) {
+                waypointLayerGroup.clearLayers();
+                activeWpMarkers = {};
+            }
+
+            let wpsToRender = [];
+            
+            if (activeMapRouteId && !showAll) {
+                const rt = routesData.find(r => r.id === activeMapRouteId);
+                if (rt && rt.waypoints) {
+                    const uniqueWps = [];
+                    const seenIds = new Set();
+                    rt.waypoints.forEach(w => {
+                        if (!seenIds.has(w.id)) {
+                            seenIds.add(w.id);
+                            uniqueWps.push(w);
+                        }
+                    });
+                    wpsToRender = uniqueWps;
+                }
+            } else {
+                wpsToRender = waypointsData.filter(wp => {
+                    if (!bounds.contains([wp.lat, wp.lon])) return false;
+                    
+                    if (currentZoom < 7) return wp.type === 'airport';
+                    else if (currentZoom < 9) return wp.type === 'airport' || wp.type === 'heliport';
+                    else return true;
+                });
+            }
+
+            const wpsToRenderIds = new Set(wpsToRender.map(w => w.id));
+
+            for (const id in activeWpMarkers) {
+                if (!wpsToRenderIds.has(id)) {
+                    waypointLayerGroup.removeLayer(activeWpMarkers[id]);
+                    delete activeWpMarkers[id];
+                }
+            }
+
+            wpsToRender.forEach(wp => {
+                if (!activeWpMarkers[wp.id]) {
+                    const customIcon = L.divIcon({
+                        html: getIconHTML(wp.type),
+                        className: '',
+                        iconSize: [20, 20], 
+                        iconAnchor: [10, 10],
+                        popupAnchor: [0, -10]
+                    });
+                    const marker = L.marker([wp.lat, wp.lon], { icon: customIcon });
+                    
+                    if (showLabel) {
+                        marker.bindTooltip((wp.name || '').toString().toUpperCase(), {
+                            permanent: true, direction: 'bottom', className: 'wp-black-label', offset: [0, 10]
+                        });
+                    } else {
+                        marker.bindTooltip((wp.name || '').toString().toUpperCase(), {
+                            permanent: false, direction: 'top'
+                        });
+                    }
+
+                    let extraHtml = '';
+                    if (wp.type === 'airport') {
+                        extraHtml = `
+                        <div class="mt-3 pt-2 border-t border-slate-700/50">
+                            <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-[10px]">
+                                <p class="m-0"><span class="text-slate-500">RWY:</span> <span class="text-white">${wp.runway || '-'}</span></p>
+                                <p class="m-0"><span class="text-slate-500">FREQ:</span> <span class="text-white">${wp.generalFreq || '-'}</span></p>
+                            </div>
+                            ${wp.towers && wp.towers.length > 0 ? `<div class="mt-1 text-[9px] text-emerald-400 font-bold">TWR: ${wp.towers[0].name} (${wp.towers[0].freq})</div>` : ''}
+                        </div>`;
+                    }
+
+                    const popupHtml = `<div class="min-w-[180px]"><div class="flex items-center gap-2 mb-2 border-b border-slate-600 pb-2">${getIconHTML(wp.type).replace('mx-auto', '')}<h4 class="font-bold text-sm text-blue-400 m-0">${(wp.name || '').toString().toUpperCase()}</h4></div><div class="text-xs text-slate-300 space-y-1 mb-2"><p class="m-0 flex items-center"><i class="fas fa-map-pin w-4 text-center text-slate-400 mr-1"></i> ${decToDMSStr(wp.lat, true)}</p><p class="m-0 flex items-center"><i class="fas fa-map-pin w-4 text-center text-slate-400 opacity-0 mr-1"></i> ${decToDMSStr(wp.lon, false)}</p><p class="m-0 flex items-center mt-1"><i class="fas fa-mountain w-4 text-center text-slate-400 mr-1"></i> ${wp.elev} ft</p></div>${extraHtml}<div class="flex gap-2 mt-4"><button onclick="addToRoute('${wp.id}')" class="bg-blue-600 hover:bg-blue-500 text-white px-2 py-1.5 rounded text-[10px] flex-1 transition font-medium"><i class="fas fa-plus mr-1"></i> Route</button><button onclick="showWaypointDetail('${wp.id}')" class="bg-slate-700 hover:bg-slate-600 border border-slate-600 text-white px-2 py-1.5 rounded text-[10px] flex-1 transition font-medium"><i class="fas fa-info-circle mr-1"></i> Info</button></div></div>`;
+                    marker.bindPopup(popupHtml, { className: 'custom-popup' });
+                    
+                    waypointLayerGroup.addLayer(marker);
+                    activeWpMarkers[wp.id] = marker;
+                }
+            });
+        }
+
+        async function loadAircrafts() {
+            if (!auth.currentUser) return;
+            try {
+                const snapshot = await getDocs(getColRef('aircrafts'));
+                aircraftsData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                renderAircrafts();
+            } catch(e) { console.error("Error loading aircrafts from Firestore:", e); }
         }
 
         function renderAircrafts() {
@@ -2457,9 +2111,7 @@
 
         function updateAcWeightLabels() {
             const unit = document.getElementById('acWeightUnit').value;
-            document.querySelectorAll('.ac-weight-lbl').forEach(el => {
-                el.textContent = unit;
-            });
+            document.querySelectorAll('.ac-weight-lbl').forEach(el => { el.textContent = unit; });
         }
 
         function openAircraftForm(id = null) {
@@ -2474,7 +2126,6 @@
                     document.getElementById('acSpeed').value = ac.speed;
                     document.getElementById('acFuel').value = ac.fuel;
                     document.getElementById('acFuelUnit').value = ac.fuelUnit;
-                    
                     document.getElementById('acWeightUnit').value = ac.weightUnit || 'kg';
                     document.getElementById('acMtow').value = ac.mtow || '';
                     document.getElementById('acEmptyWeight').value = ac.emptyWeight || '';
@@ -2482,7 +2133,6 @@
                     document.getElementById('acSic').value = ac.sic || '';
                     document.getElementById('acEng1').value = ac.eng1 || '';
                     document.getElementById('acEng2').value = ac.eng2 || '';
-
                     document.getElementById('acModalTitle').innerHTML = '<i class="fas fa-edit text-blue-400 mr-2"></i>Edit Aircraft Profile';
                 }
             } else {
@@ -2494,7 +2144,6 @@
                 document.getElementById('acSic').value = '';
                 document.getElementById('acEng1').value = '';
                 document.getElementById('acEng2').value = '';
-
                 document.getElementById('acModalTitle').innerHTML = '<i class="fas fa-plane text-blue-400 mr-2"></i>Add Aircraft Profile';
             }
             updateAcWeightLabels();
@@ -2505,8 +2154,9 @@
             document.getElementById('aircraftFormModal').classList.add('hidden');
         }
 
-        function saveAircraft(e) {
+        async function saveAircraft(e) {
             e.preventDefault();
+            if (!auth.currentUser) return;
             const id = document.getElementById('acId').value;
             const newAC = {
                 id: id || 'ac_' + Date.now(),
@@ -2524,16 +2174,18 @@
                 eng1: parseFloat(document.getElementById('acEng1').value) || 0,
                 eng2: parseFloat(document.getElementById('acEng2').value) || 0
             };
-            if (id) {
-                const idx = aircraftsData.findIndex(u => u.id === id);
-                if (idx !== -1) aircraftsData[idx] = newAC;
-            } else {
-                aircraftsData.push(newAC);
-            }
-            saveAircrafts();
-            renderAircrafts();
-            closeAircraftForm();
-            closeAircraftDetail();
+            try {
+                await setDoc(getDocRef('aircrafts', newAC.id), sanitizeForFirestore(newAC));
+                if (id) {
+                    const idx = aircraftsData.findIndex(u => u.id === id);
+                    if (idx !== -1) aircraftsData[idx] = newAC;
+                } else {
+                    aircraftsData.push(newAC);
+                }
+                renderAircrafts();
+                closeAircraftForm();
+                closeAircraftDetail();
+            } catch (error) { showMessage("Error", "Gagal menyimpan aircraft ke Firestore."); }
         }
 
         function viewAircraft(id) {
@@ -2574,28 +2226,24 @@
 
         function deleteAircraftFromDetail() {
             const id = document.getElementById('detailId').value;
-            if (confirm("Hapus Profil Pesawat ini secara permanen?")) {
-                aircraftsData = aircraftsData.filter(a => a.id !== id);
-                saveAircrafts();
-                renderAircrafts();
-                closeAircraftDetail();
-            }
+            showConfirm("Hapus Pesawat", "Hapus Profil Pesawat ini secara permanen?", async () => {
+                if (!auth.currentUser) return;
+                try {
+                    await deleteDoc(getDocRef('aircrafts', id));
+                    aircraftsData = aircraftsData.filter(a => a.id !== id);
+                    renderAircrafts();
+                    closeAircraftDetail();
+                } catch(e) { showMessage("Error", "Gagal menghapus aircraft dari Firestore."); }
+            });
         }
-        // ==========================================
-        // --- ROUTE & OFP LOGIC                  ---
-        // ==========================================
+
         async function loadRoutes() {
-            const data = await fetchFromSheet('routes');
-            if (data !== null) {
-                routesData = data.map(rt => {
-                    if (typeof rt.etd === 'string' && rt.etd.includes('T')) {
-                        try {
-                            const d = new Date(rt.etd);
-                            rt.etd = `${d.getUTCHours().toString().padStart(2, '0')}:${d.getUTCMinutes().toString().padStart(2, '0')}`;
-                        } catch (e) {}
-                    }
-                    let totalDist = 0;
-                    let totalDecHours = 0;
+            if (!auth.currentUser) return;
+            try {
+                const snapshot = await getDocs(getColRef('routes'));
+                routesData = snapshot.docs.map(doc => {
+                    let rt = { id: doc.id, ...doc.data() };
+                    let totalDist = 0; let totalDecHours = 0;
                     if (rt.waypoints && Array.isArray(rt.waypoints)) {
                         for (let i = 1; i < rt.waypoints.length; i++) {
                             const dist = calcDistanceNM(rt.waypoints[i - 1].lat, rt.waypoints[i - 1].lon, rt.waypoints[i].lat, rt.waypoints[i].lon);
@@ -2607,41 +2255,14 @@
                     rt.totalEET = formatTimeHM(totalDecHours);
                     return rt;
                 });
-            }
-            renderRouteList();
-            if (activeMapRouteId) {
-                if (!routesData.find(r => r.id === activeMapRouteId)) {
-                    clearActiveMapRoute();
-                } else {
-                    drawActiveRoute();
-                }
-            }
-        }
-
-        function saveRoutes() {
-            postToSheet('routes', routesData);
+                renderRouteList();
+            } catch(e) { console.error("Error loading routes from Firestore:", e); }
         }
 
         function renderRouteList() {
             const tbody = document.getElementById('routeTableBody');
             const search = document.getElementById('searchInputRoute') ? document.getElementById('searchInputRoute').value.toLowerCase() : '';
-            
-            // Update Indikator Sisa Slot Rute
-            const indicator = document.getElementById('routeSlotIndicator');
-            if (indicator) {
-                const count = routesData.length;
-                indicator.textContent = `${count}/90`;
-                if (count >= 90) {
-                    indicator.className = 'ml-3 px-2 py-0.5 text-[10px] sm:text-xs font-bold rounded-full bg-red-500/20 text-red-400 border border-red-500/30';
-                } else if (count >= 80) {
-                    indicator.className = 'ml-3 px-2 py-0.5 text-[10px] sm:text-xs font-bold rounded-full bg-orange-500/20 text-orange-400 border border-orange-500/30';
-                } else {
-                    indicator.className = 'ml-3 px-2 py-0.5 text-[10px] sm:text-xs font-bold rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30';
-                }
-            }
-            
             tbody.innerHTML = '';
-            // PERBAIKAN: Bungkus name dan aircraftReg dengan String()
             const filtered = routesData.filter(rt => String(rt.name || '').toLowerCase().includes(search) || String(rt.aircraftReg || '').toLowerCase().includes(search));
             filtered.forEach(rt => {
                 const tr = document.createElement('tr');
@@ -2656,111 +2277,6 @@
                 tr.innerHTML = `<td class="px-4 py-3"><div class="font-bold text-white tracking-wide">${rt.name}</div><div class="text-cyan-400 text-[9px] md:hidden mt-0.5"><i class="fas fa-plane mr-1"></i> ${rt.aircraftReg}</div></td><td class="px-4 py-3 text-cyan-400 text-[10px] sm:text-xs font-medium hidden md:table-cell">${rt.aircraftReg}</td><td class="px-4 py-3 text-xs sm:text-sm">${originDest}</td><td class="px-4 py-3 hidden sm:table-cell">${rt.totalDist} NM</td><td class="px-4 py-3 text-orange-300 hidden sm:table-cell">${rt.totalEET}</td><td class="px-4 py-3 text-right opacity-50 group-hover:opacity-100 transition"><button onclick="event.stopPropagation(); editRoute('${rt.id}')" class="text-blue-400 hover:text-blue-300 mr-2 sm:mr-3 p-1.5 sm:p-2 bg-blue-500/10 rounded-lg"><i class="fas fa-edit"></i></button><button onclick="event.stopPropagation(); deleteRoute('${rt.id}')" class="text-red-400 hover:text-red-300 p-1.5 sm:p-2 bg-red-500/10 rounded-lg"><i class="fas fa-trash"></i></button></td>`;
                 tbody.appendChild(tr);
             });
-        }
-
-        function openRouteDetailModal(id) {
-            const rt = routesData.find(r => r.id === id);
-            if (!rt) return;
-            document.getElementById('detRtName').textContent = rt.name;
-            const ac = aircraftsData.find(a => a.id === rt.aircraftId);
-            document.getElementById('detRtAircraft').textContent = ac ? `${ac.reg} (${ac.type})` : rt.aircraftReg;
-            let originDest = '-';
-            if (rt.waypoints && rt.waypoints.length >= 2) {
-                originDest = `${rt.waypoints[0].name} <i class="fas fa-arrow-right text-blue-400 mx-1 sm:mx-2 text-[8px] sm:text-xs"></i> ${rt.waypoints[rt.waypoints.length - 1].name}`;
-            } else if (rt.waypoints && rt.waypoints.length === 1) {
-                originDest = rt.waypoints[0].name;
-            }
-            document.getElementById('detRtOriginDest').innerHTML = originDest;
-            document.getElementById('detRtDist').textContent = rt.totalDist;
-            document.getElementById('detRtEET').textContent = rt.totalEET;
-            let totalFuel = 0;
-            if (rt.speed > 0) {
-                let totalDecHours = 0;
-                for (let i = 1; i < rt.waypoints.length; i++) {
-                    const dist = calcDistanceNM(rt.waypoints[i - 1].lat, rt.waypoints[i - 1].lon, rt.waypoints[i].lat, rt.waypoints[i].lon);
-                    totalDecHours += (dist / rt.speed);
-                }
-                totalFuel = totalDecHours * rt.fuelCons;
-            }
-            document.getElementById('detRtFuel').textContent = Math.round(totalFuel) + (ac ? ' ' + ac.fuelUnit : '');
-            
-            // --- UPDATE UI TAMBAHAN FOB, REM FUEL, MAX PAX ---
-            const fob = rt.fuelOnboard || 0;
-            const remFuel = fob - totalFuel;
-            document.getElementById('detRtFob').textContent = fob + (ac ? ' ' + ac.fuelUnit : '');
-            
-            const remEl = document.getElementById('detRtRem');
-            remEl.textContent = Math.round(remFuel) + (ac ? ' ' + ac.fuelUnit : '');
-            if (remFuel < 0) remEl.className = "text-red-400 font-bold";
-            else if (remFuel < (totalFuel * 0.1)) remEl.className = "text-orange-400 font-bold";
-            else remEl.className = "text-emerald-400 font-bold";
-            
-            document.getElementById('detRtMaxPax').textContent = rt.maxPax || '-';
-
-            document.getElementById('btnDetEdit').onclick = () => {
-                closeRouteDetailModal();
-                editRoute(id);
-            };
-            document.getElementById('btnDetDuplicate').onclick = () => duplicateRoute(id);
-            document.getElementById('btnDetInvert').onclick = () => invertRoute(id);
-            document.getElementById('btnDetDelete').onclick = () => {
-                closeRouteDetailModal();
-                deleteRoute(id);
-            };
-            document.getElementById('btnDetViewMap').onclick = () => viewRouteOnMap(id);
-            document.getElementById('btnDetPrint').onclick = () => printRouteOFP(id);
-            document.getElementById('btnDetSimulate').onclick = () => {
-                if (rt.id) startSimulateRoute(rt.id);
-            };
-            document.getElementById('btnDetNavigate').onclick = () => {
-                if (rt.id) startNavigateRoute(rt.id);
-            };
-            document.getElementById('routeDetailModal').classList.remove('hidden');
-        }
-
-        function closeRouteDetailModal() {
-             document.getElementById('routeDetailModal').classList.add('hidden');
-        }
-
-        function duplicateRoute(id) {
-            if (routesData.length >= 90) {
-                alert("Peringatan: Kuota maksimal 90 rute telah tercapai! Anda tidak dapat menduplikasi rute. Silakan hapus rute lama terlebih dahulu.");
-                return;
-            }
-            const rt = routesData.find(r => r.id === id);
-            if (!rt) return;
-            const clone = JSON.parse(JSON.stringify(rt));
-            clone.id = 'rt_' + Date.now();
-            clone.name += ' - COPY';
-            routesData.push(clone);
-            saveRoutes();
-            renderRouteList();
-            closeRouteDetailModal();
-        }
-
-        function invertRoute(id) {
-            const rt = routesData.find(r => r.id === id);
-            if (!rt) return;
-            rt.waypoints.reverse();
-            const parts = rt.name.split('-');
-            if (parts.length === 2) rt.name = parts[1] + '-' + parts[0];
-            else rt.name = rt.name + ' (INVERTED)';
-            recalcRouteTotals(rt);
-            saveRoutes();
-            renderRouteList();
-            openRouteDetailModal(rt.id);
-        }
-
-        function recalcRouteTotals(rt) {
-            let totalDist = 0;
-            let totalDecHours = 0;
-            for (let i = 1; i < rt.waypoints.length; i++) {
-                const dist = calcDistanceNM(rt.waypoints[i - 1].lat, rt.waypoints[i - 1].lon, rt.waypoints[i].lat, rt.waypoints[i].lon);
-                totalDist += dist;
-                if (rt.speed > 0) totalDecHours += (dist / rt.speed);
-            }
-            rt.totalDist = Math.round(totalDist);
-            rt.totalEET = formatTimeHM(totalDecHours);
         }
 
         function populateRouteAircrafts() {
@@ -2817,15 +2333,12 @@
                 payloadEl.classList.add('text-emerald-400', 'border-emerald-500/30', 'bg-emerald-900/20');
             }
 
-            // --- KALKULASI PAX (OTOMATIS CONVERT LBS KE KG JIKA PERLU) ---
             const acId = document.getElementById('rtAircraft').value;
             const ac = aircraftsData.find(a => a.id === acId);
             const wUnit = ac ? (ac.weightUnit || 'kg') : 'kg';
             
             let payloadKg = payload;
-            if (wUnit === 'lbs') {
-                payloadKg = payload / 2.20462;
-            }
+            if (wUnit === 'lbs') payloadKg = payload / 2.20462;
 
             const paxWt = parseFloat(document.getElementById('rtPaxWeight').value) || 0;
             const maxPaxEl = document.getElementById('rtMaxPax');
@@ -2856,9 +2369,7 @@
                     document.getElementById('rtFuelOnboard').value = rt.fuelOnboard || 0;
                     currentRouteWps = rt.waypoints.map(savedWp => {
                         const dbWp = waypointsData.find(db => db.id === savedWp.id);
-                        return dbWp ? {
-                            ...dbWp
-                        } : savedWp;
+                        return dbWp ? { ...dbWp } : savedWp;
                     });
                     document.getElementById('routeModalTitle').innerHTML = '<i class="fas fa-edit text-blue-400 mr-2"></i>Edit Operational Flight Plan';
                     const ac = aircraftsData.find(a => a.id === rt.aircraftId);
@@ -2867,9 +2378,6 @@
                         document.getElementById('rtFuelUnitLabel2').textContent = ac.fuelUnit;
                         document.getElementById('rtMtow').value = ac.mtow || 0;
                         document.getElementById('rtEmptyWt').value = ac.emptyWeight || 0;
-                    } else {
-                        document.getElementById('rtMtow').value = '';
-                        document.getElementById('rtEmptyWt').value = '';
                     }
                     document.getElementById('rtCrewWt').value = rt.crewWt !== undefined ? rt.crewWt : ((ac ? (ac.pic||0)+(ac.sic||0)+(ac.eng1||0)+(ac.eng2||0) : 0));
                     document.getElementById('rtPaxWeight').value = rt.paxWeight !== undefined ? rt.paxWeight : '75';
@@ -2917,7 +2425,6 @@
             const listDiv = document.getElementById('routeWpSelectList');
             const search = document.getElementById('searchRouteWp').value.toLowerCase();
             listDiv.innerHTML = '';
-            // PERBAIKAN: Bungkus wp.name dan wp.id dengan String()
             const filtered = waypointsData.filter(wp => String(wp.name || '').toLowerCase().includes(search) || String(wp.id || '').toLowerCase().includes(search));
             if (filtered.length === 0) {
                 listDiv.innerHTML = '<div class="text-center p-4 text-slate-500">No waypoints found.</div>';
@@ -2935,9 +2442,7 @@
         function addWpToRoute(wpId) {
             const wp = waypointsData.find(w => w.id === wpId);
             if (wp) {
-                currentRouteWps.push({
-                    ...wp
-                });
+                currentRouteWps.push({ ...wp });
                 renderOFPTable();
                 closeRouteWpSelector();
             }
@@ -2982,11 +2487,7 @@
             let currentRemFuel = fuelOnboard;
 
             currentRouteWps.forEach((wp, i) => {
-                let dist = 0,
-                    brng = 0,
-                    decHrs = 0,
-                    fuelBurn = 0;
-                let etaHrs = 0;
+                let dist = 0, brng = 0, decHrs = 0, fuelBurn = 0, etaHrs = 0;
                 if (i > 0) {
                     const prevWp = currentRouteWps[i - 1];
                     dist = calcDistanceNM(prevWp.lat, prevWp.lon, wp.lat, wp.lon);
@@ -2998,28 +2499,19 @@
                     totalFuel += fuelBurn;
                     etaHrs = totalDecHours;
                 }
-                
                 currentRemFuel -= fuelBurn;
 
                 const getColValueHTML = (type) => {
                     if (i === 0 && type !== 'eta' && type !== 'remFuel') return '-';
                     if (i === 0 && type === 'eta') return document.getElementById('rtEtd').value || '00:00';
                     switch (type) {
-                        case 'distance':
-                            return `${formatDecimal(dist)} <span class="text-[8px] sm:text-[10px] text-slate-500">NM</span>`;
-                        case 'heading':
-                        case 'bearing':
-                            return `${Math.round(brng).toString().padStart(3, '0')}°`;
-                        case 'eet':
-                            return formatTimeHM(decHrs);
-                        case 'eta':
-                            return addDecimalHoursToHHMM(etdVal, etaHrs);
-                        case 'fuel':
-                            return formatDecimal(fuelBurn);
-                        case 'remFuel':
-                            return `<span class="${currentRemFuel < 0 ? 'text-red-400 font-bold' : 'text-emerald-400'}">${formatDecimal(currentRemFuel)}</span>`;
-                        default:
-                            return '-';
+                        case 'distance': return `${formatDecimal(dist)} <span class="text-[8px] sm:text-[10px] text-slate-500">NM</span>`;
+                        case 'heading': case 'bearing': return `${Math.round(brng).toString().padStart(3, '0')}°`;
+                        case 'eet': return formatTimeHM(decHrs);
+                        case 'eta': return addDecimalHoursToHHMM(etdVal, etaHrs);
+                        case 'fuel': return formatDecimal(fuelBurn);
+                        case 'remFuel': return `<span class="${currentRemFuel < 0 ? 'text-red-400 font-bold' : 'text-emerald-400'}">${formatDecimal(currentRemFuel)}</span>`;
+                        default: return '-';
                     }
                 };
                 const upClass = i === 0 ? 'opacity-30 cursor-not-allowed' : 'hover:text-blue-400 cursor-pointer';
@@ -3035,9 +2527,7 @@
             const nameInput = document.getElementById('rtName');
             if (nameInput && nameInput.dataset.manualEdit !== 'true') {
                 if (currentRouteWps.length > 0) {
-                    const firstWp = currentRouteWps[0].name;
-                    const lastWp = currentRouteWps[currentRouteWps.length - 1].name;
-                    nameInput.value = firstWp + (currentRouteWps.length > 1 ? '-' + lastWp : '');
+                    nameInput.value = currentRouteWps[0].name + (currentRouteWps.length > 1 ? '-' + currentRouteWps[currentRouteWps.length - 1].name : '');
                 } else {
                     nameInput.value = '';
                 }
@@ -3064,75 +2554,56 @@
         function invertCurrentRouteForm() {
             if (currentRouteWps.length < 2) return;
             currentRouteWps.reverse();
-            
             const nameInput = document.getElementById('rtName');
             if (nameInput.dataset.manualEdit === 'true') {
                 const parts = nameInput.value.split('-');
-                if (parts.length === 2) {
-                    nameInput.value = parts[1].trim() + '-' + parts[0].trim();
-                }
+                if (parts.length === 2) nameInput.value = parts[1].trim() + '-' + parts[0].trim();
             }
-            
             renderOFPTable();
         }
 
-        function saveRoute() {
+        async function saveRoute() {
+            if (!auth.currentUser) return;
             const id = document.getElementById('rtId').value;
-
-            // Validasi Kuota Maksimal Rute (hanya berlaku untuk penambahan rute baru, bukan edit)
-            if (!id && routesData.length >= 90) {
-                alert("Peringatan: Kuota maksimal 90 rute telah tercapai! Anda tidak dapat menyimpan rute baru. Silakan hapus rute lama terlebih dahulu.");
-                return;
-            }
-
             const name = document.getElementById('rtName').value.trim();
             const acId = document.getElementById('rtAircraft').value;
             const etd = document.getElementById('rtEtd').value;
-            if (!name || !acId) {
-                alert("Mohon isi Route Name dan pilih Aircraft Profile.");
-                return;
-            }
-            if (currentRouteWps.length < 2) {
-                alert("Operational Flight Plan minimal harus terdiri dari 2 Waypoint (Origin & Destination).");
-                return;
-            }
+            if (!name || !acId) { showMessage("Notice", "Mohon isi Route Name dan pilih Aircraft Profile."); return; }
+            if (currentRouteWps.length < 2) { showMessage("Notice", "Operational Flight Plan minimal harus terdiri dari 2 Waypoint (Origin & Destination)."); return; }
+            
             const ac = aircraftsData.find(a => a.id === acId);
-            let totalDist = 0;
-            let totalDecHours = 0;
+            let totalDist = 0, totalDecHours = 0;
             const speed = parseFloat(document.getElementById('rtSpeed').value) || 0;
             for (let i = 1; i < currentRouteWps.length; i++) {
-                const prev = currentRouteWps[i - 1];
-                const curr = currentRouteWps[i];
-                const dist = calcDistanceNM(prev.lat, prev.lon, curr.lat, curr.lon);
+                const dist = calcDistanceNM(currentRouteWps[i - 1].lat, currentRouteWps[i - 1].lon, currentRouteWps[i].lat, currentRouteWps[i].lon);
                 totalDist += dist;
                 if (speed > 0) totalDecHours += (dist / speed);
             }
+            
             const newRt = {
                 id: id || 'rt_' + Date.now(),
-                name: name,
-                aircraftId: acId,
-                aircraftReg: ac ? ac.reg : 'UNKNOWN',
-                etd: etd,
-                speed: speed,
-                fuelCons: parseFloat(document.getElementById('rtFuelCons').value) || 0,
+                name: name, aircraftId: acId, aircraftReg: ac ? ac.reg : 'UNKNOWN', etd: etd,
+                speed: speed, fuelCons: parseFloat(document.getElementById('rtFuelCons').value) || 0,
                 fuelOnboard: parseFloat(document.getElementById('rtFuelOnboard').value) || 0,
                 crewWt: parseFloat(document.getElementById('rtCrewWt').value) || 0,
                 payload: parseFloat(document.getElementById('rtPayload').value) || 0,
                 paxWeight: parseFloat(document.getElementById('rtPaxWeight').value) || 75,
                 maxPax: document.getElementById('rtMaxPax').value,
                 waypoints: currentRouteWps,
-                totalDist: Math.round(totalDist),
-                totalEET: formatTimeHM(totalDecHours)
+                totalDist: Math.round(totalDist), totalEET: formatTimeHM(totalDecHours)
             };
-            if (id) {
-                const idx = routesData.findIndex(r => r.id === id);
-                if (idx !== -1) routesData[idx] = newRt;
-            } else {
-                routesData.push(newRt);
-            }
-            saveRoutes();
-            renderRouteList();
-            closeRouteForm();
+
+            try {
+                await setDoc(getDocRef('routes', newRt.id), sanitizeForFirestore(newRt));
+                if (id) {
+                    const idx = routesData.findIndex(r => r.id === id);
+                    if (idx !== -1) routesData[idx] = newRt;
+                } else {
+                    routesData.push(newRt);
+                }
+                renderRouteList();
+                closeRouteForm();
+            } catch (error) { showMessage("Error", "Gagal menyimpan rute ke Firestore."); }
         }
 
         function editRoute(id) {
@@ -3140,24 +2611,115 @@
         }
 
         function deleteRoute(id) {
-            if (confirm("Hapus rute ini dari database?")) {
-                routesData = routesData.filter(r => r.id !== id);
-                saveRoutes();
-                renderRouteList();
+            showConfirm("Hapus Rute", "Hapus rute ini dari database Firestore?", async () => {
+                if (!auth.currentUser) return;
+                try {
+                    await deleteDoc(getDocRef('routes', id));
+                    routesData = routesData.filter(r => r.id !== id);
+                    renderRouteList();
+                } catch(e) { showMessage("Error", "Gagal menghapus rute dari Firestore."); }
+            });
+        }
+
+        function openRouteDetailModal(id) {
+            const rt = routesData.find(r => r.id === id);
+            if (!rt) return;
+            document.getElementById('detRtName').textContent = rt.name;
+            const ac = aircraftsData.find(a => a.id === rt.aircraftId);
+            document.getElementById('detRtAircraft').textContent = ac ? `${ac.reg} (${ac.type})` : rt.aircraftReg;
+            let originDest = '-';
+            if (rt.waypoints && rt.waypoints.length >= 2) {
+                originDest = `${rt.waypoints[0].name} <i class="fas fa-arrow-right text-blue-400 mx-1 sm:mx-2 text-[8px] sm:text-xs"></i> ${rt.waypoints[rt.waypoints.length - 1].name}`;
+            } else if (rt.waypoints && rt.waypoints.length === 1) {
+                originDest = rt.waypoints[0].name;
             }
+            document.getElementById('detRtOriginDest').innerHTML = originDest;
+            document.getElementById('detRtDist').textContent = rt.totalDist;
+            document.getElementById('detRtEET').textContent = rt.totalEET;
+            let totalFuel = 0;
+            if (rt.speed > 0) {
+                let totalDecHours = 0;
+                for (let i = 1; i < rt.waypoints.length; i++) {
+                    const dist = calcDistanceNM(rt.waypoints[i - 1].lat, rt.waypoints[i - 1].lon, rt.waypoints[i].lat, rt.waypoints[i].lon);
+                    totalDecHours += (dist / rt.speed);
+                }
+                totalFuel = totalDecHours * rt.fuelCons;
+            }
+            document.getElementById('detRtFuel').textContent = Math.round(totalFuel) + (ac ? ' ' + ac.fuelUnit : '');
+            
+            const fob = rt.fuelOnboard || 0;
+            const remFuel = fob - totalFuel;
+            document.getElementById('detRtFob').textContent = fob + (ac ? ' ' + ac.fuelUnit : '');
+            
+            const remEl = document.getElementById('detRtRem');
+            remEl.textContent = Math.round(remFuel) + (ac ? ' ' + ac.fuelUnit : '');
+            if (remFuel < 0) remEl.className = "text-red-400 font-bold";
+            else if (remFuel < (totalFuel * 0.1)) remEl.className = "text-orange-400 font-bold";
+            else remEl.className = "text-emerald-400 font-bold";
+            
+            document.getElementById('detRtMaxPax').textContent = rt.maxPax || '-';
+
+            document.getElementById('btnDetEdit').onclick = () => { closeRouteDetailModal(); editRoute(id); };
+            document.getElementById('btnDetDuplicate').onclick = () => duplicateRoute(id);
+            document.getElementById('btnDetInvert').onclick = () => invertRoute(id);
+            document.getElementById('btnDetDelete').onclick = () => { closeRouteDetailModal(); deleteRoute(id); };
+            document.getElementById('btnDetViewMap').onclick = () => viewRouteOnMap(id);
+            document.getElementById('btnDetPrint').onclick = () => printRouteOFP(id);
+            document.getElementById('btnDetSimulate').onclick = () => { if (rt.id) startSimulateRoute(rt.id); };
+            document.getElementById('btnDetNavigate').onclick = () => { if (rt.id) startNavigateRoute(rt.id); };
+            document.getElementById('routeDetailModal').classList.remove('hidden');
+        }
+
+        function closeRouteDetailModal() {
+            document.getElementById('routeDetailModal').classList.add('hidden');
+        }
+
+        async function duplicateRoute(id) {
+            if (!auth.currentUser) return;
+            const rt = routesData.find(r => r.id === id);
+            if (!rt) return;
+            const clone = JSON.parse(JSON.stringify(rt));
+            clone.id = 'rt_' + Date.now();
+            clone.name += ' - COPY';
+            
+            try {
+                await setDoc(getDocRef('routes', clone.id), sanitizeForFirestore(clone));
+                routesData.push(clone);
+                renderRouteList();
+                closeRouteDetailModal();
+            } catch(e) { showMessage("Error", "Gagal menduplikasi rute ke Firestore."); }
+        }
+
+        async function invertRoute(id) {
+            if (!auth.currentUser) return;
+            const rt = routesData.find(r => r.id === id);
+            if (!rt) return;
+            rt.waypoints.reverse();
+            const parts = rt.name.split('-');
+            if (parts.length === 2) rt.name = parts[1] + '-' + parts[0];
+            else rt.name = rt.name + ' (INVERTED)';
+            
+            let totalDist = 0, totalDecHours = 0;
+            for (let i = 1; i < rt.waypoints.length; i++) {
+                const dist = calcDistanceNM(rt.waypoints[i - 1].lat, rt.waypoints[i - 1].lon, rt.waypoints[i].lat, rt.waypoints[i].lon);
+                totalDist += dist;
+                if (rt.speed > 0) totalDecHours += (dist / rt.speed);
+            }
+            rt.totalDist = Math.round(totalDist);
+            rt.totalEET = formatTimeHM(totalDecHours);
+
+            try {
+                await setDoc(getDocRef('routes', rt.id), sanitizeForFirestore(rt));
+                renderRouteList();
+                openRouteDetailModal(rt.id);
+            } catch(e) { showMessage("Error", "Gagal mengupdate rute invert di Firestore."); }
         }
 
         function printRouteOFP(id) {
-            const rt = routesData.find(r => r.id === id);
-            if (!rt) return;
+            const rt = routesData.find(r => r.id === id); if (!rt) return;
             const ac = aircraftsData.find(a => a.id === rt.aircraftId);
-            let wpHtml = '';
-            let totalDist = 0;
-            let totalDecHours = 0;
-            let totalFuel = 0;
-            const speed = rt.speed || 0;
-            const fuelCons = rt.fuelCons || 0;
-            const etdVal = rt.etd || "00:00";
+            let wpHtml = ''; let totalDist = 0; let totalDecHours = 0; let totalFuel = 0;
+            const speed = rt.speed || 0; const fuelCons = rt.fuelCons || 0; const etdVal = rt.etd || "00:00";
             rt.waypoints.forEach((wp, i) => {
                 let dist = 0, brng = 0, decHrs = 0, fuelBurn = 0, etaHrs = 0;
                 if (i > 0) {
@@ -3166,26 +2728,287 @@
                     brng = calcBearingDeg(prevWp.lat, prevWp.lon, wp.lat, wp.lon);
                     if (speed > 0) decHrs = dist / speed;
                     fuelBurn = decHrs * fuelCons;
-                    totalDist += dist; totalDecHours += decHrs; totalFuel += fuelBurn;
-                    etaHrs = totalDecHours;
+                    totalDist += dist; totalDecHours += decHrs; totalFuel += fuelBurn; etaHrs = totalDecHours;
                 }
-                let distStr = i === 0 ? '-' : formatDecimal(dist);
-                let brngStr = i === 0 ? '-' : Math.round(brng).toString().padStart(3, '0') + '°';
-                let eetStr = i === 0 ? '-' : formatTimeHM(decHrs);
-                let etaStr = i === 0 ? etdVal : addDecimalHoursToHHMM(etdVal, etaHrs);
-                let fuelStr = i === 0 ? '-' : formatDecimal(fuelBurn);
-                wpHtml += ` <tr style="border-bottom: 1px solid #e5e7eb;"> <td style="padding: 8px; text-align: center;">${i+1}</td> <td style="padding: 8px;"><strong>${wp.name}</strong><br><span style="font-size: 10px; color: #6b7280;">Elev: ${wp.elev}ft</span></td> <td style="padding: 8px; font-size: 12px;">${decToDMSStr(wp.lat, true)}<br>${decToDMSStr(wp.lon, false)}</td> <td style="padding: 8px; text-align: center;">${brngStr}</td> <td style="padding: 8px; text-align: center;">${distStr}</td> <td style="padding: 8px; text-align: center;">${eetStr}</td> <td style="padding: 8px; text-align: center;">${etaStr}</td> <td style="padding: 8px; text-align: center;">${fuelStr}</td> </tr> `;
+                wpHtml += ` <tr style="border-bottom: 1px solid #e5e7eb;"> <td style="padding: 8px; text-align: center;">${i+1}</td> <td style="padding: 8px;"><strong>${wp.name}</strong><br><span style="font-size: 10px; color: #6b7280;">Elev: ${wp.elev}ft</span></td> <td style="padding: 8px; font-size: 12px;">${decToDMSStr(wp.lat, true)}<br>${decToDMSStr(wp.lon, false)}</td> <td style="padding: 8px; text-align: center;">${i===0?'-':Math.round(brng).toString().padStart(3, '0') + '°'}</td> <td style="padding: 8px; text-align: center;">${i===0?'-':formatDecimal(dist)}</td> <td style="padding: 8px; text-align: center;">${i===0?'-':formatTimeHM(decHrs)}</td> <td style="padding: 8px; text-align: center;">${i===0?etdVal:addDecimalHoursToHHMM(etdVal, etaHrs)}</td> <td style="padding: 8px; text-align: center;">${i===0?'-':formatDecimal(fuelBurn)}</td> </tr> `;
             });
-            const printHtml = ` <div style="max-width: 800px; margin: 0 auto; color: #000;"> <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 16px; margin-bottom: 24px;"> <h1 style="font-size: 24px; font-weight: bold; margin: 0; text-transform: uppercase; letter-spacing: 2px;">SkyOps Navigation Pro</h1> <h2 style="font-size: 16px; font-weight: normal; color: #4b5563; margin: 4px 0 0 0;">OPERATIONAL FLIGHT PLAN (OFP)</h2> </div> <div style="display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 24px; font-size: 14px;"> <div style="width: 30%; margin-bottom: 12px;"><span style="font-weight: bold; color: #6b7280; display: block; font-size: 10px;">ROUTE NAME</span><span style="font-weight: bold; font-size: 16px;">${rt.name}</span></div> <div style="width: 40%; margin-bottom: 12px;"><span style="font-weight: bold; color: #6b7280; display: block; font-size: 10px;">AIRCRAFT</span><span style="font-weight: bold; font-size: 16px;">${ac ? ac.reg : rt.aircraftReg} <span style="font-size: 12px; font-weight: normal;">(${ac ? ac.type : ''})</span></span></div> <div style="width: 30%; margin-bottom: 12px;"><span style="font-weight: bold; color: #6b7280; display: block; font-size: 10px;">ETD (LOCAL)</span><span style="font-weight: bold; font-size: 16px;">${rt.etd || '00:00'}</span></div> <div style="width: 30%;"><span style="font-weight: bold; color: #6b7280; display: block; font-size: 10px;">CRUISING SPEED</span><span style="font-weight: bold; font-size: 16px;">${rt.speed} kts</span></div> <div style="width: 40%;"><span style="font-weight: bold; color: #6b7280; display: block; font-size: 10px;">FUEL CONSUMPTION</span><span style="font-weight: bold; font-size: 16px;">${rt.fuelCons} ${ac ? ac.fuelUnit : ''}/hr</span></div> <div style="width: 30%;"><span style="font-weight: bold; color: #6b7280; display: block; font-size: 10px;">FUEL ONBOARD</span><span style="font-weight: bold; font-size: 16px;">${rt.fuelOnboard || 0} ${ac ? ac.fuelUnit : ''}</span></div> </div> <table style="width: 100%; text-align: left; font-size: 12px; margin-bottom: 24px; border-top: 1px solid #000; border-bottom: 1px solid #000; border-collapse: collapse;"> <thead style="background-color: #f3f4f6; border-bottom: 1px solid #000;"> <tr> <th style="padding: 8px; text-align: center;">#</th> <th style="padding: 8px;">Waypoint</th> <th style="padding: 8px;">Coordinates</th> <th style="padding: 8px; text-align: center;">Heading</th> <th style="padding: 8px; text-align: center;">Dist (NM)</th> <th style="padding: 8px; text-align: center;">EET</th> <th style="padding: 8px; text-align: center;">ETA</th> <th style="padding: 8px; text-align: center;">Fuel Burn</th> </tr> </thead> <tbody> ${wpHtml} </tbody> </table> <div style="display: flex; justify-content: space-between; background-color: #f3f4f6; padding: 16px; border: 1px solid #000; font-weight: bold; text-align: center;"> <div><span style="display: block; font-size: 10px; color: #6b7280; text-transform: uppercase;">Total Distance</span>${Math.round(totalDist)} NM</div> <div><span style="display: block; font-size: 10px; color: #6b7280; text-transform: uppercase;">Total EET</span>${formatTimeHM(totalDecHours)}</div> <div><span style="display: block; font-size: 10px; color: #6b7280; text-transform: uppercase;">Fuel Required</span>${Math.round(totalFuel)} ${ac ? ac.fuelUnit : ''}</div> <div><span style="display: block; font-size: 10px; color: #6b7280; text-transform: uppercase;">Fuel Remaining</span>${Math.round((rt.fuelOnboard || 0) - totalFuel)} ${ac ? ac.fuelUnit : ''}</div> </div> <div style="margin-top: 40px; text-align: center; font-size: 10px; color: #9ca3af;"> Generated by SkyOps Navigation Pro V.00 on ${new Date().toLocaleString('id-ID')} </div> </div> `;
-            document.getElementById('printArea').innerHTML = printHtml;
-            setTimeout(() => {
-                window.print();
-            }, 100);
+            document.getElementById('printArea').innerHTML = ` <div style="max-width: 800px; margin: 0 auto; color: #000;"> <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 16px; margin-bottom: 24px;"> <h1 style="font-size: 24px; font-weight: bold; margin: 0; text-transform: uppercase; letter-spacing: 2px;">SkyOps Navigation Pro</h1> <h2 style="font-size: 16px; font-weight: normal; color: #4b5563; margin: 4px 0 0 0;">OPERATIONAL FLIGHT PLAN (OFP)</h2> </div> <div style="display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: 24px; font-size: 14px;"> <div style="width: 30%; margin-bottom: 12px;"><span style="font-weight: bold; color: #6b7280; display: block; font-size: 10px;">ROUTE NAME</span><span style="font-weight: bold; font-size: 16px;">${rt.name}</span></div> <div style="width: 40%; margin-bottom: 12px;"><span style="font-weight: bold; color: #6b7280; display: block; font-size: 10px;">AIRCRAFT</span><span style="font-weight: bold; font-size: 16px;">${ac ? ac.reg : rt.aircraftReg} <span style="font-size: 12px; font-weight: normal;">(${ac ? ac.type : ''})</span></span></div> <div style="width: 30%; margin-bottom: 12px;"><span style="font-weight: bold; color: #6b7280; display: block; font-size: 10px;">ETD (LOCAL)</span><span style="font-weight: bold; font-size: 16px;">${rt.etd || '00:00'}</span></div> <div style="width: 30%;"><span style="font-weight: bold; color: #6b7280; display: block; font-size: 10px;">CRUISING SPEED</span><span style="font-weight: bold; font-size: 16px;">${rt.speed} kts</span></div> <div style="width: 40%;"><span style="font-weight: bold; color: #6b7280; display: block; font-size: 10px;">FUEL CONSUMPTION</span><span style="font-weight: bold; font-size: 16px;">${rt.fuelCons} ${ac ? ac.fuelUnit : ''}/hr</span></div> <div style="width: 30%;"><span style="font-weight: bold; color: #6b7280; display: block; font-size: 10px;">FUEL ONBOARD</span><span style="font-weight: bold; font-size: 16px;">${rt.fuelOnboard || 0} ${ac ? ac.fuelUnit : ''}</span></div> </div> <table style="width: 100%; text-align: left; font-size: 12px; margin-bottom: 24px; border-top: 1px solid #000; border-bottom: 1px solid #000; border-collapse: collapse;"> <thead style="background-color: #f3f4f6; border-bottom: 1px solid #000;"> <tr> <th style="padding: 8px; text-align: center;">#</th> <th style="padding: 8px;">Waypoint</th> <th style="padding: 8px;">Coordinates</th> <th style="padding: 8px; text-align: center;">Heading</th> <th style="padding: 8px; text-align: center;">Dist (NM)</th> <th style="padding: 8px; text-align: center;">EET</th> <th style="padding: 8px; text-align: center;">ETA</th> <th style="padding: 8px; text-align: center;">Fuel Burn</th> </tr> </thead> <tbody> ${wpHtml} </tbody> </table> <div style="display: flex; justify-content: space-between; background-color: #f3f4f6; padding: 16px; border: 1px solid #000; font-weight: bold; text-align: center;"> <div><span style="display: block; font-size: 10px; color: #6b7280; text-transform: uppercase;">Total Distance</span>${Math.round(totalDist)} NM</div> <div><span style="display: block; font-size: 10px; color: #6b7280; text-transform: uppercase;">Total EET</span>${formatTimeHM(totalDecHours)}</div> <div><span style="display: block; font-size: 10px; color: #6b7280; text-transform: uppercase;">Fuel Required</span>${Math.round(totalFuel)} ${ac ? ac.fuelUnit : ''}</div> <div><span style="display: block; font-size: 10px; color: #6b7280; text-transform: uppercase;">Fuel Remaining</span>${Math.round((rt.fuelOnboard || 0) - totalFuel)} ${ac ? ac.fuelUnit : ''}</div> </div> <div style="margin-top: 40px; text-align: center; font-size: 10px; color: #9ca3af;"> Generated by SkyOps Navigation Pro on ${new Date().toLocaleString('id-ID')} </div> </div> `;
+            setTimeout(() => window.print(), 100);
+        }
+
+        function addToRoute(id) {
+            const wp = waypointsData.find(w => w.id === id);
+            if (!wp) return;
+            if (!document.getElementById('routeFormModal').classList.contains('hidden')) {
+                currentRouteWps.push({ ...wp });
+                renderOFPTable();
+                map.closePopup();
+                return;
+            }
+            if (flightMode !== 'none') {
+                showMessage("Peringatan", "Harap matikan mode Simulasi/Navigasi terlebih dahulu.");
+                return;
+            }
+            if (activeMapRouteId) clearActiveMapRoute();
+            mapBuilderWps.push({ ...wp });
+            const builderHUD = document.getElementById('mapRouteBuilderHUD');
+            if (builderHUD.classList.contains('hidden')) {
+                builderHUD.classList.remove('hidden');
+                populateBuilderAircrafts();
+            }
+            updateMapBuilderHUD();
+            drawMapBuilderRoute();
+            map.closePopup();
+        }
+
+        function populateBuilderAircrafts() {
+            const select = document.getElementById('builderAircraft');
+            const currentVal = select.value;
+            select.innerHTML = '<option value="">-- Choose Aircraft --</option>';
+            aircraftsData.forEach(ac => {
+                select.innerHTML += `<option value="${ac.id}">${ac.reg} (${ac.type})</option>`;
+            });
+            select.value = currentVal;
+        }
+
+        function updateMapBuilderHUD() {
+            document.getElementById('bldWpCount').textContent = mapBuilderWps.length;
+            let totalDist = 0, totalDecHours = 0, totalFuel = 0;
+            const acId = document.getElementById('builderAircraft').value;
+            const fuelOnboard = parseFloat(document.getElementById('builderFuelOnboard').value) || 0;
+            const ac = aircraftsData.find(a => a.id === acId);
+            const speed = ac ? ac.speed : 0;
+            const fuelCons = ac ? ac.fuel : 0;
+            for (let i = 1; i < mapBuilderWps.length; i++) {
+                const dist = calcDistanceNM(mapBuilderWps[i - 1].lat, mapBuilderWps[i - 1].lon, mapBuilderWps[i].lat, mapBuilderWps[i].lon);
+                totalDist += dist;
+                if (speed > 0) totalDecHours += (dist / speed);
+            }
+            if (speed > 0) totalFuel = totalDecHours * fuelCons;
+            document.getElementById('bldDist').textContent = Math.round(totalDist);
+            document.getElementById('bldEet').textContent = formatTimeHM(totalDecHours);
+            document.getElementById('bldReq').textContent = Math.round(totalFuel) + (ac ? ' ' + ac.fuelUnit : '');
+            const rem = fuelOnboard - totalFuel;
+            const remEl = document.getElementById('bldRem');
+            remEl.textContent = Math.round(rem) + (ac ? ' ' + ac.fuelUnit : '');
+            remEl.className = rem < 0 ? "text-[10px] sm:text-xs font-bold text-red-500" : "text-[10px] sm:text-xs font-bold text-emerald-400";
+        }
+
+        function drawMapBuilderRoute() {
+            if (!mapBuilderLayerGroup) return;
+            mapBuilderLayerGroup.clearLayers();
+            if (mapBuilderWps.length < 2) return;
+            const latlngs = mapBuilderWps.map(wp => [wp.lat, wp.lon]);
+            const polyline = L.polyline(latlngs, { color: '#d946ef', weight: 5, opacity: 0.9 }).addTo(mapBuilderLayerGroup);
+            for (let i = 0; i < mapBuilderWps.length - 1; i++) {
+                const wp1 = mapBuilderWps[i]; const wp2 = mapBuilderWps[i + 1];
+                const midLat = (wp1.lat + wp2.lat) / 2; const midLon = (wp1.lon + wp2.lon) / 2;
+                const midIcon = L.divIcon({ className: 'custom-div-icon', html: '<div class="midpoint-marker" style="width: 14px; height: 14px;"></div>', iconSize: [14, 14], iconAnchor: [7, 7] });
+                const midMarker = L.marker([midLat, midLon], { icon: midIcon, draggable: true }).addTo(mapBuilderLayerGroup);
+                midMarker.on('drag', (e) => {
+                    const tempLatLngs = [...latlngs];
+                    tempLatLngs.splice(i + 1, 0, e.latlng);
+                    polyline.setLatLngs(tempLatLngs);
+                });
+                midMarker.on('dragend', (e) => {
+                    const markerLatLng = e.target.getLatLng();
+                    handleBuilderTrackDrop(markerLatLng.lat, markerLatLng.lng, i + 1);
+                    polyline.setLatLngs(latlngs);
+                    midMarker.setLatLng([midLat, midLon]);
+                });
+            }
+        }
+
+        async function handleBuilderTrackDrop(lat, lng, insertIndex) {
+            let nearbyWps = waypointsData.map(wp => ({ wp: wp, dist: calcDistanceNM(lat, lng, wp.lat, wp.lon) }))
+                .filter(item => item.dist <= 5).sort((a, b) => a.dist - b.dist);
+
+            if (nearbyWps.length > 0) {
+                let listHtml = '';
+                nearbyWps.forEach(item => {
+                    listHtml += `<div class="flex justify-between items-center bg-slate-800 p-2 rounded mb-2 border border-slate-700"><div><span class="font-bold text-blue-400 text-sm">${item.wp.name}</span><span class="text-[10px] text-slate-400 block">${item.dist.toFixed(2)} NM away</span></div><button onclick="addExistingWpToBuilderRoute('${item.wp.id}', ${insertIndex})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2 py-1 rounded text-[10px] transition"><i class="fas fa-plus"></i> Route</button></div>`;
+                });
+                const popupHtml = `<div class="min-w-[200px]"><h4 class="font-bold text-xs text-slate-300 mb-2 border-b border-slate-600 pb-1">Titik Ditemukan (Radius 5 NM)</h4>${listHtml}<p class="text-[10px] text-slate-400 italic text-center mt-2">Atau klik area kosong map untuk buat WP baru.</p></div>`;
+                L.popup({ className: 'custom-popup' }).setLatLng([lat, lng]).setContent(popupHtml).openOn(map);
+            } else {
+                const popup = L.popup({ className: 'custom-popup' }).setLatLng([lat, lng]).setContent('<div class="p-2 text-slate-300 text-xs"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</div>').openOn(map);
+                try {
+                    const res = await fetch(`https://api.open-meteo.com/v1/elevation?latitude=${lat}&longitude=${lng}`);
+                    const data = await res.json();
+                    const elevFeet = Math.round((data.elevation && data.elevation.length > 0 ? data.elevation[0] : 0) * 3.28084);
+                    const popupHtml = ` <div class="min-w-[180px]"> <h4 class="font-bold text-sm text-emerald-400 m-0 mb-2 border-b border-slate-600 pb-1"><i class="fas fa-magic mr-1"></i> ADD NEW WAYPOINT</h4> <div class="text-xs text-slate-300 space-y-1 mb-3"> <p class="m-0"><i class="fas fa-map-pin w-4 text-center mr-1"></i> ${decToDMSStr(lat, true)}</p> <p class="m-0"><i class="fas fa-map-pin w-4 text-center opacity-0 mr-1"></i> ${decToDMSStr(lng, false)}</p> <p class="m-0 mt-1"><i class="fas fa-mountain w-4 text-center mr-1"></i> ${elevFeet} ft</p> </div> <button onclick="pendingBuilderInsert = { insertIndex: ${insertIndex} }; addClickedToWaypoint(${lat}, ${lng}, ${elevFeet})" class="bg-emerald-600 hover:bg-emerald-500 text-white w-full px-2 py-2 rounded text-xs transition font-bold"><i class="fas fa-plus mr-1"></i> Create & Insert to Route</button> </div> `;
+                    popup.setContent(popupHtml);
+                } catch (e) { popup.setContent('<div class="p-2 text-red-400 text-xs">Gagal mengambil data elevasi.</div>'); }
+            }
+        }
+
+        function addExistingWpToBuilderRoute(wpId, insertIndex) {
+            const wp = waypointsData.find(w => w.id === wpId);
+            if (wp) {
+                mapBuilderWps.splice(insertIndex, 0, wp);
+                updateMapBuilderHUD();
+                drawMapBuilderRoute();
+                map.closePopup();
+            }
+        }
+
+        function cancelMapBuilder() {
+            mapBuilderWps = [];
+            document.getElementById('mapRouteBuilderHUD').classList.add('hidden');
+            if (mapBuilderLayerGroup) mapBuilderLayerGroup.clearLayers();
+        }
+
+        function finishMapBuilder() {
+            if (mapBuilderWps.length < 2) {
+                showMessage("Notice", "Tambahkan minimal 2 Waypoint untuk merangkai rute.");
+                return;
+            }
+            const acId = document.getElementById('builderAircraft').value;
+            const fuelOb = document.getElementById('builderFuelOnboard').value;
+            switchTab('route');
+            openRouteForm();
+            currentRouteWps = [...mapBuilderWps];
+            if (acId) { document.getElementById('rtAircraft').value = acId; handleRouteAircraftChange(); }
+            if (fuelOb) { document.getElementById('rtFuelOnboard').value = fuelOb; }
+            renderOFPTable();
+            cancelMapBuilder();
+        }
+
+        function viewRouteOnMap(id) {
+            activeMapRouteId = id;
+            if (document.getElementById('toggleAllWps')) document.getElementById('toggleAllWps').checked = false;
+            closeRouteDetailModal();
+            switchTab('map');
+            drawActiveRoute();
+            updateMapWaypoints();
+        }
+
+        function clearActiveMapRoute() {
+            activeMapRouteId = null;
+            document.getElementById('activeRouteOverlay').classList.add('hidden');
+            const infoHud = document.getElementById('activeRouteInfoHUD');
+            if (infoHud) infoHud.classList.add('hidden');
+            if (activeRouteLayerGroup) activeRouteLayerGroup.clearLayers();
+            if (document.getElementById('toggleAllWps')) document.getElementById('toggleAllWps').checked = false;
+            updateMapWaypoints();
+        }
+
+        function fitMapToActiveRoute() {
+            if (!activeMapRouteId || !map) return;
+            const rt = routesData.find(r => r.id === activeMapRouteId);
+            if (!rt || !rt.waypoints || rt.waypoints.length === 0) return;
+            const latlngs = rt.waypoints.map(wp => [wp.lat, wp.lon]);
+            const bounds = L.latLngBounds(latlngs);
+            map.flyToBounds(bounds, { padding: [50, 50], duration: 1.5 });
+        }
+
+        function updateActiveRouteInfoHUD() {
+            if (!activeMapRouteId) return;
+            const rt = routesData.find(r => r.id === activeMapRouteId);
+            if (!rt) return;
+            const ac = aircraftsData.find(a => a.id === rt.aircraftId);
+            const fuelUnit = ac ? ac.fuelUnit : '';
+            document.getElementById('infoHudRouteName').textContent = rt.name;
+            document.getElementById('infoHudAircraft').textContent = ac ? `${ac.reg} (${ac.type})` : rt.aircraftReg;
+            document.getElementById('infoHudDist').textContent = rt.totalDist;
+            document.getElementById('infoHudEet').textContent = rt.totalEET;
+            const fob = rt.fuelOnboard || 0;
+            document.getElementById('infoHudFOB').textContent = fob + (fuelUnit ? ' ' + fuelUnit : '');
+            let totalDecHours = 0;
+            if (rt.speed > 0 && rt.waypoints && rt.waypoints.length > 1) {
+                for (let i = 1; i < rt.waypoints.length; i++) {
+                    const dist = calcDistanceNM(rt.waypoints[i - 1].lat, rt.waypoints[i - 1].lon, rt.waypoints[i].lat, rt.waypoints[i].lon);
+                    totalDecHours += (dist / rt.speed);
+                }
+            }
+            const fuelReq = totalDecHours * (rt.fuelCons || 0);
+            const rem = fob - fuelReq;
+            const remEl = document.getElementById('infoHudRem');
+            remEl.textContent = Math.round(rem) + (fuelUnit ? ' ' + fuelUnit : '');
+            if (rem < 0) remEl.className = "text-[10px] sm:text-xs font-bold text-red-500";
+            else if (rem < (fuelReq * 0.1)) remEl.className = "text-[10px] sm:text-xs font-bold text-orange-400";
+            else remEl.className = "text-[10px] sm:text-xs font-bold text-emerald-400";
+        }
+
+        function drawActiveRoute() {
+            if (!activeRouteLayerGroup) return;
+            activeRouteLayerGroup.clearLayers();
+            const rt = routesData.find(r => r.id === activeMapRouteId);
+            if (!rt || !rt.waypoints || rt.waypoints.length === 0) return;
+            document.getElementById('activeRouteOverlay').classList.remove('hidden');
+            document.getElementById('activeRouteOverlayName').textContent = rt.name;
+            const infoHud = document.getElementById('activeRouteInfoHUD');
+            if (infoHud) {
+                infoHud.classList.remove('hidden');
+                updateActiveRouteInfoHUD();
+            }
+            const latlngs = rt.waypoints.map(wp => [wp.lat, wp.lon]);
+            const polyline = L.polyline(latlngs, { color: '#d946ef', weight: 5, opacity: 0.9 }).addTo(activeRouteLayerGroup);
+            map.fitBounds(polyline.getBounds(), { padding: [50, 50] });
+            for (let i = 0; i < rt.waypoints.length - 1; i++) {
+                const wp1 = rt.waypoints[i]; const wp2 = rt.waypoints[i + 1];
+                const midLat = (wp1.lat + wp2.lat) / 2; const midLon = (wp1.lon + wp2.lon) / 2;
+                const midIcon = L.divIcon({ className: 'custom-div-icon', html: '<div class="midpoint-marker" style="width: 14px; height: 14px;"></div>', iconSize: [14, 14], iconAnchor: [7, 7] });
+                const midMarker = L.marker([midLat, midLon], { icon: midIcon, draggable: true }).addTo(activeRouteLayerGroup);
+                midMarker.on('drag', (e) => {
+                    const tempLatLngs = [...latlngs];
+                    tempLatLngs.splice(i + 1, 0, e.latlng);
+                    polyline.setLatLngs(tempLatLngs);
+                });
+                midMarker.on('dragend', (e) => {
+                    const markerLatLng = e.target.getLatLng();
+                    handleTrackDrop(markerLatLng.lat, markerLatLng.lng, i + 1);
+                    polyline.setLatLngs(latlngs);
+                    midMarker.setLatLng([midLat, midLon]);
+                });
+            }
+        }
+
+        async function handleTrackDrop(lat, lng, insertIndex) {
+            let nearbyWps = waypointsData.map(wp => ({ wp: wp, dist: calcDistanceNM(lat, lng, wp.lat, wp.lon) }))
+                .filter(item => item.dist <= 5).sort((a, b) => a.dist - b.dist);
+            if (nearbyWps.length > 0) {
+                let listHtml = '';
+                nearbyWps.forEach(item => {
+                    listHtml += `<div class="flex justify-between items-center bg-slate-800 p-2 rounded mb-2 border border-slate-700"><div><span class="font-bold text-blue-400 text-sm">${item.wp.name}</span><span class="text-[10px] text-slate-400 block">${item.dist.toFixed(2)} NM away</span></div><button onclick="addExistingWpToActiveRoute('${item.wp.id}', ${insertIndex})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-2 py-1 rounded text-[10px] transition"><i class="fas fa-plus"></i> Route</button></div>`;
+                });
+                const popupHtml = `<div class="min-w-[200px]"><h4 class="font-bold text-xs text-slate-300 mb-2 border-b border-slate-600 pb-1">Titik Ditemukan (Radius 5 NM)</h4>${listHtml}<p class="text-[10px] text-slate-400 italic text-center mt-2">Atau klik area kosong map untuk buat WP baru.</p></div>`;
+                L.popup({ className: 'custom-popup' }).setLatLng([lat, lng]).setContent(popupHtml).openOn(map);
+            } else {
+                const popup = L.popup({ className: 'custom-popup' }).setLatLng([lat, lng]).setContent('<div class="p-2 text-slate-300 text-xs"><i class="fas fa-spinner fa-spin mr-2"></i> Mengambil data...</div>').openOn(map);
+                try {
+                    const res = await fetch(`https://api.open-meteo.com/v1/elevation?latitude=${lat}&longitude=${lng}`);
+                    const data = await res.json();
+                    const elevFeet = Math.round((data.elevation && data.elevation.length > 0 ? data.elevation[0] : 0) * 3.28084);
+                    const popupHtml = ` <div class="min-w-[180px]"> <h4 class="font-bold text-sm text-magenta-400 m-0 mb-2 border-b border-slate-600 pb-1"><i class="fas fa-magic mr-1"></i> ADD NEW WAYPOINT</h4> <div class="text-xs text-slate-300 space-y-1 mb-3"> <p class="m-0"><i class="fas fa-map-pin w-4 text-center mr-1"></i> ${decToDMSStr(lat, true)}</p> <p class="m-0"><i class="fas fa-map-pin w-4 text-center opacity-0 mr-1"></i> ${decToDMSStr(lng, false)}</p> <p class="m-0 mt-1"><i class="fas fa-mountain w-4 text-center mr-1"></i> ${elevFeet} ft</p> </div> <button onclick="pendingRouteInsert = { routeId: activeMapRouteId, insertIndex: ${insertIndex} }; addClickedToWaypoint(${lat}, ${lng}, ${elevFeet})" class="bg-magenta-600 hover:bg-magenta-500 text-white w-full px-2 py-2 rounded text-xs transition font-bold"><i class="fas fa-plus mr-1"></i> Create & Insert to Route</button> </div> `;
+                    popup.setContent(popupHtml);
+                } catch (e) { popup.setContent('<div class="p-2 text-red-400 text-xs">Gagal mengambil data elevasi.</div>'); }
+            }
+        }
+
+        async function addExistingWpToActiveRoute(wpId, insertIndex) {
+            const rt = routesData.find(r => r.id === activeMapRouteId);
+            const wp = waypointsData.find(w => w.id === wpId);
+            if (rt && wp) {
+                rt.waypoints.splice(insertIndex, 0, wp);
+                let totalDist = 0, totalDecHours = 0;
+                for (let i = 1; i < rt.waypoints.length; i++) {
+                    const dist = calcDistanceNM(rt.waypoints[i - 1].lat, rt.waypoints[i - 1].lon, rt.waypoints[i].lat, rt.waypoints[i].lon);
+                    totalDist += dist;
+                    if (rt.speed > 0) totalDecHours += (dist / rt.speed);
+                }
+                rt.totalDist = Math.round(totalDist);
+                rt.totalEET = formatTimeHM(totalDecHours);
+                if (auth.currentUser) await setDoc(getDocRef('routes', rt.id), sanitizeForFirestore(rt));
+                drawActiveRoute();
+                updateActiveRouteInfoHUD();
+                map.closePopup();
+            }
         }
 
         function startSimulateRoute(routeId) {
             const rt = routesData.find(r => r.id === routeId);
-            if (!rt || rt.waypoints.length < 2) return alert("Rute tidak valid untuk disimulasikan.");
+            if (!rt || rt.waypoints.length < 2) return showMessage("Notice", "Rute tidak valid untuk disimulasikan.");
             flightRouteData = rt;
             flightAircraftData = aircraftsData.find(a => a.id === rt.aircraftId);
             flightMode = 'sim';
@@ -3200,170 +3023,66 @@
             document.getElementById('flightModeLabel').innerHTML = '<i class="fas fa-play-circle mr-1"></i> SIMULATION';
             document.getElementById('simSpeedControl').classList.remove('hidden');
 
-            // --- FULLSCREEN MAP OVERRIDE FOR MOBILE ---
             const mainHeader = document.querySelector('#mainScreen header');
             const mainNav = document.querySelector('#mainScreen nav');
             if(mainHeader) mainHeader.classList.add('hidden');
             if(mainNav) mainNav.classList.add('hidden');
 
-            // Jadikan container peta fixed fullscreen agar benar-benar penuh (100dvh)
             const tabMap = document.getElementById('tab-map');
             tabMap.classList.remove('absolute', 'h-full');
             tabMap.classList.add('fixed', 'z-[9999]', 'h-[100dvh]');
             
-            // Perbesar ukuran canvas Leaflet (150%) agar saat peta berputar, sudutnya tidak berwarna hitam
             const mapContainer = document.getElementById('realMap');
-            mapContainer.style.width = '150vw';
-            mapContainer.style.height = '150vh';
-            mapContainer.style.position = 'absolute';
-            mapContainer.style.top = '-25vh';
-            mapContainer.style.left = '-25vw';
+            mapContainer.style.width = '150vw'; mapContainer.style.height = '150vh';
+            mapContainer.style.position = 'absolute'; mapContainer.style.top = '-25vh'; mapContainer.style.left = '-25vw';
             
-            // Coba request native fullscreen jika browser ponsel mendukung
-            try {
-                if (document.documentElement.requestFullscreen) {
-                    document.documentElement.requestFullscreen().catch(e => console.warn("Fullscreen API Error:", e));
-                } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
-                    document.documentElement.webkitRequestFullscreen().catch(e => console.warn("Fullscreen API Error:", e));
-                }
-            } catch(e) {}
-
             setTimeout(() => { if(map) map.invalidateSize(); }, 200);
-            // ------------------------------------------
 
-            flightCurrentLat = rt.waypoints[0].lat;
-            flightCurrentLon = rt.waypoints[0].lon;
+            flightCurrentLat = rt.waypoints[0].lat; flightCurrentLon = rt.waypoints[0].lon;
             flightTargetWpIndex = 1;
-            drawFlightRouteLine();
-            createFlightMarker();
-            
-            // --- ZOOM IN ALA GOOGLE MAPS ---
-            // Memaksa peta untuk zoom in ke level 16 agar terasa seperti mode navigasi asli
+            drawFlightRouteLine(); createFlightMarker();
             map.setView([flightCurrentLat, flightCurrentLon], 16);
-
             flightInterval = setInterval(simulationLoop, 100);
         }
 
         function startNavigateRoute(routeId) {
             const rt = routesData.find(r => r.id === routeId);
-            if (!rt || rt.waypoints.length < 2) return alert("Rute tidak valid untuk dinavigasikan.");
-            if (!navigator.geolocation) return alert("Geolocation tidak didukung oleh browser Anda.");
-            flightRouteData = rt;
-            flightAircraftData = aircraftsData.find(a => a.id === rt.aircraftId);
-            flightMode = 'nav';
-            closeRouteDetailModal();
-            switchTab('map');
-            clearActiveMapRoute();
-            activeMapRouteId = routeId;
+            if (!rt || rt.waypoints.length < 2) return showMessage("Notice", "Rute tidak valid untuk dinavigasikan.");
+            if (!navigator.geolocation) return showMessage("Peringatan", "Geolocation tidak didukung oleh browser Anda.");
+            flightRouteData = rt; flightAircraftData = aircraftsData.find(a => a.id === rt.aircraftId); flightMode = 'nav';
+            closeRouteDetailModal(); switchTab('map'); clearActiveMapRoute(); activeMapRouteId = routeId;
             if (document.getElementById('toggleAllWps')) document.getElementById('toggleAllWps').checked = false;
-            updateMapWaypoints();
-            document.getElementById('btnAutoDetectMap').classList.add('hidden');
-            document.getElementById('flightHUDOverlay').classList.remove('hidden');
-            document.getElementById('flightModeLabel').innerHTML = '<i class="fas fa-location-arrow mr-1 text-emerald-400"></i> NAVIGATION';
+            updateMapWaypoints(); document.getElementById('btnAutoDetectMap').classList.add('hidden');
+            document.getElementById('flightHUDOverlay').classList.remove('hidden'); document.getElementById('flightModeLabel').innerHTML = '<i class="fas fa-location-arrow mr-1 text-emerald-400"></i> NAVIGATION';
             document.getElementById('simSpeedControl').classList.add('hidden');
-
-            // --- FULLSCREEN MAP OVERRIDE FOR MOBILE ---
-            const mainHeader = document.querySelector('#mainScreen header');
-            const mainNav = document.querySelector('#mainScreen nav');
-            if(mainHeader) mainHeader.classList.add('hidden');
-            if(mainNav) mainNav.classList.add('hidden');
-
-            // Jadikan container peta fixed fullscreen agar benar-benar penuh (100dvh)
-            const tabMap = document.getElementById('tab-map');
-            tabMap.classList.remove('absolute', 'h-full');
-            tabMap.classList.add('fixed', 'z-[9999]', 'h-[100dvh]');
-            
-            // Perbesar ukuran canvas Leaflet (150%) agar saat peta berputar, sudutnya tidak berwarna hitam
-            const mapContainer = document.getElementById('realMap');
-            mapContainer.style.width = '150vw';
-            mapContainer.style.height = '150vh';
-            mapContainer.style.position = 'absolute';
-            mapContainer.style.top = '-25vh';
-            mapContainer.style.left = '-25vw';
-            
-            // Coba request native fullscreen jika browser ponsel mendukung
-            try {
-                if (document.documentElement.requestFullscreen) {
-                    document.documentElement.requestFullscreen().catch(e => console.warn("Fullscreen API Error:", e));
-                } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
-                    document.documentElement.webkitRequestFullscreen().catch(e => console.warn("Fullscreen API Error:", e));
-                }
-            } catch(e) {}
-
+            const mainHeader = document.querySelector('#mainScreen header'); const mainNav = document.querySelector('#mainScreen nav');
+            if(mainHeader) mainHeader.classList.add('hidden'); if(mainNav) mainNav.classList.add('hidden');
+            const tabMap = document.getElementById('tab-map'); tabMap.classList.remove('absolute', 'h-full'); tabMap.classList.add('fixed', 'z-[9999]', 'h-[100dvh]');
+            const mapContainer = document.getElementById('realMap'); mapContainer.style.width = '150vw'; mapContainer.style.height = '150vh'; mapContainer.style.position = 'absolute'; mapContainer.style.top = '-25vh'; mapContainer.style.left = '-25vw';
             setTimeout(() => { if(map) map.invalidateSize(); }, 200);
-            // ------------------------------------------
-
-            drawFlightRouteLine();
-            createFlightMarker();
-            flightCurrentLat = rt.waypoints[0].lat;
-            flightCurrentLon = rt.waypoints[0].lon;
-            flightTargetWpIndex = 1;
-            
-            // --- ZOOM IN ALA GOOGLE MAPS ---
+            drawFlightRouteLine(); createFlightMarker();
+            flightCurrentLat = rt.waypoints[0].lat; flightCurrentLon = rt.waypoints[0].lon; flightTargetWpIndex = 1;
             map.setView([flightCurrentLat, flightCurrentLon], 16);
-
-            flightWatchId = navigator.geolocation.watchPosition(navigationLoop, (err) => {
-                console.warn("GPS Error", err);
-            }, {
-                enableHighAccuracy: true,
-                maximumAge: 0
-            });
+            flightWatchId = navigator.geolocation.watchPosition(navigationLoop, (err) => { console.warn("GPS Error", err); }, { enableHighAccuracy: true, maximumAge: 0 });
         }
 
         function stopFlightMode() {
             if (flightInterval) clearInterval(flightInterval);
             if (flightWatchId) navigator.geolocation.clearWatch(flightWatchId);
-            flightMode = 'none';
-            flightInterval = null;
-            flightWatchId = null;
+            flightMode = 'none'; flightInterval = null; flightWatchId = null;
             document.getElementById('flightHUDOverlay').classList.add('hidden');
             document.getElementById('btnAutoDetectMap').classList.remove('hidden');
-            
-            // --- RESTORE HEADER AND NAV ---
-            const mainHeader = document.querySelector('#mainScreen header');
-            const mainNav = document.querySelector('#mainScreen nav');
-            if(mainHeader) mainHeader.classList.remove('hidden');
-            if(mainNav) mainNav.classList.remove('hidden');
-
-            // Kembalikan container peta seperti semula
+            const mainHeader = document.querySelector('#mainScreen header'); const mainNav = document.querySelector('#mainScreen nav');
+            if(mainHeader) mainHeader.classList.remove('hidden'); if(mainNav) mainNav.classList.remove('hidden');
             const tabMap = document.getElementById('tab-map');
-            tabMap.classList.remove('fixed', 'z-[9999]', 'h-[100dvh]');
-            tabMap.classList.add('absolute', 'h-full');
-
-            // Kembalikan ukuran canvas Leaflet ke ukuran normal
+            tabMap.classList.remove('fixed', 'z-[9999]', 'h-[100dvh]'); tabMap.classList.add('absolute', 'h-full');
             const mapContainer = document.getElementById('realMap');
-            mapContainer.style.transition = 'none'; // Kunci: Buang animasi CSS saat mode normal agar tidak ngelag
-            mapContainer.style.width = '100%';
-            mapContainer.style.height = '100%';
-            mapContainer.style.top = '0';
-            mapContainer.style.left = '0';
+            mapContainer.style.transition = 'none';
+            mapContainer.style.width = '100%'; mapContainer.style.height = '100%'; mapContainer.style.top = '0'; mapContainer.style.left = '0';
             mapContainer.style.transform = `rotate(0deg)`;
-
-            // Keluar dari native fullscreen jika aktif
-            try {
-                if (document.fullscreenElement || document.webkitFullscreenElement) {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen().catch(e => {});
-                    } else if (document.webkitExitFullscreen) {
-                        document.webkitExitFullscreen().catch(e => {});
-                    }
-                }
-            } catch(e) {}
-
-            setTimeout(() => { 
-                if(map) {
-                    map.invalidateSize();
-                    // Zoom out kembali untuk melihat keseluruhan rute
-                    if (activeMapRouteId) fitMapToActiveRoute(); 
-                }
-            }, 200);
-            // ------------------------------
-
+            setTimeout(() => { if(map) { map.invalidateSize(); if (activeMapRouteId) fitMapToActiveRoute(); } }, 200);
             if (activeRouteLayerGroup) activeRouteLayerGroup.clearLayers();
-            if (flightMarker) {
-                map.removeLayer(flightMarker);
-                flightMarker = null;
-            }
+            if (flightMarker) { map.removeLayer(flightMarker); flightMarker = null; }
             activeMapRouteId = null;
             if (document.getElementById('toggleAllWps')) document.getElementById('toggleAllWps').checked = false;
             updateMapWaypoints();
@@ -3372,45 +3091,26 @@
         function drawFlightRouteLine() {
             if (activeRouteLayerGroup) activeRouteLayerGroup.clearLayers();
             const latlngs = flightRouteData.waypoints.map(wp => [wp.lat, wp.lon]);
-            L.polyline(latlngs, {
-                color: '#d946ef',
-                weight: 4,
-                opacity: 0.9
-            }).addTo(activeRouteLayerGroup);
+            L.polyline(latlngs, { color: '#d946ef', weight: 4, opacity: 0.9 }).addTo(activeRouteLayerGroup);
         }
 
         function createFlightMarker() {
             const imgUrl = "https://lh3.googleusercontent.com/d/1moeKjggaljE9zw_phLEZxYhhQzKHqvvY";
-            // Ikon navigasi yang diperbesar (80x80) dengan efek bayangan
             const html = `
                 <div class="flight-icon-inner" style="filter: drop-shadow(0px 8px 12px rgba(0,0,0,0.6)); display: flex; justify-content: center; align-items: center; transition: transform 0.1s linear; width: 80px; height: 80px;">
-                    <img src="${imgUrl}" alt="Logo" class="w-full h-full object-contain" />
+                    <img src="${imgUrl}" alt="Plane" class="w-full h-full object-contain" />
                 </div>`;
-                
-            const icon = L.divIcon({
-                className: '',
-                html: html,
-                iconSize: [80, 80], // Diperbesar dari 44x44
-                iconAnchor: [40, 40] // Titik tengah disesuaikan (setengah dari 80)
-            });
-            
-            flightMarker = L.marker([flightCurrentLat, flightCurrentLon], {
-                icon: icon,
-                zIndexOffset: 1000
-            }).addTo(map);
+            const icon = L.divIcon({ className: '', html: html, iconSize: [80, 80], iconAnchor: [40, 40] });
+            flightMarker = L.marker([flightCurrentLat, flightCurrentLon], { icon: icon, zIndexOffset: 1000 }).addTo(map);
         }
 
         function updateTrackUp(heading) {
             const mapContainer = document.getElementById('realMap');
             mapContainer.style.transformOrigin = 'center center';
-            // Aktifkan transisi HANYA saat rotasi simulasi
-            mapContainer.style.transition = 'transform 0.1s linear';
+            if (flightMode === 'sim') mapContainer.style.transition = 'transform 0.1s linear';
+            else mapContainer.style.transition = 'transform 1s ease-out';
             mapContainer.style.transform = `rotate(${-heading}deg)`;
-            map.panTo([flightCurrentLat, flightCurrentLon], {
-                animate: true,
-                duration: 0.1,
-                easeLinearity: 1
-            });
+            map.panTo([flightCurrentLat, flightCurrentLon], { animate: true, duration: 0.1, easeLinearity: 1 });
             if (flightMarker) {
                 const iconElement = flightMarker.getElement();
                 if (iconElement) {
@@ -3423,20 +3123,14 @@
         function updateHUD(hdg, spd, distToWp, eetaDest) {
             document.getElementById('hudHdg').textContent = Math.round(hdg).toString().padStart(3, '0') + '°';
             document.getElementById('hudSpd').textContent = Math.round(spd);
-            let eetStr = '00:00';
-            if (spd > 0) {
-                const decHrs = distToWp / spd;
-                eetStr = formatTimeHM(decHrs);
-            }
-            document.getElementById('hudEet').textContent = eetStr;
+            document.getElementById('hudEet').textContent = spd > 0 ? formatTimeHM(distToWp / spd) : '00:00';
             document.getElementById('hudEta').textContent = eetaDest;
         }
 
         function simulationLoop() {
             if (flightTargetWpIndex >= flightRouteData.waypoints.length) {
-                alert("Simulasi Rute Selesai.");
-                stopFlightMode();
-                return;
+                showMessage("Notice", "Simulasi Rute Selesai.");
+                stopFlightMode(); return;
             }
             const targetWp = flightRouteData.waypoints[flightTargetWpIndex];
             const distToTarget = calcDistanceNM(flightCurrentLat, flightCurrentLon, targetWp.lat, targetWp.lon);
@@ -3444,14 +3138,12 @@
             const sliderSpeed = parseFloat(document.getElementById('simSpeedSlider').value) || 400;
             const distMoved = (sliderSpeed / 3600) * 0.1;
             if (distMoved >= distToTarget) {
-                flightCurrentLat = targetWp.lat;
-                flightCurrentLon = targetWp.lon;
+                flightCurrentLat = targetWp.lat; flightCurrentLon = targetWp.lon;
                 flightTargetWpIndex++;
             } else {
                 const dLat = distMoved * Math.cos(brng * Math.PI / 180) / 60;
                 const dLon = distMoved * Math.sin(brng * Math.PI / 180) / (60 * Math.cos(flightCurrentLat * Math.PI / 180));
-                flightCurrentLat += dLat;
-                flightCurrentLon += dLon;
+                flightCurrentLat += dLat; flightCurrentLon += dLon;
             }
             flightMarker.setLatLng([flightCurrentLat, flightCurrentLon]);
             updateTrackUp(brng);
@@ -3461,8 +3153,7 @@
             }
             let etaDestStr = '--:--';
             if (sliderSpeed > 0) {
-                const now = new Date();
-                const hrsRemaining = totalRemainingDist / sliderSpeed;
+                const now = new Date(); const hrsRemaining = totalRemainingDist / sliderSpeed;
                 now.setMinutes(now.getMinutes() + (hrsRemaining * 60));
                 etaDestStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
             }
@@ -3470,47 +3161,28 @@
         }
 
         function navigationLoop(position) {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-            let spdMps = position.coords.speed || 0;
-            let hdg = position.coords.heading || 0;
-            const spdKts = spdMps * 1.94384;
-            flightCurrentLat = lat;
-            flightCurrentLon = lon;
-            flightMarker.setLatLng([flightCurrentLat, flightCurrentLon]);
-            if (flightTargetWpIndex >= flightRouteData.waypoints.length) {
-                updateTrackUp(hdg);
-                updateHUD(hdg, spdKts, 0, "ARRIVED");
-                return;
-            }
+            const lat = position.coords.latitude; const lon = position.coords.longitude;
+            let spdMps = position.coords.speed || 0; let hdg = position.coords.heading || 0; const spdKts = spdMps * 1.94384;
+            flightCurrentLat = lat; flightCurrentLon = lon; flightMarker.setLatLng([flightCurrentLat, flightCurrentLon]);
+            if (flightTargetWpIndex >= flightRouteData.waypoints.length) { updateTrackUp(hdg); updateHUD(hdg, spdKts, 0, "ARRIVED"); return; }
             const targetWp = flightRouteData.waypoints[flightTargetWpIndex];
             const distToTarget = calcDistanceNM(flightCurrentLat, flightCurrentLon, targetWp.lat, targetWp.lon);
-            if (hdg === null || isNaN(hdg)) {
-                hdg = calcBearingDeg(flightCurrentLat, flightCurrentLon, targetWp.lat, targetWp.lon);
-            }
-            if (distToTarget < 0.5) {
-                flightTargetWpIndex++;
-            }
+            if (hdg === null || isNaN(hdg)) hdg = calcBearingDeg(flightCurrentLat, flightCurrentLon, targetWp.lat, targetWp.lon);
+            if (distToTarget < 0.5) flightTargetWpIndex++;
             updateTrackUp(hdg);
             let totalRemainingDist = distToTarget;
             for (let i = flightTargetWpIndex; i < flightRouteData.waypoints.length - 1; i++) {
-                if (i + 1 < flightRouteData.waypoints.length) {
-                    totalRemainingDist += calcDistanceNM(flightRouteData.waypoints[i].lat, flightRouteData.waypoints[i].lon, flightRouteData.waypoints[i + 1].lat, flightRouteData.waypoints[i + 1].lon);
-                }
+                if (i + 1 < flightRouteData.waypoints.length) totalRemainingDist += calcDistanceNM(flightRouteData.waypoints[i].lat, flightRouteData.waypoints[i].lon, flightRouteData.waypoints[i + 1].lat, flightRouteData.waypoints[i + 1].lon);
             }
             let etaDestStr = '--:--';
             if (spdKts > 5) {
-                const now = new Date();
-                const hrsRemaining = totalRemainingDist / spdKts;
+                const now = new Date(); const hrsRemaining = totalRemainingDist / spdKts;
                 now.setMinutes(now.getMinutes() + (hrsRemaining * 60));
                 etaDestStr = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
             }
             updateHUD(hdg, spdKts, distToTarget, etaDestStr);
         }
 
-        // ==========================================
-        // --- BACK BUTTON / HISTORY MANAGER      ---
-        // ==========================================
         function showExitConfirm() {
             document.getElementById('exitConfirmModal').classList.remove('hidden');
         }
@@ -3522,22 +3194,13 @@
         function confirmExit() {
             isExiting = true;
             document.getElementById('exitConfirmModal').classList.add('hidden');
-            // Trigger history back untuk keluar sepenuhnya
             history.back();
         }
 
-        window.addEventListener('load', () => {
-            // Push initial state untuk membuat "jebakan" riwayat agar tombol back bisa dicegat
-            history.pushState({ page: 'init' }, null, window.location.href);
-        });
-
         window.addEventListener('popstate', (e) => {
             let blocked = false;
-
-            // Jika sedang dalam proses exit yang dikonfirmasi, biarkan popstate berjalan natural
             if (isExiting) return;
 
-            // 1. Cek Modal yang sedang terbuka (Sub-modal/popup sekunder dicek lebih dulu)
             const modals = [
                 { id: 'exitConfirmModal', closeFn: cancelExit },
                 { id: 'routeWpSelectModal', closeFn: closeRouteWpSelector },
@@ -3556,11 +3219,10 @@
                 if (el && !el.classList.contains('hidden')) {
                     m.closeFn();
                     blocked = true;
-                    break; // Hanya tutup satu modal/layer per satu kali klik "Back"
+                    break;
                 }
             }
 
-            // 2. Cek Mode Penerbangan atau Builder HUD yang sedang aktif
             if (!blocked) {
                 if (flightMode !== 'none') {
                     stopFlightMode();
@@ -3574,7 +3236,6 @@
                 }
             }
 
-            // 3. Cek Tab Navigasi yang aktif (Jika bukan di Map, kembalikan ke Map)
             if (!blocked) {
                 const mainScreen = document.getElementById('mainScreen');
                 if (mainScreen && !mainScreen.classList.contains('hidden')) {
@@ -3586,7 +3247,6 @@
                 }
             }
 
-            // 4. Cek Admin Screen (kembali ke Login jika sedang di Admin Screen)
             if (!blocked) {
                 const adminScreen = document.getElementById('adminScreen');
                 if (adminScreen && !adminScreen.classList.contains('hidden')) {
@@ -3595,7 +3255,6 @@
                 }
             }
 
-            // 5. Cek Exit Confirmation di Halaman Utama (Main Screen & Map Tab)
             if (!blocked) {
                 const mainScreen = document.getElementById('mainScreen');
                 if (mainScreen && !mainScreen.classList.contains('hidden')) {
@@ -3604,12 +3263,28 @@
                 }
             }
 
-            // Jika kita mencegat aksi "Back" (mengubah UI), 
-            // kita harus memasukkan ulang history state agar aplikasi tetap tidak keluar pada klik berikutnya.
             if (blocked) {
                 history.pushState({ page: 'internal' }, null, window.location.href);
             }
         });
+
+        const exportedFunctions = {
+            handleLogin, syncWithCloud, syncWithGoogleSheet: syncWithCloud, logout, updateAdminCreds, openUserModal, closeUserModal, saveUser, editUser, deleteUser,
+            switchTab, clearActiveMapRoute, fitMapToActiveRoute, toggleAllWaypointsMap, stopFlightMode,
+            updateMapBuilderHUD, cancelMapBuilder, finishMapBuilder, locateUser, renderRouteList, openRouteForm,
+            invertCurrentRouteForm, closeRouteForm, saveRoute, renderRouteWpSelectorList, openRouteWpSelector, closeRouteWpSelector,
+            openRouteDetailModal, closeRouteDetailModal, renderWaypoints, openParseModal, openWaypointModal, saveWaypoint, closeWaypointModal,
+            closeParseModal, processBulkWaypoints, syncElevation, closeWaypointDetail, showWaypointDetail, showWpOnMap, openAircraftForm,
+            closeAircraftForm, saveAircraft, closeAircraftDetail, editAircraftFromDetail, deleteAircraftFromDetail,
+            showExitConfirm, cancelExit, confirmExit, addExistingWpToActiveRoute, addExistingWpToBuilderRoute, addClickedToWaypoint,
+            addToRoute, removeWpFromRoute, moveWpUp, moveWpDown, editRoute, deleteRoute, duplicateRoute,
+            invertRoute, startSimulateRoute, startNavigateRoute, editWaypoint, deleteWaypoint,
+            viewAircraft, showMessage, closeMsgModal, showConfirm, cancelConfirm, executeConfirm, toggleWpTypeFields, toggleCoordFormat,
+            handleRouteAircraftChange, calculatePayload, updateAcWeightLabels, renderOFPTable, printRouteOFP, addTowerRow,
+            viewRouteOnMap
+        };
+
+        Object.assign(window, exportedFunctions);
     </script>
 </body>
 </html>
