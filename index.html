@@ -735,10 +735,18 @@
                                 </div>
                             </div>
                             
-                            <!-- CHART URLs SECTION -->
-                            <div class="grid grid-cols-2 gap-3 border-t border-slate-700/50 pt-3 mt-1">
-                                <div><label class="text-[10px] text-slate-400 block mb-1">Aerodrome Chart (URL)</label><input type="url" id="apAerodromeChart" placeholder="https://..." class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-emerald-500"></div>
-                                <div><label class="text-[10px] text-slate-400 block mb-1">Approach Chart (URL)</label><input type="url" id="apApproachChart" placeholder="https://..." class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs outline-none focus:border-emerald-500"></div>
+                            <!-- DYNAMIC ATTACHMENTS SECTION -->
+                            <div class="bg-slate-900/40 p-3 rounded-xl border border-slate-700/50 mt-2">
+                                <div class="flex justify-between items-center mb-2">
+                                    <label class="text-[10px] text-slate-400 uppercase font-bold"><i class="fas fa-paperclip mr-1"></i> Attachments & Charts</label>
+                                    <div class="flex items-center gap-2">
+                                        <span class="text-[8px] text-slate-500">(Max 10)</span>
+                                        <button type="button" onclick="addAttachmentRow()" class="text-[10px] bg-emerald-600/30 text-emerald-400 px-2 py-1 rounded hover:bg-emerald-600/50 transition"><i class="fas fa-plus"></i></button>
+                                    </div>
+                                </div>
+                                <div id="attachmentInputsContainer" class="space-y-2 max-h-32 overflow-y-auto pr-1">
+                                    <!-- Dynamic Rows Render Here -->
+                                </div>
                             </div>
                         </div>
                         <div class="flex gap-3 pt-2 sm:pt-4 border-t border-slate-700 mt-4 sm:mt-6"> <button type="button" onclick="closeWaypointModal()" class="flex-1 bg-slate-800 border border-slate-700 hover:bg-slate-700 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm transition">Cancel</button> <button type="submit" class="flex-1 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition shadow-lg shadow-blue-500/20 text-white">Save Data</button> </div>
@@ -780,7 +788,7 @@
                                 <div><p class="text-[9px] text-emerald-400 uppercase font-bold">NDB</p><p id="detApNdb" class="text-[10px] text-white font-mono">-</p></div>
                             </div>
                             <!-- CHARTS RENDER SECTION -->
-                            <div id="detApCharts" class="grid grid-cols-2 gap-2 border-t border-emerald-500/10 pt-3 mt-1 hidden"></div>
+                            <div id="detApCharts" class="grid grid-cols-2 sm:grid-cols-3 gap-2 border-t border-emerald-500/10 pt-3 mt-1 hidden"></div>
                         </div>
                         <div class="grid grid-cols-3 gap-2 pt-2"> <button id="btnWpShowMap" class="bg-emerald-600 hover:bg-emerald-500 text-white py-2.5 rounded-xl text-xs transition font-bold flex flex-col items-center gap-1"><i class="fas fa-map-marked-alt text-lg"></i> Map</button> <button id="btnWpEdit" class="bg-blue-600 hover:bg-blue-500 text-white py-2.5 rounded-xl text-xs transition font-bold flex flex-col items-center gap-1"><i class="fas fa-edit text-lg"></i> Edit</button> <button id="btnWpDelete" class="bg-red-600/20 hover:bg-red-600/40 text-red-400 border border-red-500/30 py-2.5 rounded-xl text-xs transition font-bold flex flex-col items-center gap-1"><i class="fas fa-trash text-lg"></i> Del</button> </div>
                     </div>
@@ -1638,17 +1646,25 @@
                     towerList.innerHTML = '<p class="text-[9px] text-slate-500 italic">No Tower Data</p>';
                 }
                 
-                // --- RENDER CHARTS ---
+                // --- RENDER CHARTS / ATTACHMENTS ---
                 const chartsDiv = document.getElementById('detApCharts');
                 chartsDiv.innerHTML = '';
                 chartsDiv.classList.add('hidden');
-                if (wp.aerodromeChart || wp.approachChart) {
+                
+                if (wp.attachments && wp.attachments.length > 0) {
+                    chartsDiv.classList.remove('hidden');
+                    wp.attachments.forEach(att => {
+                        const isImage = att.url.match(/\.(jpeg|jpg|gif|png|webp)$/i) != null;
+                        const icon = isImage ? 'fa-image' : (att.title.toLowerCase().includes('chart') ? 'fa-map' : 'fa-link');
+                        chartsDiv.innerHTML += `<a href="${att.url}" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 py-2 px-1 rounded-lg text-[9px] text-center transition shadow flex flex-col items-center justify-center gap-1.5 truncate relative overflow-hidden" title="${att.title}"><i class="fas ${icon} text-sm"></i> <span class="w-full truncate px-1">${att.title}</span></a>`;
+                    });
+                } else if (wp.aerodromeChart || wp.approachChart) { // Fallback untuk data lama
                     chartsDiv.classList.remove('hidden');
                     if (wp.aerodromeChart) {
-                        chartsDiv.innerHTML += `<a href="${wp.aerodromeChart}" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 py-2 rounded-lg text-[10px] text-center transition shadow flex flex-col items-center justify-center gap-1.5"><i class="fas fa-map text-sm"></i> Aerodrome Chart</a>`;
+                        chartsDiv.innerHTML += `<a href="${wp.aerodromeChart}" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-emerald-400 border border-emerald-500/30 py-2 rounded-lg text-[9px] text-center transition shadow flex flex-col items-center justify-center gap-1.5"><i class="fas fa-map text-sm"></i> Aerodrome</a>`;
                     }
                     if (wp.approachChart) {
-                        chartsDiv.innerHTML += `<a href="${wp.approachChart}" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-blue-400 border border-blue-500/30 py-2 rounded-lg text-[10px] text-center transition shadow flex flex-col items-center justify-center gap-1.5"><i class="fas fa-layer-group text-sm"></i> Approach Chart</a>`;
+                        chartsDiv.innerHTML += `<a href="${wp.approachChart}" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-blue-400 border border-blue-500/30 py-2 rounded-lg text-[9px] text-center transition shadow flex flex-col items-center justify-center gap-1.5"><i class="fas fa-layer-group text-sm"></i> Approach</a>`;
                     }
                 }
             } else {
@@ -1716,9 +1732,17 @@
                 newWp.ndbName = document.getElementById('apNdbName').value;
                 newWp.ndbFreq = document.getElementById('apNdbFreq').value;
                 
-                // Tambahan Chart URLs
-                newWp.aerodromeChart = document.getElementById('apAerodromeChart').value;
-                newWp.approachChart = document.getElementById('apApproachChart').value;
+                const attachments = [];
+                document.querySelectorAll('.attach-row').forEach(row => {
+                    const t = row.querySelector('.attach-title').value.trim();
+                    const u = row.querySelector('.attach-url').value.trim();
+                    if (t || u) attachments.push({ title: t || 'Attachment', url: u });
+                });
+                newWp.attachments = attachments;
+                
+                // Hapus data lama jika ada
+                delete newWp.aerodromeChart;
+                delete newWp.approachChart;
 
                 const towers = [];
                 document.querySelectorAll('.tower-row').forEach(row => {
@@ -1772,8 +1796,17 @@
                 document.getElementById('apNdbName').value = wp.ndbName || '';
                 document.getElementById('apNdbFreq').value = wp.ndbFreq || '';
                 
-                document.getElementById('apAerodromeChart').value = wp.aerodromeChart || '';
-                document.getElementById('apApproachChart').value = wp.approachChart || '';
+                const attachContainer = document.getElementById('attachmentInputsContainer');
+                if (attachContainer) {
+                    attachContainer.innerHTML = '';
+                    if (wp.attachments && wp.attachments.length > 0) {
+                        wp.attachments.forEach(a => addAttachmentRow(a.title, a.url));
+                    } else if (wp.aerodromeChart || wp.approachChart) {
+                        // Migrasi backward-compatibility
+                        if (wp.aerodromeChart) addAttachmentRow('Aerodrome', wp.aerodromeChart);
+                        if (wp.approachChart) addAttachmentRow('Approach', wp.approachChart);
+                    }
+                }
 
                 const container = document.getElementById('towerInputsContainer');
                 container.innerHTML = '';
@@ -1808,9 +1841,8 @@
             document.getElementById('wpId').value = '';
             document.getElementById('towerInputsContainer').innerHTML = '';
             
-            // Reset Chart URLs
-            if (document.getElementById('apAerodromeChart')) document.getElementById('apAerodromeChart').value = '';
-            if (document.getElementById('apApproachChart')) document.getElementById('apApproachChart').value = '';
+            const attachContainer = document.getElementById('attachmentInputsContainer');
+            if (attachContainer) attachContainer.innerHTML = '';
             
             toggleWpTypeFields();
             ['latDeg', 'latMin', 'latSec', 'lonDeg', 'lonMin', 'lonSec', 'wpLatDec', 'wpLonDec'].forEach(id => {
@@ -1880,6 +1912,21 @@
             div.innerHTML = `<input type="text" placeholder="Name" value="${name}" class="twr-name flex-[2] bg-slate-800 border border-slate-700 rounded px-2 py-1 text-[10px] outline-none text-white focus:border-blue-500">
                              <input type="text" placeholder="Freq" value="${freq}" class="twr-freq flex-[1] bg-slate-800 border border-slate-700 rounded px-2 py-1 text-[10px] outline-none text-white focus:border-blue-500 font-mono">
                              <button type="button" onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-300 p-1"><i class="fas fa-minus-circle"></i></button>`;
+            container.appendChild(div);
+        }
+
+        function addAttachmentRow(title = '', url = '') {
+            const container = document.getElementById('attachmentInputsContainer');
+            if (!container) return;
+            if (container.children.length >= 10) {
+                showMessage("Limit Tercapai", "Maksimal 10 attachment per waypoint.");
+                return;
+            }
+            const div = document.createElement('div');
+            div.className = 'attach-row flex gap-2 items-center fade-in';
+            div.innerHTML = `<input type="text" placeholder="Judul..." value="${title}" class="attach-title w-[35%] bg-slate-800 border border-slate-700 rounded px-2 py-1.5 text-[10px] outline-none text-white focus:border-emerald-500">
+                             <input type="url" placeholder="URL Tautan..." value="${url}" class="attach-url flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-1.5 text-[10px] outline-none text-white focus:border-emerald-500">
+                             <button type="button" onclick="this.parentElement.remove()" class="text-red-400 hover:text-red-300 p-1.5 bg-red-500/10 rounded"><i class="fas fa-trash text-[10px]"></i></button>`;
             container.appendChild(div);
         }
 
@@ -3281,7 +3328,7 @@
             invertRoute, startSimulateRoute, startNavigateRoute, editWaypoint, deleteWaypoint,
             viewAircraft, showMessage, closeMsgModal, showConfirm, cancelConfirm, executeConfirm, toggleWpTypeFields, toggleCoordFormat,
             handleRouteAircraftChange, calculatePayload, updateAcWeightLabels, renderOFPTable, printRouteOFP, addTowerRow,
-            viewRouteOnMap
+            addAttachmentRow, viewRouteOnMap
         };
 
         Object.assign(window, exportedFunctions);
